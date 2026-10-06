@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:workmanager/workmanager.dart';
@@ -21,6 +23,9 @@ const _channel = AndroidNotificationDetails(
   priority: Priority.high,
 );
 
+/// iOS: show the banner and play the sound even when the app is in the foreground.
+const _ios = DarwinNotificationDetails(presentAlert: true, presentBanner: true, presentSound: true);
+
 /// Entry point for the WorkManager background isolate.
 @pragma('vm:entry-point')
 void callbackDispatcher() {
@@ -40,6 +45,11 @@ void callbackDispatcher() {
   });
 }
 
+/// How often background checks run, for user-facing text. Android's WorkManager honours
+/// the 15-minute period; iOS runs background refresh when it sees fit, typically far less
+/// often (and less still for apps that are rarely opened).
+String get backgroundCadence => Platform.isIOS ? 'when iOS allows, often hourly' : 'about every 15 min';
+
 /// Where a tapped notification should take the user, carried in its payload:
 /// `pair|SOLUSDT|h1`, `scanner` or `setups`.
 typedef NotificationTap = void Function(String payload);
@@ -48,6 +58,13 @@ Future<void> initNotifications({NotificationTap? onTap}) async {
   await _notifications.initialize(
     settings: const InitializationSettings(
       android: AndroidInitializationSettings('@drawable/ic_notification'),
+      // Don't prompt at launch (this also runs in the background isolate, which can't
+      // prompt); [requestNotificationPermission] asks when the user turns an alert on.
+      iOS: DarwinInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+      ),
     ),
     onDidReceiveNotificationResponse: onTap == null
         ? null
@@ -67,7 +84,11 @@ Future<String?> launchPayload() async {
 Future<bool> requestNotificationPermission() async {
   final android = _notifications
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-  return await android?.requestNotificationsPermission() ?? true;
+  // Null below Android 13, where no runtime permission exists.
+  if (android != null) return await android.requestNotificationsPermission() ?? true;
+  final ios = _notifications.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+  if (ios != null) return await ios.requestPermissions(alert: true, sound: true) ?? false;
+  return true;
 }
 
 /// Starts the 15-minute background check (Android's minimum periodic interval).
@@ -95,7 +116,7 @@ Future<void> checkSetups() async {
       id: s.id.hashCode & 0x7fffffff,
       title: '${s.side == Side.long ? 'Long' : 'Short'} ${s.source.title} $what',
       body: '${r >= 0 ? '+' : ''}${r.toStringAsFixed(2)} R · ${s.count}',
-      notificationDetails: const NotificationDetails(android: _setupChannel),
+      notificationDetails: const NotificationDetails(android: _setupChannel, iOS: _ios),
       payload: 'setups',
     );
   }
@@ -112,6 +133,7 @@ NotificationDetails _scanDetails(String body) => NotificationDetails(
         styleInformation: BigTextStyleInformation(body),
         groupKey: 'tantya.scan',
       ),
+      iOS: const DarwinNotificationDetails(threadIdentifier: 'tantya.scan'),
     );
 
 /// Runs the background scan when due and notifies new setups: one notification each
@@ -196,7 +218,7 @@ Future<Map<String, Market>> checkWatchlist({PolymarketApi? api}) async {
         id: item.key.hashCode & 0x7fffffff,
         title: item.question,
         body: lines.join('\n'),
-        notificationDetails: const NotificationDetails(android: _channel),
+        notificationDetails: const NotificationDetails(android: _channel, iOS: _ios),
       );
     }
   }

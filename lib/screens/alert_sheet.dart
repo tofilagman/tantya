@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../alerts.dart';
 import '../watchlist.dart';
 
 class AlertSheetResult {
@@ -133,7 +134,7 @@ class _AlertSheetState extends State<AlertSheet> {
               child: Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
             ),
           const SizedBox(height: 8),
-          Text('You\'ll also be notified when the market closes. Checks run about every 15 minutes.',
+          Text('You\'ll also be notified when the market closes. Checks run $backgroundCadence.',
               style: text.bodySmall),
           const SizedBox(height: 16),
           FilledButton(onPressed: _save, child: Text(widget.isNew ? 'Watch' : 'Save')),

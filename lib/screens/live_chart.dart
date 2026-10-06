@@ -349,22 +349,26 @@ class _ChartPainter extends CustomPainter {
     }
     // Tags, drawn last so they sit above the tick labels.
     if (st != null) {
-      _tag(canvas, x, y(st.stop), 'SL ${format(st.stop)}', _down, r);
-      _tag(canvas, x, y(st.tp1), 'TP1 ${format(st.tp1)}', _up, r);
-      _tag(canvas, x, y(st.tp2), 'TP2 ${format(st.tp2)}', _up.withValues(alpha: 0.75), r);
+      _tag(canvas, size, x, y(st.stop), 'SL ${format(st.stop)}', _down, r);
+      _tag(canvas, size, x, y(st.tp1), 'TP1 ${format(st.tp1)}', _up, r);
+      _tag(canvas, size, x, y(st.tp2), 'TP2 ${format(st.tp2)}', _up.withValues(alpha: 0.75), r);
     }
     final last = candles.last;
     final ly = y(last.close);
     _dashed(canvas, Offset(geo.plot.left, ly), Offset(geo.plot.right, ly), (last.up ? _up : _down).withValues(alpha: 0.6), 1);
-    _tag(canvas, x, ly, format(last.close), last.up ? _up : _down, r);
+    _tag(canvas, size, x, ly, format(last.close), last.up ? _up : _down, r);
   }
 
-  void _tag(Canvas canvas, double x, double yPos, String label, Color color, Rect r) {
+  /// A price tag on the axis. Wider labels ("TP2 88239.74", or larger system fonts)
+  /// grow leftwards over the plot instead of running off the screen.
+  void _tag(Canvas canvas, Size size, double x, double yPos, String label, Color color, Rect r) {
     final cy = yPos.clamp(r.top, r.bottom);
     final tp = _tp(label, text.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 10));
-    final box = Rect.fromLTWH(x - 3, cy - tp.height / 2 - 2, math.max(tp.width + 6, _Geometry.axisW - 2), tp.height + 4);
+    final width = math.max(tp.width + 6, _Geometry.axisW - 2);
+    final left = math.min(x - 3, size.width - width);
+    final box = Rect.fromLTWH(left, cy - tp.height / 2 - 2, width, tp.height + 4);
     canvas.drawRRect(RRect.fromRectAndRadius(box, const Radius.circular(3)), Paint()..color = color);
-    tp.paint(canvas, Offset(x, cy - tp.height / 2));
+    tp.paint(canvas, Offset(left + 3, cy - tp.height / 2));
   }
 
   void _times(Canvas canvas, Size size, int from, int to) {
@@ -375,12 +379,16 @@ class _ChartPainter extends CustomPainter {
             : DateFormat.Hm();
     final muted = text.copyWith(color: scheme.onSurfaceVariant);
     final every = math.max(1, (geo.visible / 4).round());
+    var lastRight = double.negativeInfinity;
     for (var i = from; i <= to; i++) {
       if (i % every != 0) continue;
       final tp = _tp(fmt.format(candles[i].start), muted);
       final x = geo.x(i) - tp.width / 2;
       if (x < 0 || x + tp.width > geo.plot.right) continue;
+      // Skip a label that would touch the previous one (long formats, big fonts, zoomed out).
+      if (x < lastRight + 8) continue;
       tp.paint(canvas, Offset(x, geo.plot.bottom + 3));
+      lastRight = x + tp.width;
     }
   }
 

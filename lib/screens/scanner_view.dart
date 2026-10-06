@@ -293,7 +293,7 @@ class _ScannerViewState extends State<ScannerView> {
               Text(describe(a), style: text.bodySmall),
               const SizedBox(height: 4),
               Text(
-                'Scans once per new ${a.frame.label} candle (checked every ~15 min) and notifies only setups '
+                'Scans once per new ${a.frame.label} candle (checked $backgroundCadence) and notifies only setups '
                 'it hasn\'t reported before. About ${a.megabytesPerDay.toStringAsFixed(0)} MB of data a day.',
                 style: text.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
               ),
@@ -312,7 +312,7 @@ class _ScannerViewState extends State<ScannerView> {
                     ? 'Get notified when the scanner finds a fresh setup matching the settings above '
                         '(plus score ≥ 60 and under half the move done), even with the app closed. '
                         'About ${_current.megabytesPerDay.toStringAsFixed(0)} MB of data a day.'
-                    : '5m is too fast for the background check, which runs every ~15 min. '
+                    : '5m is too fast for the background check, which runs $backgroundCadence. '
                         'Pick 15m or higher to set up alerts.',
                 style: text.bodySmall,
               ),

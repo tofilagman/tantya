@@ -96,7 +96,7 @@ class _MarketScreenState extends State<MarketScreen> {
     await _loadWatch();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(result.remove ? 'Removed from watchlist' : 'Watching, checked every ~15 min'),
+        content: Text(result.remove ? 'Removed from watchlist' : 'Watching, checked $backgroundCadence'),
       ));
     }
   }

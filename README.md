@@ -1,13 +1,43 @@
 # Tantya
 
-An Elliott Wave trading companion for Android. Open the pair you're trading on
-Binance and Tantya shows the same live candlestick chart with an algorithmic wave
-count drawn on it. It projects the next wave and gives a trade setup: bias, entry,
-stop, TP1/TP2 and reward:risk. Polymarket prediction markets are a second source
-that runs on the same engine.
+**An Elliott Wave trading companion for Android and iOS.**
+
+Open the pair you're trading on Binance and Tantya shows the same live
+candlestick chart with an algorithmic wave count drawn on it. It projects the next
+wave and turns that into a trade setup: bias, entry, stop, TP1/TP2 and
+reward:risk. Polymarket prediction markets are a second source that runs on the
+same engine.
 
 No account, wallet or API key is needed. It reads public market data only and
-never places orders.
+never places orders. *It is an analysis tool, not financial advice.*
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/chart-1h.png" width="200" alt="1h chart with an A-B-C count, projected wave C, SL/TP tags and a LONG setup"><br><sub><b>Live chart + setup</b><br>count, projection, SL/TP, 4h check</sub></td>
+    <td align="center"><img src="docs/screenshots/chart-4h.png" width="200" alt="4h chart after a completed correction, projecting a new wave 1"><br><sub><b>Any timeframe</b><br>4h: correction done, new wave 1</sub></td>
+    <td align="center"><img src="docs/screenshots/scanner.png" width="200" alt="Scanner results ranked across the top 50 pairs"><br><sub><b>Scanner</b><br>best setups across the top pairs</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/pairs.png" width="200" alt="Binance pairs sorted by 24h volume"><br><sub><b>Pairs</b><br>Binance spot by 24h volume</sub></td>
+    <td align="center"><img src="docs/screenshots/about.png" width="200" alt="About tab with an Elliott Wave diagram and the three rules"><br><sub><b>About</b><br>how to use it, and the algorithm</sub></td>
+    <td valign="top"><sub>Screenshots from the iPhone simulator (iOS 27) with live
+    Binance data on 2026-10-07. The Android app is the same Flutter code.</sub></td>
+  </tr>
+</table>
+
+## What it does
+
+- **Live chart with the prediction drawn on it**: wave labels on the swings, a
+  dashed projection of the next wave into the empty space on the right, the target
+  zone, and SL / TP1 / TP2 on the price axis.
+- **Trade setup** from the best count: LONG/SHORT, entry, an ATR-buffered stop,
+  two targets and reward:risk, plus the alternate counts.
+- **Higher-timeframe check**: does the 4h agree with your 1h setup?
+- **Scanner** across the top 30/50/100 pairs, and **background alerts** for fresh
+  setups.
+- **Track record**: tracked setups are settled at their target or stop, and
+  scored in R per timeframe and by higher-timeframe agreement, so you can see
+  whether the method actually works.
 
 ## Tabs
 
@@ -107,16 +137,17 @@ actually pay?". `Scorecard.groupBy` builds both splits; each group is itself a
 stop. If one candle spans both, it counts as stopped, which is the conservative
 choice. After 50 candles of its timeframe it expires at the market price. Results
 are in R (multiples of the risk). Checks run when the Setups tab opens and in the
-15-minute background job, which notifies when a setup closes.
+background job, which notifies when a setup closes.
 
 ## Scanner (`lib/scanner.dart`)
 
-`evaluate()` runs the chart's exact pipeline on each pair: `analyze` → primary
+`evaluatePair()` runs the chart's exact pipeline on each pair: `analyze` → primary
 count → `TradeSetup.from` with the ATR stop buffer. A scan result is therefore
 always the setup you see when you open the chart. Pairs are ranked by:
 
 ```
-rank = fit × min(R:R to TP1, 3)/3 × (1 − ½·progress) × (1 if counts agree else 0.8)
+rank = score × min(R:R to TP1, 3)/3 × (1 − ½·progress) × (1 if counts agree else 0.8)
+       × higher-timeframe factor (agree 1, unclear 0.85, conflict 0.6)
 ```
 
 `progress` is how much of the way from the wave's start to TP1 price has already
@@ -129,7 +160,8 @@ the screen, cancels the one running.
 
 "Alert me about new setups like these" saves the scanner's current settings
 (timeframe 15m–1D, top N, long/short, R:R, agreeing counts) plus two of its own:
-**fit ≥ 60** and **under 50% of the move done**. The 15-minute WorkManager job then:
+**score ≥ 60** and **under 50% of the move done**. The background job (every
+15 minutes on Android) then:
 
 - scans **at most once per candle** of that timeframe (skipped if the current
   candle was already scanned);
@@ -142,7 +174,8 @@ the screen, cancels the one running.
   opens the scanner).
 
 Estimated data use is shown on the card: about 15 KB gzipped per pair per scan.
-5m is excluded because the job can't run more often than every 15 minutes.
+5m is excluded because the job can't run more often than every 15 minutes (on
+iOS, far less often; see *iOS*).
 
 Crypto pairs are highly correlated, so one market-wide swing often produces the
 same pattern on many pairs at once. Ten "SHORT · ABC complete" results are closer
@@ -167,9 +200,17 @@ Polymarket quirks (in `lib/api.dart`): `outcomes` / `outcomePrices` /
 (`active: false`) and effectively settled ones are filtered out. Price-history
 windows are capped at about 15 days.
 
+**Polymarket may be blocked where you are.** On 2026-10-07 the Philippine ISP
+Converge answered Polymarket's API hostnames with its own server (161.49.61.85)
+instead of Cloudflare's. Its certificate can't match, so the TLS handshake fails.
+The app reports "Your network or internet provider may be blocking it" instead
+of a raw TLS error. It deliberately doesn't work around the block: such blocks
+usually follow a regulator's order. The Binance side is unaffected.
+
 ## Build
 
-Requires Flutter 3.47+ and JDK 21 (`flutter config --jdk-dir <jdk21>`).
+Requires Flutter 3.47+, JDK 21 (`flutter config --jdk-dir <jdk21>`) for Android,
+and Xcode for iOS (see *iOS*).
 
 ```bash
 flutter test
@@ -188,6 +229,54 @@ clone, Gradle falls back to the debug key, and that APK **cannot update** a phon
 running a release-signed install. **Back up both files somewhere other than this
 laptop.** If they're lost, every install has to be uninstalled (losing tracked
 setups) before a new build can go on.
+
+## iOS
+
+**Status (2026-10-07):** builds with Xcode 27 and runs on the iPhone simulator,
+where the live charts, wave counts, setups, scanner and the notification
+permission flow were checked. An unsigned device build (arm64 release, 18 MB)
+compiles. Not yet installed on a physical iPhone (needs signing), and a
+background refresh hasn't yet been observed firing.
+
+```bash
+flutter build ios --simulator --debug     # Simulator
+flutter build ios --release --no-codesign # device build, compile check only
+```
+
+**To install on an iPhone:** sign in to Xcode → Settings → Accounts with an Apple
+ID, open `ios/Runner.xcworkspace`, set Runner → Signing & Capabilities → **Team**,
+connect the phone (trust this Mac, enable Developer Mode), then
+`flutter run --release`. A **free** Apple ID's installs stop opening after 7 days.
+The paid developer program gives 1-year installs and TestFlight.
+
+Plugins come in through Swift Package Manager (Flutter's default), so CocoaPods
+is not needed, despite `flutter doctor`'s warning.
+
+What's iOS-specific:
+
+- `ios/Runner/AppDelegate.swift` registers the background task
+  (`tantya.checkWatchlist`, the same name as `_taskName` in `lib/alerts.dart`) before
+  `didFinishLaunching` returns, as the UIScene lifecycle requires. It also gives the
+  background engine its plugins and makes notifications show in the foreground.
+- `Info.plist`: `BGTaskSchedulerPermittedIdentifiers` and `UIBackgroundModes: fetch`.
+  A task ID missing from that list crashes the app at launch, so a clean launch
+  confirms the wiring.
+- Notifications ask permission only when the user turns an alert on, never at launch
+  (the background isolate also initialises them and can't prompt).
+- **Background checks are much less frequent than on Android.** iOS runs
+  `BGAppRefreshTask` when it decides to (often hourly or less, less still for rarely
+  opened apps). In-app texts say so via `backgroundCadence` in `lib/alerts.dart`.
+  Charts, counts, setups and the scanner are unaffected while the app is open.
+- The app icon is a single 1024 px image rendered by `tool/render_ios_icon.swift`
+  (same design as Android, scaled up because iOS doesn't crop it to a safe zone).
+- Apple verifies TLS certificates through the system trust store, more strictly
+  than Android. That is why the Polymarket DNS block showed up on iOS first.
+
+To force a background run while debugging (pause in Xcode, then in the lldb console):
+
+```
+e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"tantya.checkWatchlist"]
+```
 
 ## Gotchas
 

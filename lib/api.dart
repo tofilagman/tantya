@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io' show HandshakeException;
 
 import 'package:http/http.dart' as http;
 
@@ -13,7 +14,15 @@ class PolymarketApi {
 
   Future<dynamic> _get(String base, String path, Map<String, String> query) async {
     final uri = Uri.parse('$base$path').replace(queryParameters: query.isEmpty ? null : query);
-    final res = await _client.get(uri).timeout(const Duration(seconds: 20));
+    final http.Response res;
+    try {
+      res = await _client.get(uri).timeout(const Duration(seconds: 20));
+    } on HandshakeException {
+      // Seen in practice: an ISP answering Polymarket's DNS with its own block server,
+      // whose certificate can't match. Say so instead of surfacing a TLS error.
+      throw ApiException('Couldn\'t reach Polymarket securely. Your network or internet provider '
+          'may be blocking it.');
+    }
     if (res.statusCode != 200) {
       throw ApiException('HTTP ${res.statusCode} from ${uri.host}');
     }
