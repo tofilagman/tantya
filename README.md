@@ -176,7 +176,18 @@ flutter test
 flutter build apk --release
 ```
 
-The release build is signed with the **debug key** for now.
+For a phone, build per-architecture (arm64 is about 19 MB vs 53 MB universal):
+
+```bash
+flutter build apk --release --split-per-abi
+```
+
+**Release signing:** `keystore.properties` and `keystore/tantya-release.jks` at the
+repo root (both gitignored) sign release builds. Without them, e.g. on a fresh
+clone, Gradle falls back to the debug key, and that APK **cannot update** a phone
+running a release-signed install. **Back up both files somewhere other than this
+laptop.** If they're lost, every install has to be uninstalled (losing tracked
+setups) before a new build can go on.
 
 ## Gotchas
 

@@ -46,3 +46,12 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Release signing — KEEP SECRET, never commit (see keystore.properties)
+keystore.properties
+keystore/
+*.jks
+*.keystore
+
+# Built APKs handed out for sideloading
+/dist/
