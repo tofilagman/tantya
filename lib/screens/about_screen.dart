@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../elliott.dart';
 import '../setup.dart';
 
-const appVersion = '0.1.0';
+const appVersion = '0.1.1';
 
 /// What the app is, how to use it while trading, and exactly how predictions are made.
 /// The swing sensitivities, Fibonacci table, stop buffer and expiry are read from the
