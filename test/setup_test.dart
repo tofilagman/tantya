@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tantya/candles.dart';
 import 'package:tantya/elliott.dart';
+import 'package:tantya/indicators.dart';
 import 'package:tantya/mtf.dart';
 import 'package:tantya/setup.dart';
 import 'package:tantya/sources/binance.dart';
@@ -177,6 +178,23 @@ void main() {
     expect(f[Timeframe.h1]!.open, 1);
     // Sub-scorecards are full scorecards: they can be split again.
     expect(f[Timeframe.m5]!.byHtf, isEmpty);
+  });
+
+  test('scorecard splits by MACD verdict and the verdict round-trips', () {
+    TrackedSetup make(MacdVerdict? v) => TrackedSetup(
+          id: 'x', source: BinanceSource('BTCUSDT'), frame: Timeframe.h1, side: Side.long,
+          entry: 100, stop: 95, tp1: 110, tp2: 120, count: 'c', fit: 0.7, madeAt: t0, macd: v);
+    final now = t0.add(const Duration(days: 30));
+    final card = Scorecard([
+      make(MacdVerdict.agree)..resolve([c(0, 100, 111)], now), // +2
+      make(MacdVerdict.against)..resolve([c(0, 94, 100)], now), // -1
+      make(null)..resolve([c(0, 94, 100)], now), // unrecorded
+    ]);
+    expect(card.byMacd.keys, unorderedEquals([MacdVerdict.agree, MacdVerdict.against]));
+    expect(card.byMacd[MacdVerdict.agree]!.avgR, 2);
+    expect(card.byMacd[MacdVerdict.against]!.avgR, -1);
+    expect(TrackedSetup.fromJson(make(MacdVerdict.turning).toJson()).macd, MacdVerdict.turning);
+    expect(TrackedSetup.fromJson(make(null).toJson()).macd, isNull);
   });
 
   test('tracked setup round-trips through JSON with its source', () {

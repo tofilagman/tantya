@@ -47,12 +47,23 @@ class _InstrumentScreenState extends State<InstrumentScreen> {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
-        children: [
-          EwPanel(source: widget.source, initialFrame: widget.initialFrame, onPrice: (p) => _price.value = p),
-        ],
-      ),
+      // Wide windows (desktop, tablets): chart fills the screen with the setup beside it.
+      body: MediaQuery.sizeOf(context).width >= 1000
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: EwPanel(
+                source: widget.source,
+                initialFrame: widget.initialFrame,
+                wide: true,
+                onPrice: (p) => _price.value = p,
+              ),
+            )
+          : ListView(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
+              children: [
+                EwPanel(source: widget.source, initialFrame: widget.initialFrame, onPrice: (p) => _price.value = p),
+              ],
+            ),
     );
   }
 }

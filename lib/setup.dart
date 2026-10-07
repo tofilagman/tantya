@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'candles.dart';
 import 'elliott.dart';
+import 'indicators.dart';
 import 'mtf.dart';
 import 'sources/source.dart';
 
@@ -78,6 +79,7 @@ class TrackedSetup {
     this.resolvedAt,
     this.exit,
     this.htf,
+    this.macd,
   });
 
   final String id;
@@ -96,6 +98,9 @@ class TrackedSetup {
 
   /// The higher timeframe's verdict when the setup was tracked; null if not checked.
   final HtfVerdict? htf;
+
+  /// Whether MACD momentum backed the trade when it was tracked; null if not recorded.
+  final MacdVerdict? macd;
   SetupStatus status;
   DateTime? resolvedAt;
 
@@ -164,6 +169,7 @@ class TrackedSetup {
         'resolvedAt': resolvedAt?.toIso8601String(),
         'exit': exit,
         'htf': htf?.name,
+        'macd': macd?.name,
       };
 
   factory TrackedSetup.fromJson(Map<String, dynamic> j) => TrackedSetup(
@@ -182,10 +188,11 @@ class TrackedSetup {
         resolvedAt: j['resolvedAt'] == null ? null : DateTime.parse(j['resolvedAt'] as String),
         exit: (j['exit'] as num?)?.toDouble(),
         htf: j['htf'] == null ? null : HtfVerdict.values.byName(j['htf'] as String),
+        macd: j['macd'] == null ? null : MacdVerdict.values.byName(j['macd'] as String),
       );
 
   factory TrackedSetup.fromSetup(TradeSetup s, CandleSource source, Timeframe frame, DateTime now,
-          {HtfVerdict? htf}) =>
+          {HtfVerdict? htf, MacdVerdict? macd}) =>
       TrackedSetup(
         id: '${source.id}:${now.millisecondsSinceEpoch}',
         source: source,
@@ -199,6 +206,7 @@ class TrackedSetup {
         fit: s.scenario.score,
         madeAt: now,
         htf: htf,
+        macd: macd,
       );
 }
 
@@ -231,6 +239,11 @@ class Scorecard {
 
   /// Closed setups by higher-timeframe verdict, to show whether agreement actually
   /// improves results. Setups never checked, and groups with nothing closed yet, are left out.
+  /// Closed setups by whether MACD backed them when tracked: does momentum help?
+  Map<MacdVerdict, Scorecard> get byMacd => {
+        for (final e in Scorecard(closed).groupBy((s) => s.macd, MacdVerdict.values).entries) e.key: e.value,
+      };
+
   Map<HtfVerdict, Scorecard> get byHtf => {
         for (final e in Scorecard(closed).groupBy((s) => s.htf, HtfVerdict.values).entries) e.key: e.value,
       };

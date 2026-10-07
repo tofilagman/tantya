@@ -99,32 +99,61 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  static const _tabs = [
+    (Icons.candlestick_chart_outlined, Icons.candlestick_chart, 'Crypto'),
+    (Icons.how_to_vote_outlined, Icons.how_to_vote, 'Polymarket'),
+    (Icons.fact_check_outlined, Icons.fact_check, 'Setups'),
+    (Icons.notifications_none, Icons.notifications, 'Watchlist'),
+    (Icons.info_outline, Icons.info, 'About'),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final body = IndexedStack(
+      index: _tab,
+      children: [
+        CryptoScreen(key: _cryptoKey),
+        const MarketsScreen(),
+        SetupsScreen(key: _setupsKey),
+        WatchlistScreen(key: _watchlistKey),
+        const AboutScreen(),
+      ],
+    );
+
+    // Desktop / tablet: a side rail, and lists kept to a readable width.
+    if (MediaQuery.sizeOf(context).width >= 900) {
+      return Scaffold(
+        body: Row(
+          children: [
+            NavigationRail(
+              selectedIndex: _tab,
+              onDestinationSelected: _select,
+              labelType: NavigationRailLabelType.all,
+              destinations: [
+                for (final (icon, selected, label) in _tabs)
+                  NavigationRailDestination(icon: Icon(icon), selectedIcon: Icon(selected), label: Text(label)),
+              ],
+            ),
+            const VerticalDivider(width: 1),
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 900), child: body),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
-      body: IndexedStack(
-        index: _tab,
-        children: [
-          CryptoScreen(key: _cryptoKey),
-          const MarketsScreen(),
-          SetupsScreen(key: _setupsKey),
-          WatchlistScreen(key: _watchlistKey),
-          const AboutScreen(),
-        ],
-      ),
+      body: body,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
         onDestinationSelected: _select,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.candlestick_chart_outlined), selectedIcon: Icon(Icons.candlestick_chart), label: 'Crypto'),
-          NavigationDestination(icon: Icon(Icons.how_to_vote_outlined), selectedIcon: Icon(Icons.how_to_vote), label: 'Polymarket'),
-          NavigationDestination(icon: Icon(Icons.fact_check_outlined), selectedIcon: Icon(Icons.fact_check), label: 'Setups'),
-          NavigationDestination(
-            icon: Icon(Icons.notifications_none),
-            selectedIcon: Icon(Icons.notifications),
-            label: 'Watchlist',
-          ),
-          NavigationDestination(icon: Icon(Icons.info_outline), selectedIcon: Icon(Icons.info), label: 'About'),
+        destinations: [
+          for (final (icon, selected, label) in _tabs)
+            NavigationDestination(icon: Icon(icon), selectedIcon: Icon(selected), label: label),
         ],
       ),
     );

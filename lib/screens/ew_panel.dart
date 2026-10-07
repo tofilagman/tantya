@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../candles.dart';
 import '../elliott.dart';
+import '../indicators.dart';
+import '../layers.dart';
 import '../live.dart';
 import '../mtf.dart';
 import '../setup.dart';
@@ -15,9 +17,13 @@ import 'widgets.dart';
 /// Live chart + Elliott Wave count + trade setup for one [CandleSource].
 /// Lays out as a column; put it inside a scroll view.
 class EwPanel extends StatefulWidget {
-  const EwPanel({super.key, required this.source, this.onPrice, this.initialFrame});
+  const EwPanel({super.key, required this.source, this.onPrice, this.initialFrame, this.wide = false});
 
   final CandleSource source;
+
+  /// Desktop/tablet layout: chart filling the left, setup card scrolling on the right.
+  /// Needs a bounded height from the parent (don't put it in a ListView).
+  final bool wide;
 
   /// Timeframe to open on; defaults to the source's own default.
   final Timeframe? initialFrame;
@@ -42,6 +48,8 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
 
   EwAnalysis? _analysis;
   String? _selectedKey;
+  Macd? _macd;
+  bool _showMacd = true;
 
   /// The next timeframe up, counted separately to judge agreement.
   Timeframe? get _higherFrame {
@@ -49,9 +57,19 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
     return h != null && widget.source.timeframes.contains(h) ? h : null;
   }
 
-  EwAnalysis? _higher;
-  bool _higherFailed = false;
-  Timer? _higherRefresh;
+  /// Every other timeframe's count, for the higher-timeframe check, the coloured layers
+  /// and the all-timeframes table. Recounted every few minutes, not live.
+  final _others = <Timeframe, ({EwAnalysis analysis, List<Candle> candles})>{};
+  final _othersFailed = <Timeframe>{};
+  Timer? _othersRefresh;
+
+  EwAnalysis? get _higher => _higherFrame == null ? null : _others[_higherFrame]?.analysis;
+  bool get _higherFailed => _othersFailed.contains(_higherFrame);
+
+  /// Timeframes drawn over the chart as coloured layers, besides the chart's own.
+  /// Starts with the next one up, and follows the timeframe until the user picks.
+  late final Set<Timeframe> _layersOn = {?_higherFrame};
+  bool _layersPicked = false;
   bool _overlay = true;
 
   @override
@@ -66,6 +84,8 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
     super.didUpdateWidget(old);
     if (old.source.id != widget.source.id) {
       if (!widget.source.timeframes.contains(_frame)) _frame = widget.source.defaultFrame;
+      _others.clear();
+      _othersFailed.clear();
       _load();
     }
   }
@@ -74,7 +94,7 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _tick?.cancel();
-    _higherRefresh?.cancel();
+    _othersRefresh?.cancel();
     _disconnect();
     super.dispose();
   }
@@ -105,13 +125,11 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
       _error = null;
       _analysis = null;
       _bid = _ask = null;
-      _higher = null;
-      _higherFailed = false;
     });
-    _higherRefresh?.cancel();
-    _loadHigher();
-    // The higher timeframe moves slowly; recount it every few minutes, not every tick.
-    _higherRefresh = Timer.periodic(const Duration(minutes: 5), (_) => _loadHigher());
+    _othersRefresh?.cancel();
+    _loadOthers();
+    // Other timeframes move slowly relative to this one; recount every few minutes.
+    _othersRefresh = Timer.periodic(const Duration(minutes: 5), (_) => _loadOthers());
     try {
       final candles = await source.history(frame);
       if (!mounted || frame != _frame || source.id != widget.source.id) return;
@@ -126,21 +144,57 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _loadHigher() async {
-    final h = _higherFrame;
+  /// Counts every timeframe other than the chart's own, each as soon as it arrives.
+  /// Earlier results stay on screen while a refresh is in flight.
+  Future<void> _loadOthers() async {
     final source = widget.source;
-    if (h == null) return;
-    try {
-      final a = analyze(await source.history(h), bounds: source.bounds);
-      if (mounted && h == _higherFrame && source.id == widget.source.id) {
-        setState(() {
-          _higher = a;
-          _higherFailed = false;
-        });
+    await Future.wait([
+      for (final f in source.timeframes)
+        if (f != _frame)
+          () async {
+            try {
+              final candles = await source.history(f);
+              final a = analyze(candles, bounds: source.bounds);
+              if (!mounted || source.id != widget.source.id) return;
+              setState(() {
+                _others[f] = (analysis: a, candles: candles);
+                _othersFailed.remove(f);
+              });
+            } catch (_) {
+              if (mounted && !_others.containsKey(f)) setState(() => _othersFailed.add(f));
+            }
+          }(),
+    ]);
+  }
+
+  /// Each timeframe's primary count: the chart's own (the selected count) and the rest.
+  Map<Timeframe, Scenario> get _primaries => {
+        for (final f in widget.source.timeframes)
+          f: ?(f == _frame ? _selected : _others[f]?.analysis.primary),
+      };
+
+  List<Layer> get _layers => [
+        for (final f in widget.source.timeframes)
+          if (f != _frame && _layersOn.contains(f))
+            if ((_others[f]?.analysis.primary, _others[f]?.candles) case (final s?, final c?)) Layer.of(f, s, c),
+      ];
+
+  void _toggleLayer(Timeframe f) => setState(() {
+        _layersPicked = true;
+        _layersOn.contains(f) ? _layersOn.remove(f) : _layersOn.add(f);
+      });
+
+  /// Switches the chart's timeframe; the default overlay moves to the new next-higher one.
+  void _setFrame(Timeframe f) {
+    setState(() {
+      _frame = f;
+      if (!_layersPicked) {
+        _layersOn
+          ..clear()
+          ..addAll({?_higherFrame});
       }
-    } catch (_) {
-      if (mounted && _higher == null) setState(() => _higherFailed = true);
-    }
+    });
+    _load();
   }
 
   HtfCheck? _htfFor(TradeSetup s) {
@@ -173,6 +227,7 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
     final candles = _candles;
     if (candles == null || candles.isEmpty) return;
     _analysis = analyze(candles, bounds: widget.source.bounds);
+    _macd = Macd.of(candles);
     widget.onPrice?.call(candles.last.close);
   }
 
@@ -183,8 +238,9 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
   }
 
   Future<void> _track(TradeSetup s) async {
-    await SetupStore.add(
-        TrackedSetup.fromSetup(s, widget.source, _frame, DateTime.now(), htf: _htfFor(s)?.verdict));
+    final macd = _macd == null ? null : MacdState.of(_macd!)?.verdictFor(s.side);
+    await SetupStore.add(TrackedSetup.fromSetup(s, widget.source, _frame, DateTime.now(),
+        htf: _htfFor(s)?.verdict, macd: macd));
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Tracking — see the Setups tab for the result'),
@@ -200,65 +256,133 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
         // A buffer beyond the invalidation level keeps routine wicks from stopping it out.
         : TradeSetup.from(selected, candles.last.close, buffer: atr(candles) * stopBufferAtr);
 
+    final layers = _layers;
+    final status = _live == null
+        ? const SizedBox.shrink()
+        : _StatusRow(status: _live!.status, bid: _bid, ask: _ask, format: widget.source.format);
+    final chart = _error != null
+        ? ErrorRetry(error: _error!, onRetry: _load)
+        : candles == null
+            ? const Center(child: CircularProgressIndicator())
+            : candles.length < 2
+                ? const Center(child: Text('Not enough trading history yet'))
+                : LiveChart(
+                    candles: candles,
+                    frame: _frame,
+                    format: widget.source.format,
+                    scenario: _overlay ? selected : null,
+                    setup: _overlay ? setup : null,
+                    revision: _revision,
+                    primaryColor: colorOf(_frame),
+                    layers: _overlay ? layers : const [],
+                    macd: _showMacd ? _macd : null,
+                    confluence: _overlay
+                        ? findConfluence({_frame: ?selected, for (final l in layers) l.frame: l.scenario})
+                        : const [],
+                  );
+    final controls = Row(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (final f in widget.source.timeframes)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: ChoiceChip(
+                      label: Text(f.label),
+                      selected: f == _frame,
+                      visualDensity: VisualDensity.compact,
+                      onSelected: (_) {
+                        if (f == _frame) return;
+                        _setFrame(f);
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        IconButton(
+          tooltip: _showMacd ? 'Hide MACD' : 'Show MACD',
+          isSelected: _showMacd,
+          icon: const Icon(Icons.stacked_line_chart_outlined),
+          selectedIcon: const Icon(Icons.stacked_line_chart),
+          onPressed: () => setState(() => _showMacd = !_showMacd),
+        ),
+        IconButton(
+          tooltip: _overlay ? 'Hide wave count' : 'Show wave count',
+          isSelected: _overlay,
+          icon: const Icon(Icons.waves_outlined),
+          selectedIcon: const Icon(Icons.waves),
+          onPressed: () => setState(() => _overlay = !_overlay),
+        ),
+      ],
+    );
+    final layerChips = SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Text('Overlay', style: Theme.of(context).textTheme.labelMedium),
+          ),
+          for (final f in widget.source.timeframes)
+            if (f != _frame)
+              Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: FilterChip(
+                  avatar: CircleAvatar(backgroundColor: colorOf(f), radius: 6),
+                  label: Text(f.label),
+                  selected: _layersOn.contains(f),
+                  showCheckmark: false,
+                  visualDensity: VisualDensity.compact,
+                  tooltip: 'Draw the ${f.label} count on this chart',
+                  onSelected: (_) => _toggleLayer(f),
+                ),
+              ),
+        ],
+      ),
+    );
+    final controlsAndLayers = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [controls, if (_overlay) ...[const SizedBox(height: 4), layerChips]],
+    );
+    final card = _analysis == null ? const SizedBox.shrink() : _analysisCard(_analysis!, setup);
+
+    if (widget.wide) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                status,
+                const SizedBox(height: 6),
+                Expanded(child: chart),
+                const SizedBox(height: 8),
+                controlsAndLayers,
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          SizedBox(width: 400, child: SingleChildScrollView(child: card)),
+        ],
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (_live != null) _StatusRow(status: _live!.status, bid: _bid, ask: _ask, format: widget.source.format),
+        status,
         const SizedBox(height: 6),
-        SizedBox(
-          height: 360,
-          child: _error != null
-              ? ErrorRetry(error: _error!, onRetry: _load)
-              : candles == null
-                  ? const Center(child: CircularProgressIndicator())
-                  : candles.length < 2
-                      ? const Center(child: Text('Not enough trading history yet'))
-                      : LiveChart(
-                          candles: candles,
-                          frame: _frame,
-                          format: widget.source.format,
-                          scenario: _overlay ? selected : null,
-                          setup: _overlay ? setup : null,
-                          revision: _revision,
-                        ),
-        ),
+        // Taller with the MACD pane so the price area keeps its height.
+        SizedBox(height: _showMacd ? 440 : 360, child: chart),
         const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    for (final f in widget.source.timeframes)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 6),
-                        child: ChoiceChip(
-                          label: Text(f.label),
-                          selected: f == _frame,
-                          visualDensity: VisualDensity.compact,
-                          onSelected: (_) {
-                            if (f == _frame) return;
-                            setState(() => _frame = f);
-                            _load();
-                          },
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            IconButton(
-              tooltip: _overlay ? 'Hide wave count' : 'Show wave count',
-              isSelected: _overlay,
-              icon: const Icon(Icons.waves_outlined),
-              selectedIcon: const Icon(Icons.waves),
-              onPressed: () => setState(() => _overlay = !_overlay),
-            ),
-          ],
-        ),
+        controlsAndLayers,
         const SizedBox(height: 8),
-        if (_analysis != null) _analysisCard(_analysis!, setup),
+        card,
       ],
     );
   }
@@ -306,10 +430,7 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                     frame: _higherFrame!,
                     check: _htfFor(setup),
                     failed: _higherFailed,
-                    onTap: () {
-                      setState(() => _frame = _higherFrame!);
-                      _load();
-                    },
+                    onTap: () => _setFrame(_higherFrame!),
                   ),
                 ),
               if (setup.poorRR)
@@ -321,6 +442,24 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                   ),
                 ),
             ],
+            if (_macd != null) ...[
+              const SizedBox(height: 10),
+              _MacdSection(
+                state: MacdState.of(_macd!),
+                side: setup?.side,
+                notes: _candles == null ? const [] : macdNotes(s, _macd!, _candles!),
+              ),
+            ],
+            const Divider(height: 24),
+            _TimeframesTable(
+              timeframes: widget.source.timeframes,
+              current: _frame,
+              primaries: _primaries,
+              failed: _othersFailed,
+              layersOn: _layersOn,
+              format: fmt,
+              onToggle: _toggleLayer,
+            ),
             if (s.notes.isNotEmpty) ...[
               const SizedBox(height: 10),
               Wrap(
@@ -519,6 +658,189 @@ class HtfBadge extends StatelessWidget {
         ),
         child: body,
       ),
+    );
+  }
+}
+
+/// Every timeframe's current count at a glance, in its overlay colour, with how many
+/// point each way and where their targets coincide. Tapping a row toggles its layer.
+class _TimeframesTable extends StatelessWidget {
+  const _TimeframesTable({
+    required this.timeframes,
+    required this.current,
+    required this.primaries,
+    required this.failed,
+    required this.layersOn,
+    required this.format,
+    required this.onToggle,
+  });
+
+  final List<Timeframe> timeframes;
+  final Timeframe current;
+  final Map<Timeframe, Scenario> primaries;
+  final Set<Timeframe> failed;
+  final Set<Timeframe> layersOn;
+  final String Function(double) format;
+  final ValueChanged<Timeframe> onToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final a = alignment(primaries);
+    final confluence = findConfluence(primaries);
+    final total = a.up + a.down;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Text('All timeframes', style: text.labelLarge),
+            const Spacer(),
+            if (total > 0)
+              Text(
+                a.up == total || a.down == total
+                    ? 'All $total expect ${a.up > 0 ? '↑' : '↓'}'
+                    : '${a.up} expect ↑ · ${a.down} ↓',
+                style: text.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: a.up == total
+                      ? Colors.green.shade600
+                      : a.down == total
+                          ? Colors.red.shade400
+                          : muted,
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        for (final f in timeframes)
+          InkWell(
+            onTap: f == current ? null : () => onToggle(f),
+            borderRadius: BorderRadius.circular(6),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+              child: Row(
+                children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: f == current || layersOn.contains(f) ? colorOf(f) : Colors.transparent,
+                      border: Border.all(color: colorOf(f), width: 2),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    width: 34,
+                    child: Text(f.label,
+                        style: text.labelMedium?.copyWith(fontWeight: f == current ? FontWeight.w800 : null)),
+                  ),
+                  Expanded(child: _summary(text, muted, f)),
+                ],
+              ),
+            ),
+          ),
+        if (confluence.isNotEmpty) ...[
+          const SizedBox(height: 6),
+          for (final c in confluence.take(3))
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: Text(
+                '◆ Confluence: ${c.frames.map((f) => f.label).join(' + ')} targets overlap at '
+                '${format(c.low)}–${format(c.high)} ${c.direction > 0 ? '↑' : '↓'}',
+                style: text.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ),
+          Text('Outlined on the chart when both timeframes are shown.', style: text.bodySmall?.copyWith(color: muted)),
+        ],
+        const SizedBox(height: 2),
+        Text('Tap a row to draw that timeframe on the chart, in its colour.',
+            style: text.bodySmall?.copyWith(color: muted)),
+      ],
+    );
+  }
+
+  Widget _summary(TextTheme text, Color muted, Timeframe f) {
+    final p = primaries[f];
+    if (p == null) {
+      final note = failed.contains(f) ? 'couldn\'t load' : (f == current ? 'no clear count' : 'counting…');
+      return Text(note, style: text.bodySmall?.copyWith(color: muted));
+    }
+    final up = p.direction > 0;
+    return Text.rich(
+      TextSpan(children: [
+        TextSpan(
+          text: up ? '↑ ' : '↓ ',
+          style: TextStyle(color: up ? Colors.green.shade600 : Colors.red.shade400, fontWeight: FontWeight.w800),
+        ),
+        TextSpan(text: p.shortTitle),
+        TextSpan(text: '  ${format(p.targetLow)}–${format(p.targetHigh)}', style: TextStyle(color: muted)),
+      ]),
+      style: text.bodySmall,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+}
+
+/// MACD at the latest candle, whether it backs the setup, and what it says about the count.
+class _MacdSection extends StatelessWidget {
+  const _MacdSection({required this.state, required this.side, required this.notes});
+
+  final MacdState? state;
+  final Side? side;
+  final List<MacdNote> notes;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final st = state;
+    if (st == null) {
+      return Text('MACD: not enough history yet', style: text.bodySmall?.copyWith(color: muted));
+    }
+    final momentum = '${st.bullish ? 'Bullish' : 'Bearish'}: histogram ${st.histogram >= 0 ? 'above' : 'below'} zero, '
+        '${st.rising ? 'rising' : 'falling'}'
+        '${st.crossAgo != null && st.crossAgo! <= 5 ? ', crossed ${st.crossAgo == 0 ? 'this candle' : '${st.crossAgo} candles ago'}' : ''}';
+    final verdict = side == null ? null : st.verdictFor(side!);
+    final (Color vColor, String vText) = switch (verdict) {
+      MacdVerdict.agree => (Colors.green.shade600, 'backs the ${side == Side.long ? 'LONG' : 'SHORT'}'),
+      MacdVerdict.turning => (Colors.orange.shade800, 'turning toward the ${side == Side.long ? 'LONG' : 'SHORT'}'),
+      MacdVerdict.against => (Colors.red.shade400, 'against the ${side == Side.long ? 'LONG' : 'SHORT'}'),
+      null => (muted, ''),
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Text('MACD (${Macd.fast}, ${Macd.slow}, ${Macd.smooth})', style: text.labelLarge),
+            const Spacer(),
+            if (verdict != null)
+              Text(vText, style: text.labelMedium?.copyWith(color: vColor, fontWeight: FontWeight.w700)),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(momentum, style: text.bodySmall),
+        for (final n in notes)
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  n.good == true ? Icons.check_circle : (n.good == false ? Icons.warning_amber : Icons.info_outline),
+                  size: 14,
+                  color: n.good == true ? Colors.green.shade600 : (n.good == false ? Colors.orange.shade800 : muted),
+                ),
+                const SizedBox(width: 6),
+                Expanded(child: Text(n.text, style: text.bodySmall)),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

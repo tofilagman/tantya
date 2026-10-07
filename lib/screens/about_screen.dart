@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../elliott.dart';
+import '../layers.dart';
 import '../setup.dart';
 
-const appVersion = '0.1.1';
+const appVersion = '0.2.0';
 
 /// What the app is, how to use it while trading, and exactly how predictions are made.
 /// The swing sensitivities, Fibonacci table, stop buffer and expiry are read from the
@@ -83,6 +84,27 @@ class AboutScreen extends StatelessWidget {
               _Legend(swatch: _box(Colors.green.shade600.withValues(alpha: 0.2)), text: 'Target zone (green for up, red for down).'),
               _Legend(swatch: _tag('SL', Colors.red.shade400), text: 'Stop: where the count is proven wrong.'),
               _Legend(swatch: _tag('TP1', Colors.green.shade600), text: 'First and second targets: near and far edge of the zone.'),
+              _Legend(
+                swatch: Row(mainAxisSize: MainAxisSize.min, children: [
+                  for (final f in timeframeColors.values)
+                    Container(width: 6, height: 16, color: f, margin: const EdgeInsets.only(right: 1)),
+                ]),
+                text: 'Overlays: other timeframes\' counts in their own colour (1m purple, 5m red, 15m orange, '
+                    '1h yellow, 4h blue, 1D teal). Turn them on with the Overlay chips under the chart.',
+              ),
+              _Legend(
+                swatch: Container(
+                  width: 28,
+                  height: 16,
+                  decoration: BoxDecoration(border: Border.all(width: 1.5)),
+                ),
+                text: 'Confluence: two timeframes\' targets overlap and point the same way.',
+              ),
+              _Legend(
+                swatch: const Icon(Icons.stacked_line_chart, size: 20),
+                text: 'MACD pane (12, 26, 9): histogram bars, MACD line (dark) and signal line (grey). '
+                    'The card says whether momentum backs the setup and what it means for the wave count.',
+              ),
               const SizedBox(height: 8),
               Text('Drag to scroll back in time, pinch to zoom, long-press for a candle\'s OHLC and volume, '
                   'double-tap to snap back to live. The wave icon next to the timeframes hides or shows the count.',
@@ -174,6 +196,22 @@ class AboutScreen extends StatelessWidget {
               ),
               const _Algo(
                 n: 8,
+                title: 'Compare every timeframe',
+                body: 'Each timeframe is counted separately. The All timeframes table shows what each one expects '
+                    'next, how many agree, and where two timeframes\' target zones overlap in the same direction '
+                    '(confluence). Overlapping targets from different degrees are a stronger level than '
+                    'either alone.',
+              ),
+              const _Algo(
+                n: 9,
+                title: 'Check momentum with MACD',
+                body: 'Elliott Wave makes momentum claims MACD can test: wave 3 should carry the strongest '
+                    'momentum, and a wave 5 that makes a new extreme on weaker MACD (divergence) usually ends '
+                    'the impulse. The same goes for wave C against wave A. These checks are shown as ✓ or ⚠ '
+                    'but don\'t change the score yet: the Setups tab measures whether they help first.',
+              ),
+              const _Algo(
+                n: 10,
                 title: 'Rank and update',
                 body: 'Counts already invalidated, or whose target is already behind the price, are dropped. '
                     'The highest score becomes the primary count, and up to four alternates are listed with '

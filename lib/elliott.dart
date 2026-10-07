@@ -159,6 +159,15 @@ class Scenario {
     return '$structure · wave $next in progress';
   }
 
+  /// Compact form for tables: "wave 4 of impulse ↓". The arrow is the structure's
+  /// direction; [direction] (the expected next move) is shown separately.
+  String get shortTitle {
+    final arrow = trend > 0 ? '↑' : '↓';
+    final structure = kind == ScenarioKind.impulse ? 'impulse' : 'correction';
+    if (next == 'new trend') return 'ABC done (correction $arrow)';
+    return 'wave $next of $structure $arrow';
+  }
+
   String get key => '${kind.name}|${points.map((p) => '${p.pivot.index}${p.label}').join(',')}|$next';
 }
 

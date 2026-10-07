@@ -1,6 +1,6 @@
 # Tantya
 
-**An Elliott Wave trading companion for Android and iOS.**
+**An Elliott Wave trading companion for Android, iOS, Windows and macOS.**
 
 Open the pair you're trading on Binance and Tantya shows the same live
 candlestick chart with an algorithmic wave count drawn on it. It projects the next
@@ -20,10 +20,12 @@ never places orders. *It is an analysis tool, not financial advice.*
   <tr>
     <td align="center"><img src="docs/screenshots/pairs.png" width="200" alt="Binance pairs sorted by 24h volume"><br><sub><b>Pairs</b><br>Binance spot by 24h volume</sub></td>
     <td align="center"><img src="docs/screenshots/about.png" width="200" alt="About tab with an Elliott Wave diagram and the three rules"><br><sub><b>About</b><br>how to use it, and the algorithm</sub></td>
-    <td valign="top"><sub>Screenshots from the iPhone simulator (iOS 27) with live
-    Binance data on 2026-10-07. The Android app is the same Flutter code.</sub></td>
+    <td align="center"><img src="docs/screenshots/overlays.png" width="200" alt="5m count in red with the 1h count overlaid in yellow"><br><sub><b>Timeframe overlays</b><br>5m red + 1h yellow on one chart</sub></td>
   </tr>
 </table>
+
+<sub>Screenshots from the iPhone simulator (iOS 27) with live Binance data on
+2026-10-07. Android, Windows and macOS run the same Flutter code.</sub>
 
 ## What it does
 
@@ -33,11 +35,19 @@ never places orders. *It is an analysis tool, not financial advice.*
 - **Trade setup** from the best count: LONG/SHORT, entry, an ATR-buffered stop,
   two targets and reward:risk, plus the alternate counts.
 - **Higher-timeframe check**: does the 4h agree with your 1h setup?
+- **Timeframe overlays**: other timeframes' counts drawn on the same chart, one
+  colour each (5m red, 1h yellow, …), with their target overlaps (confluence)
+  outlined, and an "All timeframes" table showing how many point which way.
 - **Scanner** across the top 30/50/100 pairs, and **background alerts** for fresh
   setups.
 - **Track record**: tracked setups are settled at their target or stop, and
   scored in R per timeframe and by higher-timeframe agreement, so you can see
   whether the method actually works.
+- **MACD**: a momentum pane under the chart, read against the wave count (does
+  wave 3 carry the most momentum? does wave 5 diverge?), and whether momentum
+  backs the setup.
+- **Desktop**: a big chart with the setup beside it, a side navigation rail,
+  mouse-wheel zoom and a crosshair that follows the pointer.
 
 ## Tabs
 
@@ -115,6 +125,59 @@ and is *unknown* when there is no count.
 - **Track record**: tracked setups store the verdict, and the scorecard compares
   hit rate and average R for *agreed* vs *against*. That's the evidence for
   whether the check helps.
+
+## Timeframe overlays & confluence (`lib/layers.dart`)
+
+Every timeframe has a fixed colour everywhere in the app: **1m purple, 5m red,
+15m orange, 1h yellow, 4h blue, 1D teal**. The chart's own count uses its
+timeframe's colour.
+
+- **Overlay chips** under the timeframes draw other timeframes' counts on the
+  chart: their swings, labels, projected next wave and target band, thinner than
+  the chart's own. Points are placed **by time** (`indexAt`), so a 1h count lines
+  up on a 5m chart and the other way round. The next-higher timeframe is on by
+  default and follows timeframe changes until you pick overlays yourself.
+- **Off-screen targets**: a longer timeframe's target is often outside a short
+  chart's price range, so it is pinned as a coloured marker to the top or bottom
+  edge ("1h ↑ 84,893").
+- **Confluence** (`findConfluence`): where two shown timeframes' target zones
+  overlap *and* expect the same direction, the overlap is outlined on the chart
+  ("5m+15m ↑"). Pairs spanning more degrees are listed first.
+- **All timeframes table** in the setup card: each timeframe's count as
+  "↑ wave 4 of impulse ↓" (the arrow is the expected next move; the structure's own
+  direction is in the text), its target, alignment ("All 6 expect ↑" or
+  "4 expect ↑ · 2 ↓"), and the confluences. Tap a row to toggle its overlay.
+
+Opening a chart now counts every timeframe (about six history requests, then a
+recount every 5 minutes). The same data feeds the higher-timeframe badge.
+
+## MACD (`lib/indicators.dart`)
+
+Standard MACD (12, 26, 9): EMAs seeded with a simple average, signal = EMA(9) of
+MACD, histogram = MACD − signal. The pane under the chart shows histogram bars
+(paler while shrinking), the MACD line (dark) and the signal line (grey), in
+neutral colours because the timeframe overlays use red, orange, yellow and blue.
+Toggle it with the line-chart icon. The crosshair shows MACD and signal values.
+
+The setup card's **MACD** section reads it three ways:
+
+- **State**: bullish or bearish (histogram above or below zero), rising or
+  falling, and a recent cross.
+- **Does momentum back the setup?** *Backs* (histogram on the trade's side),
+  *turning* (wrong side but moving toward it) or *against*.
+- **Against the wave count** (`macdNotes`), measuring each wave's momentum as the
+  MACD line's extreme during that wave:
+  - wave 3 should be the momentum peak among waves 1, 3 and 5 (✓, or ⚠ if not);
+  - wave 5 past wave 3 on weaker MACD is **divergence**, the classic sign an
+    impulse is ending (✓); no divergence means it may extend (⚠); while wave 5 is
+    still running, "divergence building" is an early warning;
+  - wave C past wave A on weaker MACD is typical as a correction ends (✓); a
+    stronger C means it may not be finished (⚠).
+
+**MACD doesn't change scores or setups yet.** Each tracked setup records the MACD
+verdict, and the Setups tab's **By MACD momentum** table compares results for
+*backed* / *turning* / *against*. Folding MACD into the ranking should wait until
+that comparison shows it helps.
 
 ## Trade setups (`lib/setup.dart`)
 
@@ -230,6 +293,41 @@ running a release-signed install. **Back up both files somewhere other than this
 laptop.** If they're lost, every install has to be uninstalled (losing tracked
 setups) before a new build can go on.
 
+## Desktop (Windows, macOS)
+
+Same Flutter code. On windows at least 900 px wide the app uses a side navigation
+rail. Chart screens at least 1000 px wide put the chart on the left (filling the
+window) and the setup card on the right. On the chart, the mouse wheel zooms and
+the crosshair follows the pointer. Tablets get the same layout.
+
+- **Alerts run only while the app is open.** Desktop has no WorkManager-style
+  scheduler for Flutter, so watchlist, setup and scanner checks run on a 15-minute
+  timer inside the app (`isDesktop` / `_startDesktopChecks` in `lib/alerts.dart`).
+  Minimised is fine; quitting stops them. Notifications use the system notification
+  centre on each platform.
+- **macOS**: universal (Intel and Apple Silicon), sandboxed with the
+  `network.client` entitlement. Without that entitlement every request fails in
+  release builds. It is ad-hoc signed, not notarized (that needs a paid Apple
+  Developer account), so on first launch macOS blocks it: open
+  **System Settings → Privacy & Security → Open Anyway** (or right-click → Open on
+  older macOS).
+- **Windows**: built only on GitHub Actions (`.github/workflows/desktop.yml`), since
+  a Mac can't build Windows apps. Unsigned, so SmartScreen warns on first run
+  (**More info → Run anyway**). Unzip and run `tantya.exe`; keep the DLLs and
+  `data/` folder next to it.
+- Window: opens at 1280×820, minimum 900×620 (`macos/Runner/MainFlutterWindow.swift`,
+  `windows/runner/main.cpp`, and `WM_GETMINMAXINFO` in `win32_window.cpp`).
+- Icons: `tool/render_icon.swift macos|windows` (the Windows `.ico` packs 16–256 px PNGs).
+
+```bash
+flutter build macos --release   # → build/macos/Build/Products/Release/Tantya.app
+```
+
+**CI** (`.github/workflows/desktop.yml`): every push to `master` builds Windows
+(and runs the tests) and macOS, and keeps `tantya-windows-x64.zip` /
+`tantya-macos.zip` as workflow artifacts. Pushing a tag like `v0.2.0` also
+attaches them to a GitHub Release.
+
 ## iOS
 
 **Status (2026-10-07):** builds with Xcode 27 and runs on the iPhone simulator,
@@ -267,7 +365,7 @@ What's iOS-specific:
   `BGAppRefreshTask` when it decides to (often hourly or less, less still for rarely
   opened apps). In-app texts say so via `backgroundCadence` in `lib/alerts.dart`.
   Charts, counts, setups and the scanner are unaffected while the app is open.
-- The app icon is a single 1024 px image rendered by `tool/render_ios_icon.swift`
+- The app icon is a single 1024 px image rendered by `tool/render_icon.swift ios`
   (same design as Android, scaled up because iOS doesn't crop it to a safe zone).
 - Apple verifies TLS certificates through the system trust store, more strictly
   than Android. That is why the Polymarket DNS block showed up on iOS first.

@@ -1,11 +1,14 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../candles.dart';
 import '../elliott.dart';
+import '../indicators.dart';
+import '../layers.dart';
 import '../setup.dart';
 
 final _up = Colors.green.shade600;
@@ -15,6 +18,7 @@ final _down = Colors.red.shade400;
 /// drawn on top, projected into empty space right of the last candle.
 ///
 /// Drag to pan, pinch to zoom, long-press for a crosshair, double-tap to reset.
+/// With a mouse: scroll wheel zooms, and the crosshair follows the pointer.
 class LiveChart extends StatefulWidget {
   const LiveChart({
     super.key,
@@ -24,6 +28,10 @@ class LiveChart extends StatefulWidget {
     this.scenario,
     this.setup,
     this.revision = 0,
+    this.primaryColor,
+    this.layers = const [],
+    this.confluence = const [],
+    this.macd,
   });
 
   final List<Candle> candles;
@@ -31,6 +39,18 @@ class LiveChart extends StatefulWidget {
   final String Function(double) format;
   final Scenario? scenario;
   final TradeSetup? setup;
+
+  /// Colour of this chart's own count (its timeframe's colour); theme primary if null.
+  final Color? primaryColor;
+
+  /// Other timeframes' counts, drawn under this chart's own, each in its own colour.
+  final List<Layer> layers;
+
+  /// Overlapping same-direction targets, outlined on the chart.
+  final List<Confluence> confluence;
+
+  /// MACD for [candles], shown in a pane under the volume; null hides the pane.
+  final Macd? macd;
 
   /// Bumped by the parent whenever [candles] changed in place, to force a repaint.
   final int revision;
@@ -64,12 +84,14 @@ class _LiveChartState extends State<LiveChart> {
     return LayoutBuilder(builder: (context, box) {
       final size = Size(box.maxWidth, box.maxHeight);
       final geo = _Geometry(size, widget.candles.length, _visible, _offset, future: _future);
-      return GestureDetector(
+      final n = widget.candles.length.toDouble();
+      final maxVisible = math.max(15.0, math.min(300.0, n));
+      final chart = GestureDetector(
         onScaleStart: (_) => _visibleAtScaleStart = _visible,
         onScaleUpdate: (d) => setState(() {
-          final n = widget.candles.length.toDouble();
-          if (d.pointerCount > 1) {
-            _visible = (_visibleAtScaleStart / d.scale).clamp(15.0, math.max(15.0, math.min(300.0, n)));
+          if (d.pointerCount > 1 || d.scale != 1) {
+            // Two fingers, or a trackpad pinch.
+            _visible = (_visibleAtScaleStart / d.scale).clamp(15.0, maxVisible);
           }
           _offset = (_offset + d.focalPointDelta.dx / geo.slot).clamp(0.0, math.max(0.0, n - _visible));
         }),
@@ -88,6 +110,10 @@ class _LiveChartState extends State<LiveChart> {
             format: widget.format,
             scenario: widget.scenario,
             setup: widget.setup,
+            primaryColor: widget.primaryColor ?? theme.colorScheme.primary,
+            layers: widget.layers,
+            confluence: widget.confluence,
+            macd: widget.macd,
             geo: geo,
             cross: _cross,
             revision: widget.revision,
@@ -96,11 +122,33 @@ class _LiveChartState extends State<LiveChart> {
           ),
         ),
       );
+      return Listener(
+        // Mouse wheel zooms around the latest candles; claim the event so the page
+        // around the chart doesn't scroll at the same time.
+        onPointerSignal: (e) {
+          if (e is! PointerScrollEvent) return;
+          GestureBinding.instance.pointerSignalResolver.register(e, (_) {
+            setState(() {
+              _visible = (_visible * math.exp(e.scrollDelta.dy / 500)).clamp(15.0, maxVisible);
+              _offset = _offset.clamp(0.0, math.max(0.0, n - _visible));
+            });
+          });
+        },
+        child: MouseRegion(
+          cursor: SystemMouseCursors.precise,
+          onHover: (e) {
+            final i = geo.indexAt(e.localPosition.dx);
+            if (i != _cross) setState(() => _cross = i);
+          },
+          onExit: (_) => setState(() => _cross = null),
+          child: chart,
+        ),
+      );
     });
   }
 
   /// Empty candle slots on the right: room for the projection when there is one.
-  int get _future => widget.scenario != null ? 16 : 3;
+  int get _future => widget.scenario != null || widget.layers.isNotEmpty ? 16 : 3;
 }
 
 /// Maps candle indexes and prices to pixels.
@@ -142,6 +190,10 @@ class _ChartPainter extends CustomPainter {
     required this.format,
     required this.scenario,
     required this.setup,
+    required this.primaryColor,
+    required this.layers,
+    required this.confluence,
+    required this.macd,
     required this.geo,
     required this.cross,
     required this.revision,
@@ -154,6 +206,10 @@ class _ChartPainter extends CustomPainter {
   final String Function(double) format;
   final Scenario? scenario;
   final TradeSetup? setup;
+  final Color primaryColor;
+  final List<Layer> layers;
+  final List<Confluence> confluence;
+  final Macd? macd;
   final _Geometry geo;
   final int? cross;
   final int revision;
@@ -166,8 +222,11 @@ class _ChartPainter extends CustomPainter {
     final plot = geo.plot;
     final from = geo.firstVisible, to = geo.lastVisible;
     final hasVolume = candles.any((c) => c.volume > 0);
-    final volH = hasVolume ? plot.height * 0.16 : 0.0;
-    final priceRect = Rect.fromLTRB(plot.left, plot.top + 8, plot.right, plot.bottom - volH - 6);
+    final macdH = macd != null ? plot.height * 0.2 : 0.0;
+    final macdRect = Rect.fromLTRB(plot.left, plot.bottom - macdH, plot.right, plot.bottom);
+    final volBase = Rect.fromLTRB(plot.left, plot.top, plot.right, plot.bottom - macdH - (macdH > 0 ? 8 : 0));
+    final volH = hasVolume ? plot.height * (macd != null ? 0.12 : 0.16) : 0.0;
+    final priceRect = Rect.fromLTRB(plot.left, plot.top + 8, plot.right, volBase.bottom - volH - 6);
 
     // Price range: visible candles plus the levels we draw, so targets and stops stay on screen.
     var lo = double.infinity, hi = -double.infinity;
@@ -196,10 +255,17 @@ class _ChartPainter extends CustomPainter {
     canvas.save();
     canvas.clipRect(plot);
     _grid(canvas, priceRect, lo, hi, y);
-    if (hasVolume) _volume(canvas, plot, volH, from, to);
+    if (hasVolume) _volume(canvas, volBase, volH, from, to);
+    if (macd != null) _macd(canvas, macdRect, from, to);
     if (scenario != null) _zone(canvas, priceRect, y);
     _candles(canvas, from, to, y);
+    for (final l in layers) {
+      _layer(canvas, priceRect, l, y);
+    }
     if (scenario != null) _waves(canvas, y);
+    for (final c in confluence) {
+      _confluence(canvas, priceRect, c, y);
+    }
     canvas.restore();
 
     _axis(canvas, size, priceRect, lo, hi, y);
@@ -279,9 +345,10 @@ class _ChartPainter extends CustomPainter {
   /// The count's zigzag with wave labels, and the projected next wave.
   void _waves(Canvas canvas, double Function(double) y) {
     final s = scenario!;
+    final pc = primaryColor;
     final line = Paint()
-      ..color = scheme.primary
-      ..strokeWidth = 1.6
+      ..color = pc
+      ..strokeWidth = 1.8
       ..style = PaintingStyle.stroke;
     final path = Path();
     for (var i = 0; i < s.points.length; i++) {
@@ -296,25 +363,111 @@ class _ChartPainter extends CustomPainter {
     final aheadIdx = math.min(candles.length - 1 + s.legBars, candles.length - 1 + 14);
     final from = Offset(geo.x(last.index), y(last.price));
     final to = Offset(geo.x(aheadIdx), y(s.targetMid));
-    _dashed(canvas, from, to, scheme.primary, 1.6);
-    _arrowHead(canvas, from, to, scheme.primary);
+    _dashed(canvas, from, to, pc, 1.8);
+    _arrowHead(canvas, from, to, pc);
     // After a finished ABC the prior trend resumes: the next impulse's wave 1.
-    _bubble(canvas, to + Offset(0, s.direction > 0 ? -14 : 14), s.next == 'new trend' ? '1' : s.next, dashed: true);
+    _bubble(canvas, to + Offset(0, s.direction > 0 ? -14 : 14), s.next == 'new trend' ? '1' : s.next, pc, dashed: true);
 
     for (final w in s.points) {
       if (w.label.isEmpty) continue;
       final o = Offset(geo.x(w.pivot.index), y(w.pivot.price));
-      _bubble(canvas, o + Offset(0, w.pivot.high ? -14 : 14), w.label);
+      _bubble(canvas, o + Offset(0, w.pivot.high ? -14 : 14), w.label, pc);
     }
   }
 
-  void _bubble(Canvas canvas, Offset c, String label, {bool dashed = false}) {
-    final tp = _tp(label, text.copyWith(color: dashed ? scheme.primary : scheme.onPrimary, fontWeight: FontWeight.w700));
-    final r = math.max(tp.width, tp.height) / 2 + 3;
-    canvas.drawCircle(c, r, Paint()..color = dashed ? scheme.surface : scheme.primary);
+  /// Another timeframe's count, placed by time: its swings, labels, projected next wave
+  /// and target band, thinner than this chart's own count so the two read apart.
+  void _layer(Canvas canvas, Rect r, Layer l, double Function(double) y) {
+    final c = l.color;
+    double x(DateTime t) => geo.x(indexAt(candles, frame, t));
+    final line = Paint()
+      ..color = c.withValues(alpha: 0.9)
+      ..strokeWidth = 1.3
+      ..style = PaintingStyle.stroke;
+    final path = Path();
+    for (var i = 0; i < l.points.length; i++) {
+      final o = Offset(x(l.points[i].time), y(l.points[i].price));
+      i == 0 ? path.moveTo(o.dx, o.dy) : path.lineTo(o.dx, o.dy);
+    }
+    canvas.drawPath(path, line);
+
+    final s = l.scenario;
+    final startX = geo.x(candles.length - 1);
+    final band = Rect.fromLTRB(startX, y(s.targetHigh), r.right, y(s.targetLow));
+    canvas.drawRect(band, Paint()..color = c.withValues(alpha: 0.10));
+    _dashed(canvas, band.topLeft, band.topRight, c.withValues(alpha: 0.7), 1);
+    _dashed(canvas, band.bottomLeft, band.bottomRight, c.withValues(alpha: 0.7), 1);
+
+    final last = l.points.last;
+    final from = Offset(x(last.time), y(last.price));
+    final to = Offset(math.min(x(l.projectTo), r.right - 14), y(s.targetMid));
+    _dashed(canvas, from, to, c, 1.3);
+    _arrowHead(canvas, from, to, c);
+    _bubble(canvas, to + Offset(0, s.direction > 0 ? -12 : 12), s.next == 'new trend' ? '1' : s.next, c,
+        dashed: true, small: true);
+    // Further out than this chart's own labels (14px), so when both counts mark the same
+    // swing the two bubbles stack instead of covering each other.
+    for (final p in l.points) {
+      if (p.label.isEmpty) continue;
+      _bubble(canvas, Offset(x(p.time), y(p.price)) + Offset(0, p.high ? -30 : 30), p.label, c, small: true);
+    }
+    _offscreenTarget(canvas, r, l, y);
+  }
+
+  /// A longer timeframe's target is often far outside a short chart's price range;
+  /// pin a marker to the top or bottom edge so it's clear where that count points.
+  void _offscreenTarget(Canvas canvas, Rect r, Layer l, double Function(double) y) {
+    final s = l.scenario;
+    final above = y(s.targetLow) < r.top; // whole zone above the view
+    final below = y(s.targetHigh) > r.bottom; // whole zone below
+    if (!above && !below) return;
+    final edge = above ? r.top + 2 : r.bottom - 2;
+    final near = above ? s.targetLow : s.targetHigh;
+    final label = '${l.frame.label} ${above ? '↑' : '↓'} ${format(near)}';
+    final tp = _tp(label, text.copyWith(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 9));
+    // Stack markers by timeframe so several off-screen targets don't overlap.
+    final row = layers.where((o) {
+      final oa = y(o.scenario.targetLow) < r.top, ob = y(o.scenario.targetHigh) > r.bottom;
+      return (above ? oa : ob) && o.frame.index < l.frame.index;
+    }).length;
+    final top = above ? edge + row * (tp.height + 6) : edge - (row + 1) * (tp.height + 6);
+    final box = Rect.fromLTWH(r.right - tp.width - 12, top, tp.width + 8, tp.height + 4);
+    canvas.drawRRect(RRect.fromRectAndRadius(box, const Radius.circular(3)), Paint()..color = l.color);
+    tp.paint(canvas, Offset(box.left + 4, box.top + 2));
+  }
+
+  /// Where two timeframes' targets overlap: an outlined band with the timeframes named.
+  void _confluence(Canvas canvas, Rect r, Confluence cf, double Function(double) y) {
+    final startX = geo.x(candles.length - 1);
+    final band = Rect.fromLTRB(startX, y(cf.high), r.right, y(cf.low));
+    canvas.drawRect(band, Paint()..color = scheme.onSurface.withValues(alpha: 0.08));
+    canvas.drawRect(
+      band,
+      Paint()
+        ..color = scheme.onSurface.withValues(alpha: 0.75)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5,
+    );
+    final tp = _tp(
+      '${cf.frames.map((f) => f.label).join('+')} ${cf.direction > 0 ? '↑' : '↓'}',
+      text.copyWith(color: scheme.onSurface, fontWeight: FontWeight.w700, fontSize: 9),
+    );
+    tp.paint(canvas, Offset(band.left + 3, band.top + 2));
+  }
+
+  void _bubble(Canvas canvas, Offset c, String label, Color color, {bool dashed = false, bool small = false}) {
+    // Dark text on light fills (amber, yellow) so labels stay readable.
+    final onColor = color.computeLuminance() > 0.45 ? Colors.black : Colors.white;
+    final tp = _tp(label, text.copyWith(
+      color: dashed ? color : onColor,
+      fontWeight: FontWeight.w700,
+      fontSize: small ? 9 : null,
+    ));
+    final r = math.max(tp.width, tp.height) / 2 + (small ? 2 : 3);
+    canvas.drawCircle(c, r, Paint()..color = dashed ? scheme.surface : color);
     if (dashed) {
       canvas.drawCircle(c, r, Paint()
-        ..color = scheme.primary
+        ..color = color
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.2);
     }
@@ -392,6 +545,80 @@ class _ChartPainter extends CustomPainter {
     }
   }
 
+  /// MACD pane: histogram bars (paler while shrinking), MACD line, signal line, zero line.
+  void _macd(Canvas canvas, Rect r, int from, int to) {
+    final m = macd!;
+    var lo = 0.0, hi = 0.0; // always include zero
+    for (var i = from; i <= to; i++) {
+      for (final v in [m.line[i], m.signal[i], m.histogram[i]]) {
+        if (v == null) continue;
+        lo = math.min(lo, v);
+        hi = math.max(hi, v);
+      }
+    }
+    if (hi - lo == 0) return;
+    final pad = (hi - lo) * 0.1;
+    lo -= pad;
+    hi += pad;
+    double y(double v) => r.bottom - (v - lo) / (hi - lo) * r.height;
+
+    canvas.drawLine(Offset(r.left, r.top - 4), Offset(r.right, r.top - 4),
+        Paint()..color = scheme.outlineVariant.withValues(alpha: 0.5));
+    canvas.drawLine(Offset(r.left, y(0)), Offset(r.right, y(0)),
+        Paint()
+          ..color = scheme.outlineVariant
+          ..strokeWidth = 1);
+
+    final body = math.max(1.0, geo.slot * 0.6);
+    final bar = Paint();
+    for (var i = from; i <= to; i++) {
+      final h = m.histogram[i];
+      if (h == null) continue;
+      final prev = i > 0 ? m.histogram[i - 1] : null;
+      final growing = prev == null || h.abs() >= prev.abs();
+      bar.color = (h >= 0 ? _up : _down).withValues(alpha: growing ? 0.75 : 0.35);
+      final x = geo.x(i);
+      canvas.drawRect(Rect.fromLTRB(x - body / 2, math.min(y(0), y(h)), x + body / 2, math.max(y(0), y(h))), bar);
+    }
+
+    void line(List<double?> vs, Color c) {
+      final path = Path();
+      var started = false;
+      for (var i = from; i <= to; i++) {
+        final v = vs[i];
+        if (v == null) continue;
+        final o = Offset(geo.x(i), y(v));
+        started ? path.lineTo(o.dx, o.dy) : path.moveTo(o.dx, o.dy);
+        started = true;
+      }
+      canvas.drawPath(path, Paint()
+        ..color = c
+        ..strokeWidth = 1.4
+        ..style = PaintingStyle.stroke);
+    }
+
+    line(m.line, _macdLine);
+    line(m.signal, _signalLine);
+
+    final last = m.histogram.lastWhere((v) => v != null, orElse: () => null);
+    final tp = _tp(
+      'MACD ${Macd.fast},${Macd.slow},${Macd.smooth}${last == null ? '' : '  hist ${_fmtMacd(last)}'}',
+      text.copyWith(color: scheme.onSurfaceVariant, fontSize: 9),
+    );
+    tp.paint(canvas, Offset(r.left + 4, r.top - 2));
+  }
+
+  // Neutral on purpose: blue, orange, red and yellow are taken by the timeframe overlays.
+  Color get _macdLine => scheme.onSurface;
+  Color get _signalLine => scheme.onSurfaceVariant.withValues(alpha: 0.6);
+
+  /// MACD values are price differences: tiny for cheap coins, large for BTC.
+  String _fmtMacd(double v) {
+    final a = v.abs();
+    final digits = a >= 100 ? 1 : a >= 1 ? 2 : a >= 0.01 ? 4 : 6;
+    return v.toStringAsFixed(digits);
+  }
+
   void _crosshair(Canvas canvas, int i, double Function(double) y) {
     final c = candles[i];
     final x = geo.x(i);
@@ -405,7 +632,8 @@ class _ChartPainter extends CustomPainter {
         'O ${format(c.open)}  H ${format(c.high)}\n'
         'L ${format(c.low)}  C ${format(c.close)}\n'
         '${change >= 0 ? '+' : ''}${change.toStringAsFixed(2)}%'
-        '${c.volume > 0 ? '  Vol ${NumberFormat.compact().format(c.volume)}' : ''}';
+        '${c.volume > 0 ? '  Vol ${NumberFormat.compact().format(c.volume)}' : ''}'
+        '${macd?.histogram[i] != null ? '\nMACD ${_fmtMacd(macd!.line[i]!)}  sig ${_fmtMacd(macd!.signal[i]!)}' : ''}';
     final tp = _tp(label, text.copyWith(color: scheme.onInverseSurface, height: 1.3));
     final left = x < geo.plot.width / 2 ? geo.plot.right - tp.width - 16 : 8.0;
     final box = Rect.fromLTWH(left, 8, tp.width + 12, tp.height + 10);
@@ -434,6 +662,10 @@ class _ChartPainter extends CustomPainter {
       old.candles != candles ||
       old.scenario != scenario ||
       old.setup != setup ||
+      old.primaryColor != primaryColor ||
+      old.layers != layers ||
+      old.confluence != confluence ||
+      old.macd != macd ||
       old.cross != cross ||
       old.geo.visible != geo.visible ||
       old.geo.offset != geo.offset ||

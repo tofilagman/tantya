@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../candles.dart';
+import '../indicators.dart';
 import '../mtf.dart';
 import '../setup.dart';
 import '../sources/binance.dart';
@@ -173,6 +174,7 @@ class _ScoreCard extends StatelessWidget {
         );
     final byFrame = card.byFrame;
     final byHtf = card.byHtf;
+    final byMacd = card.byMacd;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -225,6 +227,26 @@ class _ScoreCard extends StatelessWidget {
                     ),
                 ],
                 footer: 'If agreeing setups don\'t beat the rest over time, the check isn\'t helping.',
+              ),
+            ],
+            if (byMacd.isNotEmpty) ...[
+              const Divider(height: 24),
+              _Breakdown(
+                title: 'By MACD momentum',
+                rows: [
+                  for (final MapEntry(key: v, value: g) in byMacd.entries)
+                    (
+                      label: switch (v) {
+                        MacdVerdict.agree => 'Backed',
+                        MacdVerdict.turning => 'Turning',
+                        MacdVerdict.against => 'Against',
+                      },
+                      card: g,
+                      onTap: null,
+                    ),
+                ],
+                footer: 'Whether MACD momentum was behind the trade when you tracked it. If "Backed" doesn\'t '
+                    'beat "Against" over time, MACD isn\'t adding anything here.',
               ),
             ],
           ],
@@ -341,6 +363,12 @@ class _SetupTile extends StatelessWidget {
               Text(
                 [
                   s.count,
+                  if (s.macd != null)
+                    switch (s.macd!) {
+                      MacdVerdict.agree => 'MACD backed',
+                      MacdVerdict.turning => 'MACD turning',
+                      MacdVerdict.against => 'MACD against',
+                    },
                   if (s.htf != null && s.frame.higher != null)
                     switch (s.htf!) {
                       HtfVerdict.agree => '${s.frame.higher!.label} agreed',
