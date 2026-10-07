@@ -378,6 +378,11 @@ e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWith
 
 ## Gotchas
 
+- **Don't mix split and universal APKs on one phone.** `--split-per-abi` adds 1000×ABI
+  to the version code (arm64 0.2.0 = 2003), but the universal APK keeps the plain
+  code (3). Android treats universal-after-split as a downgrade and refuses to
+  install it over the existing app. Phones should stay on the arm64 APK.
+
 - `res/raw/keep.xml` keeps `@drawable/ic_notification`, which Dart refers to only
   by name. Without it the release shrinker deletes it and notification setup throws.
 - WorkManager refuses to run a periodic job early, even with
