@@ -4,7 +4,7 @@ import '../elliott.dart';
 import '../layers.dart';
 import '../setup.dart';
 
-const appVersion = '0.2.2';
+const appVersion = '0.2.3';
 
 /// What the app is, how to use it while trading, and exactly how predictions are made.
 /// The swing sensitivities, Fibonacci table, stop buffer and expiry are read from the
@@ -108,7 +108,7 @@ class AboutScreen extends StatelessWidget {
               ),
               _Legend(
                 swatch: const Icon(Icons.stacked_line_chart, size: 20),
-                text: 'Lower pane: MACD (12, 26, 9), RSI 14 or CCI 20, chosen with the pane button. '
+                text: 'Indicator panes: MACD (12, 26, 9), RSI 14 and CCI 20, any combination, ticked in the pane menu. '
                     'The card\'s evidence checklist says whether they back the wave in progress.',
               ),
               const SizedBox(height: 8),

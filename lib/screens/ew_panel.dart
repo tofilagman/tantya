@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../candles.dart';
 import '../elliott.dart';
@@ -51,10 +52,37 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
   String? _selectedKey;
   Macd? _macd;
   Indicators? _ind;
-  _Pane _pane = _Pane.macd;
+  /// Indicator panes under the chart; any combination, remembered across charts and
+  /// app restarts.
+  static Set<_Pane> _shownPanes = {_Pane.macd};
+  static bool _panesLoaded = false;
+  Set<_Pane> get _panes => _shownPanes;
   bool _showEmas = true;
 
-  bool get _showMacd => _pane != _Pane.none;
+  static const _panesKey = 'chart.panes.v1';
+
+  Future<void> _loadPanes() async {
+    if (_panesLoaded) return;
+    _panesLoaded = true;
+    try {
+      final saved = (await SharedPreferences.getInstance()).getStringList(_panesKey);
+      if (saved != null && mounted) {
+        setState(() => _shownPanes = {for (final n in saved) ?_Pane.values.asNameMap()[n]});
+      }
+    } catch (_) {
+      // Prefs unavailable: keep the default.
+    }
+  }
+
+  void _togglePane(_Pane p) {
+    setState(() {
+      _shownPanes = {..._shownPanes};
+      _shownPanes.contains(p) ? _shownPanes.remove(p) : _shownPanes.add(p);
+    });
+    SharedPreferences.getInstance()
+        .then((prefs) => prefs.setStringList(_panesKey, [for (final p in _shownPanes) p.name]))
+        .catchError((_) => false);
+  }
 
   /// The next timeframe up, counted separately to judge agreement.
   Timeframe? get _higherFrame {
@@ -81,6 +109,7 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _loadPanes();
     _load();
   }
 
@@ -282,13 +311,13 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                     revision: _revision,
                     primaryColor: colorOf(_frame),
                     layers: _overlay ? layers : const [],
-                    macd: _pane == _Pane.macd ? _macd : null,
-                    oscillator: switch (_pane) {
-                      _Pane.rsi when _ind != null =>
+                    macd: _panes.contains(_Pane.macd) ? _macd : null,
+                    oscillators: [
+                      if (_panes.contains(_Pane.rsi) && _ind != null)
                         Oscillator('RSI 14', _ind!.rsi14, guides: const [30, 50, 70], min: 0, max: 100),
-                      _Pane.cci when _ind != null => Oscillator('CCI 20', _ind!.cci20, guides: const [-100, 0, 100]),
-                      _ => null,
-                    },
+                      if (_panes.contains(_Pane.cci) && _ind != null)
+                        Oscillator('CCI 20', _ind!.cci20, guides: const [-100, 0, 100]),
+                    ],
                     emas: _showEmas && _ind != null
                         ? [
                             EmaLine(20, _ind!.ema20, width: 1, alpha: 0.35),
@@ -332,22 +361,41 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
           selectedIcon: const Icon(Icons.timeline),
           onPressed: () => setState(() => _showEmas = !_showEmas),
         ),
-        PopupMenuButton<_Pane>(
-          tooltip: 'Lower pane: MACD, RSI or CCI',
-          initialValue: _pane,
-          onSelected: (v) => setState(() => _pane = v),
-          itemBuilder: (_) => [
-            for (final p in _Pane.values) PopupMenuItem(value: p, child: Text(p.label)),
+        // Checkboxes, and the menu stays open so several can be ticked in one go.
+        MenuAnchor(
+          menuChildren: [
+            for (final p in _Pane.values)
+              CheckboxMenuButton(
+                value: _panes.contains(p),
+                closeOnActivate: false,
+                onChanged: (_) => _togglePane(p),
+                child: Text(p.label),
+              ),
           ],
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.stacked_line_chart, color: _pane == _Pane.none ? null : Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 2),
-                Text(_pane.short, style: Theme.of(context).textTheme.labelMedium),
-              ],
+          builder: (context, menu, _) => InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: () => menu.isOpen ? menu.close() : menu.open(),
+            child: Tooltip(
+              message: 'Indicator panes: MACD, RSI, CCI (any combination)',
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.stacked_line_chart,
+                        color: _panes.isEmpty ? null : Theme.of(context).colorScheme.primary),
+                    const SizedBox(width: 2),
+                    Text(
+                      _panes.isEmpty
+                          ? 'off'
+                          : _panes.length == 1
+                              ? _panes.single.short
+                              : '${_panes.length}',
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -418,7 +466,8 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
         status,
         const SizedBox(height: 6),
         // Taller with the MACD pane so the price area keeps its height.
-        SizedBox(height: _showMacd ? 440 : 360, child: chart),
+        // Each indicator pane adds height so the price area doesn't shrink.
+        SizedBox(height: 360 + 80.0 * _panes.length, child: chart),
         const SizedBox(height: 8),
         controlsAndLayers,
         const SizedBox(height: 8),
@@ -892,8 +941,7 @@ class _MacdSection extends StatelessWidget {
 enum _Pane {
   macd('MACD (12, 26, 9)', 'MACD'),
   rsi('RSI 14', 'RSI'),
-  cci('CCI 20', 'CCI'),
-  none('No lower pane', 'off');
+  cci('CCI 20', 'CCI');
 
   const _Pane(this.label, this.short);
   final String label;

@@ -200,8 +200,11 @@ are participating? MACD: how fast? RSI: how tired? CCI: how strong?) and
 
 Indicators (all standard): EMA 20/50/200 (`K = 2/(N+1)`, drawn on the chart and
 toggled with the timeline icon), RSI 14 (Wilder smoothing), CCI 20 (typical price,
-0.015 × mean deviation), and average volume per wave. The lower pane switches
-between MACD, RSI, CCI and off.
+0.015 × mean deviation), and average volume per wave. MACD, RSI and CCI each get
+their own pane under the chart, in any combination: tick them in the pane menu
+(checkboxes; it stays open while ticking). The choice is remembered across charts
+and restarts (`chart.panes.v1`), and on phones each pane adds height so the price
+area doesn't shrink.
 
 The card's checklist picks a template from the wave in progress:
 

@@ -32,7 +32,7 @@ class LiveChart extends StatefulWidget {
     this.layers = const [],
     this.confluence = const [],
     this.macd,
-    this.oscillator,
+    this.oscillators = const [],
     this.emas = const [],
     this.bounds,
   });
@@ -55,8 +55,8 @@ class LiveChart extends StatefulWidget {
   /// MACD for [candles], shown in a pane under the volume; null hides the pane.
   final Macd? macd;
 
-  /// RSI or CCI in the lower pane, instead of [macd].
-  final Oscillator? oscillator;
+  /// RSI / CCI panes, stacked under the MACD pane (any combination can be shown).
+  final List<Oscillator> oscillators;
 
   /// EMA lines drawn over the candles, e.g. 20/50/200.
   final List<EmaLine> emas;
@@ -126,7 +126,7 @@ class _LiveChartState extends State<LiveChart> {
             layers: widget.layers,
             confluence: widget.confluence,
             macd: widget.macd,
-            oscillator: widget.oscillator,
+            oscillators: widget.oscillators,
             emas: widget.emas,
             bounds: widget.bounds,
             geo: geo,
@@ -210,7 +210,7 @@ class _ChartPainter extends CustomPainter {
     required this.layers,
     required this.confluence,
     required this.macd,
-    required this.oscillator,
+    required this.oscillators,
     required this.emas,
     required this.bounds,
     required this.geo,
@@ -229,7 +229,7 @@ class _ChartPainter extends CustomPainter {
   final List<Layer> layers;
   final List<Confluence> confluence;
   final Macd? macd;
-  final Oscillator? oscillator;
+  final List<Oscillator> oscillators;
   final List<EmaLine> emas;
   final (double, double)? bounds;
   final _Geometry geo;
@@ -244,10 +244,17 @@ class _ChartPainter extends CustomPainter {
     final plot = geo.plot;
     final from = geo.firstVisible, to = geo.lastVisible;
     final hasVolume = candles.any((c) => c.volume > 0);
-    final hasPane = macd != null || oscillator != null;
-    final macdH = hasPane ? plot.height * 0.2 : 0.0;
-    final macdRect = Rect.fromLTRB(plot.left, plot.bottom - macdH, plot.right, plot.bottom);
-    final volBase = Rect.fromLTRB(plot.left, plot.top, plot.right, plot.bottom - macdH - (macdH > 0 ? 8 : 0));
+    // Indicator panes stack upward from the bottom: MACD (if shown), then RSI / CCI.
+    final paneCount = (macd != null ? 1 : 0) + oscillators.length;
+    final hasPane = paneCount > 0;
+    final paneH = (plot.height * (paneCount <= 1 ? 0.2 : 0.15)).clamp(56.0, 140.0);
+    const paneGap = 10.0;
+    Rect paneRect(int k) {
+      final bottom = plot.bottom - k * (paneH + paneGap);
+      return Rect.fromLTRB(plot.left, bottom - paneH, plot.right, bottom);
+    }
+    final panesTop = hasPane ? paneRect(paneCount - 1).top : plot.bottom;
+    final volBase = Rect.fromLTRB(plot.left, plot.top, plot.right, panesTop - (hasPane ? 8 : 0));
     final volH = hasVolume ? plot.height * (hasPane ? 0.12 : 0.16) : 0.0;
     final priceRect = Rect.fromLTRB(plot.left, plot.top + 8, plot.right, volBase.bottom - volH - 6);
 
@@ -282,8 +289,12 @@ class _ChartPainter extends CustomPainter {
     canvas.clipRect(plot);
     _grid(canvas, priceRect, lo, hi, y);
     if (hasVolume) _volume(canvas, volBase, volH, from, to);
-    if (macd != null) _macd(canvas, macdRect, from, to);
-    if (oscillator != null) _oscillator(canvas, macdRect, from, to);
+    // Bottom-up order matches the menu: MACD, RSI, CCI from top to bottom.
+    var k = paneCount - 1;
+    if (macd != null) _macd(canvas, paneRect(k--), from, to);
+    for (final o in oscillators) {
+      _oscillator(canvas, paneRect(k--), o, from, to);
+    }
     if (scenario != null) _zone(canvas, priceRect, y);
     _candles(canvas, from, to, y);
     for (final e in emas) {
@@ -660,8 +671,7 @@ class _ChartPainter extends CustomPainter {
   }
 
   /// RSI / CCI pane: one line with guide levels (e.g. 30/70, ±100), shaded beyond them.
-  void _oscillator(Canvas canvas, Rect r, int from, int to) {
-    final o = oscillator!;
+  void _oscillator(Canvas canvas, Rect r, Oscillator o, int from, int to) {
     var lo = o.min ?? double.infinity, hi = o.max ?? -double.infinity;
     if (o.min == null || o.max == null) {
       for (final g in o.guides) {
@@ -802,7 +812,7 @@ class _ChartPainter extends CustomPainter {
         '${change >= 0 ? '+' : ''}${change.toStringAsFixed(2)}%'
         '${c.volume > 0 ? '  Vol ${NumberFormat.compact().format(c.volume)}' : ''}'
         '${macd?.histogram[i] != null ? '\nMACD ${_fmtMacd(macd!.line[i]!)}  sig ${_fmtMacd(macd!.signal[i]!)}' : ''}'
-        '${oscillator?.values[i] != null ? '\n${oscillator!.name.split(' ').first} ${oscillator!.values[i]!.toStringAsFixed(1)}' : ''}';
+        '${[for (final o in oscillators) if (o.values[i] != null) '${o.name.split(' ').first} ${o.values[i]!.toStringAsFixed(1)}'].map((t) => '\n$t').join()}';
     final tp = _tp(label, text.copyWith(color: scheme.onInverseSurface, height: 1.3));
     final left = x < geo.plot.width / 2 ? geo.plot.right - tp.width - 16 : 8.0;
     final box = Rect.fromLTWH(left, 8, tp.width + 12, tp.height + 10);
@@ -835,7 +845,7 @@ class _ChartPainter extends CustomPainter {
       old.layers != layers ||
       old.confluence != confluence ||
       old.macd != macd ||
-      old.oscillator != oscillator ||
+      old.oscillators != oscillators ||
       old.emas != emas ||
       old.bounds != bounds ||
       old.cross != cross ||
