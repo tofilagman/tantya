@@ -22,6 +22,74 @@ List<double?> ema(List<double> xs, int n) {
   return out;
 }
 
+/// EMA of closing prices, aligned with [candles].
+List<double?> emaOf(List<Candle> candles, int n) => ema([for (final c in candles) c.close], n);
+
+/// RSI with Wilder's smoothing: the first average gain/loss is a simple mean over [n]
+/// changes, then avg = (prev × (n−1) + current) / n. RSI = 100 − 100/(1 + gain/loss).
+List<double?> rsi(List<Candle> candles, {int n = 14}) {
+  final out = List<double?>.filled(candles.length, null);
+  if (candles.length <= n) return out;
+  var gain = 0.0, loss = 0.0;
+  for (var i = 1; i <= n; i++) {
+    final d = candles[i].close - candles[i - 1].close;
+    d > 0 ? gain += d : loss -= d;
+  }
+  gain /= n;
+  loss /= n;
+  double value(double g, double l) => l == 0 ? (g == 0 ? 50 : 100) : 100 - 100 / (1 + g / l);
+  out[n] = value(gain, loss);
+  for (var i = n + 1; i < candles.length; i++) {
+    final d = candles[i].close - candles[i - 1].close;
+    gain = (gain * (n - 1) + math.max(d, 0)) / n;
+    loss = (loss * (n - 1) + math.max(-d, 0)) / n;
+    out[i] = value(gain, loss);
+  }
+  return out;
+}
+
+/// Commodity Channel Index: (typical price − its n-period average) / (0.015 × mean
+/// deviation), typical price = (high + low + close) / 3. Around ±100 is a strong move.
+List<double?> cci(List<Candle> candles, {int n = 20}) {
+  final out = List<double?>.filled(candles.length, null);
+  final tp = [for (final c in candles) (c.high + c.low + c.close) / 3];
+  for (var i = n - 1; i < candles.length; i++) {
+    final window = tp.sublist(i - n + 1, i + 1);
+    final mean = window.reduce((a, b) => a + b) / n;
+    final dev = window.fold(0.0, (t, v) => t + (v - mean).abs()) / n;
+    out[i] = dev == 0 ? 0 : (tp[i] - mean) / (0.015 * dev);
+  }
+  return out;
+}
+
+/// Average volume per candle from [from] (exclusive) to [to] (inclusive): the candles
+/// that make up the move between two pivots. Null if there's no volume data.
+double? waveVolume(List<Candle> candles, int from, int to) {
+  var sum = 0.0, n = 0;
+  for (var i = math.max(from + 1, 0); i <= to && i < candles.length; i++) {
+    sum += candles[i].volume;
+    n++;
+  }
+  return n == 0 || sum == 0 ? null : sum / n;
+}
+
+/// Every indicator the evidence report uses, computed once per series.
+class Indicators {
+  Indicators.of(this.candles)
+      : ema20 = emaOf(candles, 20),
+        ema50 = emaOf(candles, 50),
+        ema200 = emaOf(candles, 200),
+        macd = Macd.of(candles),
+        rsi14 = rsi(candles),
+        cci20 = cci(candles);
+
+  final List<Candle> candles;
+  final List<double?> ema20, ema50, ema200;
+  final Macd macd;
+  final List<double?> rsi14;
+  final List<double?> cci20;
+}
+
 /// MACD (fast EMA − slow EMA), its signal line (EMA of MACD) and the histogram
 /// (MACD − signal), each aligned with the candles; null where not yet defined.
 class Macd {
@@ -120,11 +188,14 @@ class MacdNote {
 
 /// Momentum of the move between two pivots: the MACD line's extreme in the move's
 /// direction over those candles. Null if MACD isn't defined there yet.
-double? legMomentum(Macd m, Pivot from, Pivot to) {
-  final up = to.price > from.price;
+double? legMomentum(Macd m, Pivot from, Pivot to) => legExtreme(m.line, from.index, to.index, up: to.price > from.price);
+
+/// The most extreme value of [vs] between candle indexes [from] and [to] (inclusive), in
+/// the move's direction: the highest for an up move, the lowest for a down move.
+double? legExtreme(List<double?> vs, int from, int to, {required bool up}) {
   double? best;
-  for (var i = math.max(from.index, 0); i <= to.index && i < m.line.length; i++) {
-    final v = m.line[i];
+  for (var i = math.max(from, 0); i <= to && i < vs.length; i++) {
+    final v = vs[i];
     if (v == null) continue;
     best = best == null ? v : (up ? math.max(best, v) : math.min(best, v));
   }

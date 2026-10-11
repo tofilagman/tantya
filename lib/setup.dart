@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'candles.dart';
 import 'elliott.dart';
+import 'evidence.dart';
 import 'indicators.dart';
 import 'mtf.dart';
 import 'sources/source.dart';
@@ -80,6 +81,7 @@ class TrackedSetup {
     this.exit,
     this.htf,
     this.macd,
+    this.evidence,
   });
 
   final String id;
@@ -101,6 +103,9 @@ class TrackedSetup {
 
   /// Whether MACD momentum backed the trade when it was tracked; null if not recorded.
   final MacdVerdict? macd;
+
+  /// Share of the evidence report's checks that supported the count when tracked (0–1).
+  final double? evidence;
   SetupStatus status;
   DateTime? resolvedAt;
 
@@ -170,6 +175,7 @@ class TrackedSetup {
         'exit': exit,
         'htf': htf?.name,
         'macd': macd?.name,
+        'evidence': evidence,
       };
 
   factory TrackedSetup.fromJson(Map<String, dynamic> j) => TrackedSetup(
@@ -189,10 +195,11 @@ class TrackedSetup {
         exit: (j['exit'] as num?)?.toDouble(),
         htf: j['htf'] == null ? null : HtfVerdict.values.byName(j['htf'] as String),
         macd: j['macd'] == null ? null : MacdVerdict.values.byName(j['macd'] as String),
+        evidence: (j['evidence'] as num?)?.toDouble(),
       );
 
   factory TrackedSetup.fromSetup(TradeSetup s, CandleSource source, Timeframe frame, DateTime now,
-          {HtfVerdict? htf, MacdVerdict? macd}) =>
+          {HtfVerdict? htf, MacdVerdict? macd, double? evidence}) =>
       TrackedSetup(
         id: '${source.id}:${now.millisecondsSinceEpoch}',
         source: source,
@@ -207,6 +214,7 @@ class TrackedSetup {
         madeAt: now,
         htf: htf,
         macd: macd,
+        evidence: evidence,
       );
 }
 
@@ -239,6 +247,15 @@ class Scorecard {
 
   /// Closed setups by higher-timeframe verdict, to show whether agreement actually
   /// improves results. Setups never checked, and groups with nothing closed yet, are left out.
+  /// Closed setups by how strong the evidence report was when tracked: does more
+  /// supporting evidence actually mean better results?
+  Map<EvidenceLevel, Scorecard> get byEvidence => {
+        for (final e in Scorecard(closed)
+            .groupBy((s) => EvidenceReport.levelOf(s.evidence), EvidenceLevel.values)
+            .entries)
+          e.key: e.value,
+      };
+
   /// Closed setups by whether MACD backed them when tracked: does momentum help?
   Map<MacdVerdict, Scorecard> get byMacd => {
         for (final e in Scorecard(closed).groupBy((s) => s.macd, MacdVerdict.values).entries) e.key: e.value,

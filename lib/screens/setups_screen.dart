@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../candles.dart';
+import '../evidence.dart';
 import '../indicators.dart';
 import '../mtf.dart';
 import '../setup.dart';
@@ -175,6 +176,7 @@ class _ScoreCard extends StatelessWidget {
     final byFrame = card.byFrame;
     final byHtf = card.byHtf;
     final byMacd = card.byMacd;
+    final byEvidence = card.byEvidence;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -227,6 +229,26 @@ class _ScoreCard extends StatelessWidget {
                     ),
                 ],
                 footer: 'If agreeing setups don\'t beat the rest over time, the check isn\'t helping.',
+              ),
+            ],
+            if (byEvidence.isNotEmpty) ...[
+              const Divider(height: 24),
+              _Breakdown(
+                title: 'By evidence',
+                rows: [
+                  for (final MapEntry(key: v, value: g) in byEvidence.entries)
+                    (
+                      label: switch (v) {
+                        EvidenceLevel.strong => 'Strong',
+                        EvidenceLevel.mixed => 'Mixed',
+                        EvidenceLevel.weak => 'Weak',
+                      },
+                      card: g,
+                      onTap: null,
+                    ),
+                ],
+                footer: 'How much of the evidence report (EMA, MACD, RSI, CCI, volume) backed the count when '
+                    'you tracked it. If "Strong" doesn\'t beat "Weak" over time, the evidence isn\'t adding anything.',
               ),
             ],
             if (byMacd.isNotEmpty) ...[
@@ -363,6 +385,7 @@ class _SetupTile extends StatelessWidget {
               Text(
                 [
                   s.count,
+                  if (s.evidence != null) 'evidence ${(s.evidence! * 100).round()}%',
                   if (s.macd != null)
                     switch (s.macd!) {
                       MacdVerdict.agree => 'MACD backed',

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tantya/candles.dart';
 import 'package:tantya/elliott.dart';
+import 'package:tantya/evidence.dart';
 import 'package:tantya/indicators.dart';
 import 'package:tantya/mtf.dart';
 import 'package:tantya/setup.dart';
@@ -195,6 +196,22 @@ void main() {
     expect(card.byMacd[MacdVerdict.against]!.avgR, -1);
     expect(TrackedSetup.fromJson(make(MacdVerdict.turning).toJson()).macd, MacdVerdict.turning);
     expect(TrackedSetup.fromJson(make(null).toJson()).macd, isNull);
+  });
+
+  test('scorecard splits by evidence level; the score round-trips', () {
+    TrackedSetup make(double? e) => TrackedSetup(
+          id: 'x', source: BinanceSource('BTCUSDT'), frame: Timeframe.h1, side: Side.long,
+          entry: 100, stop: 95, tp1: 110, tp2: 120, count: 'c', fit: 0.7, madeAt: t0, evidence: e);
+    final now = t0.add(const Duration(days: 30));
+    final card = Scorecard([
+      make(0.8)..resolve([c(0, 100, 111)], now), // strong, +2
+      make(0.2)..resolve([c(0, 94, 100)], now), // weak, -1
+      make(null)..resolve([c(0, 94, 100)], now), // unrecorded
+    ]);
+    expect(card.byEvidence.keys, unorderedEquals([EvidenceLevel.strong, EvidenceLevel.weak]));
+    expect(card.byEvidence[EvidenceLevel.strong]!.avgR, 2);
+    expect(TrackedSetup.fromJson(make(0.6).toJson()).evidence, 0.6);
+    expect(TrackedSetup.fromJson(make(null).toJson()).evidence, isNull);
   });
 
   test('tracked setup round-trips through JSON with its source', () {

@@ -43,6 +43,9 @@ never places orders. *It is an analysis tool, not financial advice.*
 - **Track record**: tracked setups are settled at their target or stop, and
   scored in R per timeframe and by higher-timeframe agreement, so you can see
   whether the method actually works.
+- **Evidence report**: EMA 20/50/200, volume per wave, MACD, RSI 14 and CCI 20
+  checked against the wave in progress ("Healthy wave 3?", "Wave 5 exhaustion?"),
+  following the layered method: indicators are evidence, price is the result.
 - **MACD**: a momentum pane under the chart, read against the wave count (does
   wave 3 carry the most momentum? does wave 5 diverge?), and whether momentum
   backs the setup.
@@ -186,6 +189,33 @@ The setup card's **MACD** section reads it three ways:
 verdict, and the Setups tab's **By MACD momentum** table compares results for
 *backed* / *turning* / *against*. Folding MACD into the ranking should wait until
 that comparison shows it helps.
+
+## Evidence report (`lib/evidence.dart`, `lib/indicators.dart`)
+
+Built on a layered analysis method the users sent (a ChatGPT write-up on studying
+past futures data): **price → EMA + volume → MACD → RSI / CCI → Elliott Wave**,
+where each indicator answers one question (EMA: which direction? volume: how many
+are participating? MACD: how fast? RSI: how tired? CCI: how strong?) and
+"indicators = evidence, price = actual result".
+
+Indicators (all standard): EMA 20/50/200 (`K = 2/(N+1)`, drawn on the chart and
+toggled with the timeline icon), RSI 14 (Wilder smoothing), CCI 20 (typical price,
+0.015 × mean deviation), and average volume per wave. The lower pane switches
+between MACD, RSI, CCI and off.
+
+The card's checklist picks a template from the wave in progress:
+
+| Wave | Checks (✓ = supports the reading) |
+|---|---|
+| **3** "Healthy wave 3?" | EMAs stacked with the move · MACD speeding up · CCI beyond ±100 · RSI strong, not exhausted (55–75, or 25–45 down) · volume higher than wave 2 |
+| **5**, or just after 5 "Wave 5 exhaustion?" | price past wave 3 · MACD, RSI and CCI weaker than in wave 3 (divergence) · volume lower than wave 3 |
+| other waves "Evidence for wave X" | EMAs stacked · MACD speeding up · RSI has room · CCI on the move's side · volume rising for impulsive waves (1, 3, 5, A, C), lighter for pullbacks (2, 4, B) |
+
+The score is "n of m" (unknowns don't count) and reads as strong (≥ ⅔), mixed or
+weak. It's **informational**: tracked setups record it, and the Setups tab's
+**By evidence** table compares results, so we can see whether strong evidence
+actually wins more before letting it affect scores. Open interest (mentioned in the
+write-up) needs Binance futures data and isn't included; the app uses spot.
 
 ## Trade setups (`lib/setup.dart`)
 

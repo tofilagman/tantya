@@ -4,7 +4,7 @@ import '../elliott.dart';
 import '../layers.dart';
 import '../setup.dart';
 
-const appVersion = '0.2.1';
+const appVersion = '0.2.2';
 
 /// What the app is, how to use it while trading, and exactly how predictions are made.
 /// The swing sensitivities, Fibonacci table, stop buffer and expiry are read from the
@@ -102,9 +102,14 @@ class AboutScreen extends StatelessWidget {
                 text: 'Confluence: two timeframes\' targets overlap and point the same way.',
               ),
               _Legend(
+                swatch: const Icon(Icons.timeline, size: 20),
+                text: 'EMA 20, 50 and 200: grey lines over the candles, darker for longer periods. '
+                    'Stacked in order (price > 20 > 50 > 200) means a clean uptrend.',
+              ),
+              _Legend(
                 swatch: const Icon(Icons.stacked_line_chart, size: 20),
-                text: 'MACD pane (12, 26, 9): histogram bars, MACD line (dark) and signal line (grey). '
-                    'The card says whether momentum backs the setup and what it means for the wave count.',
+                text: 'Lower pane: MACD (12, 26, 9), RSI 14 or CCI 20, chosen with the pane button. '
+                    'The card\'s evidence checklist says whether they back the wave in progress.',
               ),
               const SizedBox(height: 8),
               Text('Drag to scroll back in time, pinch to zoom, long-press for a candle\'s OHLC and volume, '
@@ -213,6 +218,15 @@ class AboutScreen extends StatelessWidget {
               ),
               const _Algo(
                 n: 10,
+                title: 'Weigh the evidence',
+                body: 'Each indicator answers one question. EMA 20/50/200: which direction? Volume: how many are '
+                    'participating? MACD: how fast? RSI: how tired? CCI: how strong? For a wave 3 the app checks '
+                    'for a healthy wave 3 (stacked EMAs, rising momentum, CCI beyond 100, RSI strong but not '
+                    'exhausted, volume above wave 2). For a wave 5 it checks for exhaustion (a new extreme on '
+                    'weaker MACD, RSI, CCI and volume). Indicators are evidence; price is the result.',
+              ),
+              const _Algo(
+                n: 11,
                 title: 'Rank and update',
                 body: 'Counts already invalidated, or whose target is already behind the price, are dropped. '
                     'The highest score becomes the primary count, and up to four alternates are listed with '

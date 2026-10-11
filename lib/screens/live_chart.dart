@@ -32,6 +32,8 @@ class LiveChart extends StatefulWidget {
     this.layers = const [],
     this.confluence = const [],
     this.macd,
+    this.oscillator,
+    this.emas = const [],
     this.bounds,
   });
 
@@ -52,6 +54,12 @@ class LiveChart extends StatefulWidget {
 
   /// MACD for [candles], shown in a pane under the volume; null hides the pane.
   final Macd? macd;
+
+  /// RSI or CCI in the lower pane, instead of [macd].
+  final Oscillator? oscillator;
+
+  /// EMA lines drawn over the candles, e.g. 20/50/200.
+  final List<EmaLine> emas;
 
   /// Price limits (Polymarket's 0–1) that projected prices are kept inside.
   final (double, double)? bounds;
@@ -118,6 +126,8 @@ class _LiveChartState extends State<LiveChart> {
             layers: widget.layers,
             confluence: widget.confluence,
             macd: widget.macd,
+            oscillator: widget.oscillator,
+            emas: widget.emas,
             bounds: widget.bounds,
             geo: geo,
             cross: _cross,
@@ -200,6 +210,8 @@ class _ChartPainter extends CustomPainter {
     required this.layers,
     required this.confluence,
     required this.macd,
+    required this.oscillator,
+    required this.emas,
     required this.bounds,
     required this.geo,
     required this.cross,
@@ -217,6 +229,8 @@ class _ChartPainter extends CustomPainter {
   final List<Layer> layers;
   final List<Confluence> confluence;
   final Macd? macd;
+  final Oscillator? oscillator;
+  final List<EmaLine> emas;
   final (double, double)? bounds;
   final _Geometry geo;
   final int? cross;
@@ -230,10 +244,11 @@ class _ChartPainter extends CustomPainter {
     final plot = geo.plot;
     final from = geo.firstVisible, to = geo.lastVisible;
     final hasVolume = candles.any((c) => c.volume > 0);
-    final macdH = macd != null ? plot.height * 0.2 : 0.0;
+    final hasPane = macd != null || oscillator != null;
+    final macdH = hasPane ? plot.height * 0.2 : 0.0;
     final macdRect = Rect.fromLTRB(plot.left, plot.bottom - macdH, plot.right, plot.bottom);
     final volBase = Rect.fromLTRB(plot.left, plot.top, plot.right, plot.bottom - macdH - (macdH > 0 ? 8 : 0));
-    final volH = hasVolume ? plot.height * (macd != null ? 0.12 : 0.16) : 0.0;
+    final volH = hasVolume ? plot.height * (hasPane ? 0.12 : 0.16) : 0.0;
     final priceRect = Rect.fromLTRB(plot.left, plot.top + 8, plot.right, volBase.bottom - volH - 6);
 
     // Price range: visible candles plus the levels we draw, so targets and stops stay on screen.
@@ -268,11 +283,20 @@ class _ChartPainter extends CustomPainter {
     _grid(canvas, priceRect, lo, hi, y);
     if (hasVolume) _volume(canvas, volBase, volH, from, to);
     if (macd != null) _macd(canvas, macdRect, from, to);
+    if (oscillator != null) _oscillator(canvas, macdRect, from, to);
     if (scenario != null) _zone(canvas, priceRect, y);
     _candles(canvas, from, to, y);
+    for (final e in emas) {
+      _ema(canvas, e, from, to, y);
+    }
+    // Other timeframes' points can sit outside this chart's price range; keep their
+    // lines and labels out of the volume and indicator panes.
+    canvas.save();
+    canvas.clipRect(Rect.fromLTRB(plot.left, plot.top, plot.right, priceRect.bottom + 6));
     for (final l in layers) {
       _layer(canvas, priceRect, l, y);
     }
+    canvas.restore();
     if (scenario != null) _waves(canvas, y, projected);
     for (final c in confluence) {
       _confluence(canvas, priceRect, c, y);
@@ -612,6 +636,83 @@ class _ChartPainter extends CustomPainter {
     }
   }
 
+  /// An EMA line through the candles, labelled with its period at the right end.
+  void _ema(Canvas canvas, EmaLine e, int from, int to, double Function(double) y) {
+    final path = Path();
+    var started = false;
+    Offset? last;
+    for (var i = from; i <= to; i++) {
+      final v = e.values[i];
+      if (v == null) continue;
+      final o = Offset(geo.x(i), y(v));
+      started ? path.lineTo(o.dx, o.dy) : path.moveTo(o.dx, o.dy);
+      started = true;
+      last = o;
+    }
+    if (last == null) return;
+    final color = scheme.onSurface.withValues(alpha: e.alpha);
+    canvas.drawPath(path, Paint()
+      ..color = color
+      ..strokeWidth = e.width
+      ..style = PaintingStyle.stroke);
+    final tp = _tp('${e.period}', text.copyWith(color: color, fontSize: 8.5, fontWeight: FontWeight.w700));
+    tp.paint(canvas, last + Offset(3, -tp.height / 2));
+  }
+
+  /// RSI / CCI pane: one line with guide levels (e.g. 30/70, ±100), shaded beyond them.
+  void _oscillator(Canvas canvas, Rect r, int from, int to) {
+    final o = oscillator!;
+    var lo = o.min ?? double.infinity, hi = o.max ?? -double.infinity;
+    if (o.min == null || o.max == null) {
+      for (final g in o.guides) {
+        lo = math.min(lo, g);
+        hi = math.max(hi, g);
+      }
+      for (var i = from; i <= to; i++) {
+        final v = o.values[i];
+        if (v == null) continue;
+        lo = math.min(lo, v);
+        hi = math.max(hi, v);
+      }
+      final pad = (hi - lo) * 0.08;
+      lo -= pad;
+      hi += pad;
+    }
+    if (hi <= lo) return;
+    double y(double v) => r.bottom - (v - lo) / (hi - lo) * r.height;
+
+    canvas.drawLine(Offset(r.left, r.top - 4), Offset(r.right, r.top - 4),
+        Paint()..color = scheme.outlineVariant.withValues(alpha: 0.5));
+    final outer = o.guides.isEmpty ? null : (o.guides.reduce(math.min), o.guides.reduce(math.max));
+    if (outer != null) {
+      // Shade the band between the outer guides, where the indicator usually lives.
+      canvas.drawRect(Rect.fromLTRB(r.left, y(outer.$2), r.right, y(outer.$1)),
+          Paint()..color = scheme.primary.withValues(alpha: 0.05));
+    }
+    for (final g in o.guides) {
+      _dashed(canvas, Offset(r.left, y(g)), Offset(r.right, y(g)), scheme.outlineVariant, 1);
+    }
+
+    final path = Path();
+    var started = false;
+    for (var i = from; i <= to; i++) {
+      final v = o.values[i];
+      if (v == null) continue;
+      final p = Offset(geo.x(i), y(v));
+      started ? path.lineTo(p.dx, p.dy) : path.moveTo(p.dx, p.dy);
+      started = true;
+    }
+    canvas.drawPath(path, Paint()
+      ..color = scheme.onSurface
+      ..strokeWidth = 1.4
+      ..style = PaintingStyle.stroke);
+
+    final last = o.values.lastWhere((v) => v != null, orElse: () => null);
+    final tp = _tp('${o.name}${last == null ? '' : '  ${last.toStringAsFixed(0)}'}',
+        text.copyWith(color: scheme.onSurfaceVariant, fontSize: 9));
+    tp.paint(canvas, Offset(r.left + 4, r.top - 2));
+  }
+
   /// MACD pane: histogram bars (paler while shrinking), MACD line, signal line, zero line.
   void _macd(Canvas canvas, Rect r, int from, int to) {
     final m = macd!;
@@ -700,7 +801,8 @@ class _ChartPainter extends CustomPainter {
         'L ${format(c.low)}  C ${format(c.close)}\n'
         '${change >= 0 ? '+' : ''}${change.toStringAsFixed(2)}%'
         '${c.volume > 0 ? '  Vol ${NumberFormat.compact().format(c.volume)}' : ''}'
-        '${macd?.histogram[i] != null ? '\nMACD ${_fmtMacd(macd!.line[i]!)}  sig ${_fmtMacd(macd!.signal[i]!)}' : ''}';
+        '${macd?.histogram[i] != null ? '\nMACD ${_fmtMacd(macd!.line[i]!)}  sig ${_fmtMacd(macd!.signal[i]!)}' : ''}'
+        '${oscillator?.values[i] != null ? '\n${oscillator!.name.split(' ').first} ${oscillator!.values[i]!.toStringAsFixed(1)}' : ''}';
     final tp = _tp(label, text.copyWith(color: scheme.onInverseSurface, height: 1.3));
     final left = x < geo.plot.width / 2 ? geo.plot.right - tp.width - 16 : 8.0;
     final box = Rect.fromLTWH(left, 8, tp.width + 12, tp.height + 10);
@@ -733,6 +835,8 @@ class _ChartPainter extends CustomPainter {
       old.layers != layers ||
       old.confluence != confluence ||
       old.macd != macd ||
+      old.oscillator != oscillator ||
+      old.emas != emas ||
       old.bounds != bounds ||
       old.cross != cross ||
       old.geo.visible != geo.visible ||
@@ -740,3 +844,28 @@ class _ChartPainter extends CustomPainter {
       old.geo.size != geo.size ||
       old.scheme != scheme;
 }
+
+/// A line-type indicator for the lower pane (RSI, CCI).
+class Oscillator {
+  const Oscillator(this.name, this.values, {this.guides = const [], this.min, this.max});
+
+  /// Shown in the pane's corner, e.g. "RSI 14".
+  final String name;
+  final List<double?> values;
+
+  /// Reference levels, e.g. [30, 50, 70] for RSI or [-100, 0, 100] for CCI.
+  final List<double> guides;
+
+  /// Fixed scale (RSI is always 0–100); null autoscales.
+  final double? min, max;
+}
+
+/// An EMA over the candles; longer periods are drawn heavier and darker.
+class EmaLine {
+  const EmaLine(this.period, this.values, {required this.width, required this.alpha});
+  final int period;
+  final List<double?> values;
+  final double width;
+  final double alpha;
+}
+

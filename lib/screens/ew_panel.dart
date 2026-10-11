@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../candles.dart';
 import '../elliott.dart';
+import '../evidence.dart';
 import '../indicators.dart';
 import '../layers.dart';
 import '../live.dart';
@@ -49,7 +50,11 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
   EwAnalysis? _analysis;
   String? _selectedKey;
   Macd? _macd;
-  bool _showMacd = true;
+  Indicators? _ind;
+  _Pane _pane = _Pane.macd;
+  bool _showEmas = true;
+
+  bool get _showMacd => _pane != _Pane.none;
 
   /// The next timeframe up, counted separately to judge agreement.
   Timeframe? get _higherFrame {
@@ -227,7 +232,8 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
     final candles = _candles;
     if (candles == null || candles.isEmpty) return;
     _analysis = analyze(candles, bounds: widget.source.bounds);
-    _macd = Macd.of(candles);
+    _ind = Indicators.of(candles);
+    _macd = _ind!.macd;
     widget.onPrice?.call(candles.last.close);
   }
 
@@ -239,8 +245,9 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
 
   Future<void> _track(TradeSetup s) async {
     final macd = _macd == null ? null : MacdState.of(_macd!)?.verdictFor(s.side);
+    final evidence = _ind == null ? null : evidenceReport(s.scenario, _ind!).ratio;
     await SetupStore.add(TrackedSetup.fromSetup(s, widget.source, _frame, DateTime.now(),
-        htf: _htfFor(s)?.verdict, macd: macd));
+        htf: _htfFor(s)?.verdict, macd: macd, evidence: evidence));
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Tracking — see the Setups tab for the result'),
@@ -275,7 +282,20 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                     revision: _revision,
                     primaryColor: colorOf(_frame),
                     layers: _overlay ? layers : const [],
-                    macd: _showMacd ? _macd : null,
+                    macd: _pane == _Pane.macd ? _macd : null,
+                    oscillator: switch (_pane) {
+                      _Pane.rsi when _ind != null =>
+                        Oscillator('RSI 14', _ind!.rsi14, guides: const [30, 50, 70], min: 0, max: 100),
+                      _Pane.cci when _ind != null => Oscillator('CCI 20', _ind!.cci20, guides: const [-100, 0, 100]),
+                      _ => null,
+                    },
+                    emas: _showEmas && _ind != null
+                        ? [
+                            EmaLine(20, _ind!.ema20, width: 1, alpha: 0.35),
+                            EmaLine(50, _ind!.ema50, width: 1.3, alpha: 0.55),
+                            EmaLine(200, _ind!.ema200, width: 1.8, alpha: 0.8),
+                          ]
+                        : const [],
                     bounds: widget.source.bounds,
                     confluence: _overlay
                         ? findConfluence({_frame: ?selected, for (final l in layers) l.frame: l.scenario})
@@ -306,11 +326,30 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
           ),
         ),
         IconButton(
-          tooltip: _showMacd ? 'Hide MACD' : 'Show MACD',
-          isSelected: _showMacd,
-          icon: const Icon(Icons.stacked_line_chart_outlined),
-          selectedIcon: const Icon(Icons.stacked_line_chart),
-          onPressed: () => setState(() => _showMacd = !_showMacd),
+          tooltip: _showEmas ? 'Hide EMA 20/50/200' : 'Show EMA 20/50/200',
+          isSelected: _showEmas,
+          icon: const Icon(Icons.timeline_outlined),
+          selectedIcon: const Icon(Icons.timeline),
+          onPressed: () => setState(() => _showEmas = !_showEmas),
+        ),
+        PopupMenuButton<_Pane>(
+          tooltip: 'Lower pane: MACD, RSI or CCI',
+          initialValue: _pane,
+          onSelected: (v) => setState(() => _pane = v),
+          itemBuilder: (_) => [
+            for (final p in _Pane.values) PopupMenuItem(value: p, child: Text(p.label)),
+          ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.stacked_line_chart, color: _pane == _Pane.none ? null : Theme.of(context).colorScheme.primary),
+                const SizedBox(width: 2),
+                Text(_pane.short, style: Theme.of(context).textTheme.labelMedium),
+              ],
+            ),
+          ),
         ),
         IconButton(
           tooltip: _overlay ? 'Hide wave count' : 'Show wave count',
@@ -442,6 +481,10 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                     style: text.bodySmall?.copyWith(color: Colors.orange.shade800),
                   ),
                 ),
+            ],
+            if (_ind != null) ...[
+              const SizedBox(height: 10),
+              _EvidenceSection(report: evidenceReport(s, _ind!)),
             ],
             if (_macd != null) ...[
               const SizedBox(height: 10),
@@ -841,6 +884,79 @@ class _MacdSection extends StatelessWidget {
               ],
             ),
           ),
+      ],
+    );
+  }
+}
+
+enum _Pane {
+  macd('MACD (12, 26, 9)', 'MACD'),
+  rsi('RSI 14', 'RSI'),
+  cci('CCI 20', 'CCI'),
+  none('No lower pane', 'off');
+
+  const _Pane(this.label, this.short);
+  final String label;
+  final String short;
+}
+
+/// The evidence report as a checklist: does the indicator evidence fit the wave in progress?
+class _EvidenceSection extends StatelessWidget {
+  const _EvidenceSection({required this.report});
+  final EvidenceReport report;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final r = report;
+    final (Color c, String verdict) = switch (r.level) {
+      EvidenceLevel.strong => (Colors.green.shade600, 'strong'),
+      EvidenceLevel.mixed => (Colors.orange.shade800, 'mixed'),
+      EvidenceLevel.weak => (Colors.red.shade400, 'weak'),
+      null => (muted, 'not enough data'),
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(child: Text(r.title, style: text.labelLarge)),
+            Text(
+              r.checked == 0 ? verdict : '${r.confirmed} of ${r.checked} · $verdict',
+              style: text.labelMedium?.copyWith(color: c, fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
+        Text(r.question, style: text.bodySmall?.copyWith(color: muted)),
+        const SizedBox(height: 4),
+        for (final e in r.items)
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  e.ok == true ? Icons.check_circle : (e.ok == false ? Icons.cancel_outlined : Icons.help_outline),
+                  size: 15,
+                  color: e.ok == true ? Colors.green.shade600 : (e.ok == false ? Colors.red.shade400 : muted),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(children: [
+                      TextSpan(text: e.label),
+                      TextSpan(text: '  ${e.detail}', style: TextStyle(color: muted)),
+                    ]),
+                    style: text.bodySmall,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        const SizedBox(height: 4),
+        Text('Indicators are evidence; price is the result. Wait for price to confirm.',
+            style: text.bodySmall?.copyWith(color: muted, fontStyle: FontStyle.italic)),
       ],
     );
   }
