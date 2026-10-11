@@ -11,7 +11,7 @@ import 'source.dart';
 
 /// One outcome of a Polymarket market as a candle source. Polymarket has no OHLC,
 /// so candles are built from sampled price history.
-class PolymarketSource implements CandleSource {
+class PolymarketSource extends CandleSource {
   PolymarketSource({
     required this.marketId,
     required this.tokenId,

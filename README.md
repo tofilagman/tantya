@@ -1,6 +1,6 @@
 # Tantya
 
-**An Elliott Wave trading companion for Android, iOS, Windows and macOS.**
+**An Elliott Wave trading companion for Android, iOS, Windows, macOS and Linux.**
 
 Open the pair you're trading on Binance and Tantya shows the same live
 candlestick chart with an algorithmic wave count drawn on it. It projects the next
@@ -49,6 +49,11 @@ never places orders. *It is an analysis tool, not financial advice.*
 - **MACD**: a momentum pane under the chart, read against the wave count (does
   wave 3 carry the most momentum? does wave 5 diverge?), and whether momentum
   backs the setup.
+- **Backtest**: replay the app's own setups over up to 5,000 past candles, with no
+  look-ahead, and see the hit rate, average R, drawdown and equity curve, broken
+  down by evidence, MACD, wave and direction.
+- **How this was computed**: every setup's numbers step by step: swings, Fibonacci
+  fit, score, target zone, stop (with the ATR buffer), R:R and the projected path.
 - **Desktop**: a big chart with the setup beside it, a side navigation rail,
   mouse-wheel zoom and a crosshair that follows the pointer.
 
@@ -220,6 +225,52 @@ weak. It's **informational**: tracked setups record it, and the Setups tab's
 actually wins more before letting it affect scores. Open interest (mentioned in the
 write-up) needs Binance futures data and isn't included; the app uses spot.
 
+## Backtest (`lib/backtest.dart`, `lib/screens/backtest_screen.dart`)
+
+"Backtest <pair> on <timeframe>" in the setup card replays the app over past
+candles (Binance: 1,000 / 2,000 / 5,000, paged 1,000 per request; Polymarket:
+what its history API gives).
+
+- **No look-ahead.** At each candle the engine sees only the 300 candles up to it,
+  the same window the live chart uses, and takes the setup it would have shown.
+  A test checks that adding later candles never changes earlier trades.
+- **Settling.** Same rules as tracked setups: entry at that candle's close, then
+  TP1 or the stop, whichever is touched first. A candle touching both counts as the
+  stop, and after 50 candles the trade closes at the market. One trade at a time.
+- **Filters.** Minimum R:R (default 1) and minimum score.
+- **Results.** Trades, hit rate, average and total R, max drawdown (R), worst
+  losing streak, equity curve, and breakdowns by evidence level, MACD verdict,
+  wave traded and direction, plus the latest trades.
+- **Not modelled.** Fees, funding, slippage and the higher-timeframe check.
+- Runs in a background isolate (`compute`). 5,000 candles take about 0.1 s.
+
+First results (1h, 5,000 candles to 2026-10-11, all setups with R:R ≥ 1): roughly
+**breakeven before fees** (BTC +0.08 R per trade, ETH −0.19, XRP −0.05).
+Setups entered with **strong evidence** did better than weak ones on 4 of 5 pairs
+(e.g. BTC +0.38 R vs +0.06, ETH +0.11 vs −0.13), but on only 30–50 trades each.
+That's a hint worth tracking, not proof. Reproduce with
+`BACKTEST=BTCUSDT,ETHUSDT:1h:5000 flutter test test/live_backtest_test.dart`
+(network; skipped by default).
+
+## How this was computed (`lib/explain.dart`)
+
+A collapsible panel in the setup card that walks through the setup with real
+numbers:
+
+1. the swings: each wave's start → end, size, % and candles;
+2. the Fibonacci fit: each measured ratio against its ideals, its fit, and the average;
+3. the score: average fit × completeness × rule adjustments = fit; span and
+   amplitude → size; score = fit × (0.3 + 0.7 × size);
+4. the target and invalidation: which wave, its base length, the ratio range and
+   the rule that invalidates it;
+5. the trade levels: entry, stop = invalidation ± ½ ATR(14), risk, TP1/TP2 with R:R;
+6. the projected path: each step's price and ratio.
+
+The explanation recomputes everything from the count's points. A test runs the
+real engine over several price paths and checks that the explained rule reproduces
+every count's target zone and invalidation exactly, so the panel can't drift away
+from the engine.
+
 ## Trade setups (`lib/setup.dart`)
 
 - **Bias** is the direction of the wave in progress. **Entry** is the current price.
@@ -334,7 +385,7 @@ running a release-signed install. **Back up both files somewhere other than this
 laptop.** If they're lost, every install has to be uninstalled (losing tracked
 setups) before a new build can go on.
 
-## Desktop (Windows, macOS)
+## Desktop (Windows, macOS, Linux)
 
 Same Flutter code. On windows at least 900 px wide the app uses a side navigation
 rail. Chart screens at least 1000 px wide put the chart on the left (filling the
@@ -352,6 +403,9 @@ the crosshair follows the pointer. Tablets get the same layout.
   Developer account), so on first launch macOS blocks it: open
   **System Settings → Privacy & Security → Open Anyway** (or right-click → Open on
   older macOS).
+- **Linux**: built on GitHub Actions (Ubuntu). Ships as `tantya-linux-x64.tar.gz`:
+  unpack and run `./tantya/tantya`. Needs GTK 3, which every desktop distribution has.
+  Untested on a real Linux machine so far.
 - **Windows**: built only on GitHub Actions (`.github/workflows/desktop.yml`), since
   a Mac can't build Windows apps. Unsigned, so SmartScreen warns on first run
   (**More info → Run anyway**). Unzip and run `tantya.exe`; keep the DLLs and
@@ -365,8 +419,8 @@ flutter build macos --release   # → build/macos/Build/Products/Release/Tantya.
 ```
 
 **CI** (`.github/workflows/desktop.yml`): every push to `master` builds Windows
-(and runs the tests) and macOS, and keeps `tantya-windows-x64.zip` /
-`tantya-macos.zip` as workflow artifacts. Pushing a tag like `v0.2.0` also
+(and runs the tests), Linux and macOS, and keeps `tantya-windows-x64.zip`,
+`tantya-linux-x64.tar.gz` and `tantya-macos.zip` as workflow artifacts. Pushing a tag like `v0.2.0` also
 attaches them to a GitHub Release.
 
 ## iOS

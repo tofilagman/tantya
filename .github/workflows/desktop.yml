@@ -1,5 +1,5 @@
-# Builds the desktop apps. Windows can't be built on a Mac, so this is the only place
-# the Windows app is built. Every push keeps the zips as workflow artifacts; pushing a
+# Builds the desktop apps. Windows and Linux can't be built on a Mac, so this is the
+# only place those are built. Every push keeps the zips as workflow artifacts; pushing a
 # tag like v0.2.0 also publishes them on a GitHub Release.
 name: Desktop builds
 
@@ -40,6 +40,34 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: tantya-windows-x64.zip
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter build linux --release
+      - name: Tarball
+        # The bundle folder is the whole app: tantya executable + lib/ + data/.
+        run: tar -czf tantya-linux-x64.tar.gz -C build/linux/x64/release bundle --transform 's/^bundle/tantya/'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tantya-linux-x64
+          path: tantya-linux-x64.tar.gz
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: tantya-linux-x64.tar.gz
 
   macos:
     runs-on: macos-latest

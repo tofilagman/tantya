@@ -4,7 +4,7 @@ import '../elliott.dart';
 import '../layers.dart';
 import '../setup.dart';
 
-const appVersion = '0.2.3';
+const appVersion = '0.2.4';
 
 /// What the app is, how to use it while trading, and exactly how predictions are made.
 /// The swing sensitivities, Fibonacci table, stop buffer and expiry are read from the
@@ -263,6 +263,11 @@ class AboutScreen extends StatelessWidget {
                   'more setups, not 3.'),
               const _Bullet('Each tracked setup remembers whether the higher timeframe agreed, and the scorecard '
                   'compares the two groups. That tells you whether the higher-timeframe check actually helps.'),
+              const _Bullet('Don\'t want to wait weeks? "Backtest" in the setup card replays the app over up to 5,000 '
+                  'past candles, seeing only what it could have seen at each moment, and shows how its setups would '
+                  'have done: hit rate, average R, drawdown, and results by evidence, MACD and wave.'),
+              const _Bullet('"How this was computed" in the setup card shows every number step by step: the swings, '
+                  'Fibonacci fit, score, target zone, stop and R:R.'),
               const _Bullet('Results are also split by timeframe, and the chips at the top of the Setups tab filter '
                   'everything to one timeframe. The method may work on 4h and fail on 5m; this is how you find out.'),
             ],

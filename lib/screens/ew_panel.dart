@@ -7,12 +7,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../candles.dart';
 import '../elliott.dart';
 import '../evidence.dart';
+import '../explain.dart';
 import '../indicators.dart';
 import '../layers.dart';
 import '../live.dart';
 import '../mtf.dart';
 import '../setup.dart';
 import '../sources/source.dart';
+import 'backtest_screen.dart';
 import 'live_chart.dart';
 import 'widgets.dart';
 
@@ -561,6 +563,10 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                 children: [for (final n in s.notes) Chip(label: Text(n), visualDensity: VisualDensity.compact)],
               ),
             ],
+            if (_candles != null)
+              _ComputationTile(
+                sections: explain(s, setup, _candles!, fmt, atrValue: atr(_candles!), stopBufferAtr: stopBufferAtr),
+              ),
             if (setup != null)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
@@ -570,6 +576,16 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                   label: const Text('Track this setup'),
                 ),
               ),
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: OutlinedButton.icon(
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BacktestScreen(source: widget.source, frame: _frame),
+                )),
+                icon: const Icon(Icons.history),
+                label: Text('Backtest ${widget.source.title} on ${_frame.label}'),
+              ),
+            ),
             if (a.scenarios.length > 1) ...[
               const Divider(height: 24),
               Text('Other counts', style: text.labelLarge),
@@ -1005,6 +1021,57 @@ class _EvidenceSection extends StatelessWidget {
         const SizedBox(height: 4),
         Text('Indicators are evidence; price is the result. Wait for price to confirm.',
             style: text.bodySmall?.copyWith(color: muted, fontStyle: FontStyle.italic)),
+      ],
+    );
+  }
+}
+
+/// "How this was computed": the setup's numbers step by step, collapsed by default.
+class _ComputationTile extends StatelessWidget {
+  const _ComputationTile({required this.sections});
+  final List<CalcSection> sections;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    return ExpansionTile(
+      tilePadding: EdgeInsets.zero,
+      childrenPadding: const EdgeInsets.only(bottom: 8),
+      shape: const Border(),
+      leading: const Icon(Icons.calculate_outlined),
+      title: Text('How this was computed', style: text.labelLarge),
+      expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final sec in sections) ...[
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 2),
+            child: Text(sec.title, style: text.titleSmall),
+          ),
+          for (final l in sec.lines)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: Text(l.label, style: text.bodySmall)),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(l.value,
+                            textAlign: TextAlign.end,
+                            style: text.bodySmall?.copyWith(
+                                fontWeight: FontWeight.w700, fontFeatures: const [FontFeature.tabularFigures()])),
+                      ),
+                    ],
+                  ),
+                  if (l.note != null) Text(l.note!, style: text.labelSmall?.copyWith(color: muted)),
+                ],
+              ),
+            ),
+        ],
       ],
     );
   }

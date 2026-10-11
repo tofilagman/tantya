@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -38,6 +39,28 @@ class BinanceApi {
       if (start != null) 'startTime': '${start.millisecondsSinceEpoch}',
     }) as List;
     return data.map((k) => _kline(k as List)).toList();
+  }
+
+  /// The latest [count] candles, paging back 1000 at a time (Binance's maximum per
+  /// request). Oldest first. Used by the backtest.
+  Future<List<Candle>> longHistory(String symbol, Timeframe frame, int count) async {
+    final out = <Candle>[];
+    DateTime? before;
+    while (out.length < count) {
+      final page = math.min(1000, count - out.length);
+      final data = await _get('/api/v3/klines', {
+        'symbol': symbol,
+        'interval': intervalOf(frame),
+        'limit': '$page',
+        if (before != null) 'endTime': '${before.millisecondsSinceEpoch - 1}',
+      }) as List;
+      final candles = data.map((k) => _kline(k as List)).toList();
+      if (candles.isEmpty) break;
+      out.insertAll(0, candles);
+      before = candles.first.start;
+      if (candles.length < page) break; // reached the pair's listing date
+    }
+    return out;
   }
 
   static String intervalOf(Timeframe f) => switch (f) {
@@ -144,6 +167,12 @@ class BinanceSource implements CandleSource {
 
   @override
   Future<List<Candle>> history(Timeframe frame) => _api.klines(symbol, frame);
+
+  @override
+  int get maxBacktestCandles => 5000;
+
+  @override
+  Future<List<Candle>> backtestHistory(Timeframe frame, int count) => _api.longHistory(symbol, frame, count);
 
   @override
   Future<List<Candle>> since(DateTime from) {

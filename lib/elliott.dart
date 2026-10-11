@@ -120,6 +120,12 @@ class Scenario {
   /// enough of the price range). Set by [analyze].
   double size = 1;
 
+  /// What [size] was computed from (set by [analyze]): candles spanned, the minimum
+  /// for full weight, and the share of the chart's price range covered.
+  int spanBars = 0;
+  double minSpanBars = 0;
+  double amplitude = 0;
+
   /// Ranking score: [fit], discounted for small counts down to 30% for a tiny one.
   /// Not a probability.
   double get score => fit * (0.3 + 0.7 * size);
@@ -247,6 +253,10 @@ void _sizeUp(Scenario s, List<Candle> candles, double price, double range) {
   final spanFit = math.min(1.0, span / minSpan);
   final ampFit = math.min(1.0, amp / minCountAmplitude);
   s.size = math.sqrt(spanFit * ampFit);
+  s
+    ..spanBars = span
+    ..minSpanBars = minSpan.toDouble()
+    ..amplitude = amp;
   if (s.size < 0.5) {
     s.notes.add('Small count: $span candles, ${(amp * 100).round()}% of the range');
   }
@@ -320,6 +330,9 @@ bool _alive(Scenario sc, double price, Pivot latest, bool latestInsideLeg) {
 bool _beyond(double price, double level, int d) => d > 0 ? price > level : price < level;
 
 double _completeness(int legs) => math.min(1.0, 0.4 + 0.12 * legs);
+
+/// The completeness factor in a count's fit: more confirmed waves, less guessing.
+double completenessOf(int legs) => _completeness(legs);
 
 (double, double) _zone(double from, int dir, double size, double a, double b) {
   final p = from + dir * size * a;

@@ -84,6 +84,7 @@ Future<void> initNotifications({NotificationTap? onTap}) async {
         requestBadgePermission: false,
         requestSoundPermission: false,
       ),
+      linux: LinuxInitializationSettings(defaultActionName: 'Open'),
       windows: WindowsInitializationSettings(
         appName: 'Tantya',
         appUserModelId: 'org.r3al.tantya',

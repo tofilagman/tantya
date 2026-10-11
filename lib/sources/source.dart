@@ -48,6 +48,15 @@ abstract class CandleSource {
 
   Future<List<Candle>> history(Timeframe frame);
 
+  /// Longer history for the backtest; at most [maxBacktestCandles].
+  Future<List<Candle>> backtestHistory(Timeframe frame, int count) async {
+    final h = await history(frame);
+    return h.length > count ? h.sublist(h.length - count) : h;
+  }
+
+  /// How far back [backtestHistory] can go. Sources without paging just give [history].
+  int get maxBacktestCandles => 300;
+
   /// Fine-grained candles from [from] until now, for checking which level was hit first.
   Future<List<Candle>> since(DateTime from);
 
