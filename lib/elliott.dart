@@ -512,3 +512,84 @@ Scenario? _correction(List<Pivot> p, double? prior) {
     legBars: math.max(2, bars),
   );
 }
+
+/// One projected wave end: where the count expects price to go next.
+class ProjectedWave {
+  const ProjectedWave(this.label, this.price, this.barsAhead);
+
+  /// Wave label at this point, e.g. '3'.
+  final String label;
+  final double price;
+
+  /// Candles after the last confirmed pivot (cumulative), a rough timing guide.
+  final double barsAhead;
+}
+
+/// The likely next [maxWaves] waves after [s], each with a price, to draw the path the
+/// count implies (e.g. from wave 2: 3 → 4 → 5).
+///
+/// The first point is the middle of the count's own target zone; later points apply
+/// the textbook ratios to the waves before them, real or projected:
+/// W2 55% of W1 · W3 1.618×W1 · W4 38.2% of W3 · W5 = W1 · A 50% of 1–5 ·
+/// B 50% of A · C = A. Durations follow similar reasoning (W4 ≈ W2, W5 ≈ W1, C ≈ A).
+/// Stops after wave C: what follows a finished correction is a new count.
+List<ProjectedWave> projectPath(Scenario s, {int maxWaves = 3}) {
+  final p = s.points.map((w) => w.pivot).toList();
+  final d = s.trend;
+  const impulseLabels = ['', '1', '2', '3', '4', '5', 'A', 'B', 'C'];
+  const correctionLabels = ['', 'A', 'B', 'C'];
+  final labels = s.kind == ScenarioKind.impulse ? impulseLabels : correctionLabels;
+
+  // Ends and durations of every wave, confirmed ones first; projected ones appended.
+  final ends = [for (final x in p) x.price];
+  final bars = <double>[for (var i = 1; i < p.length; i++) (p[i].index - p[i - 1].index).toDouble()];
+  double len(int wave) => (ends[wave] - ends[wave - 1]).abs(); // wave = 1-based index
+  double dur(int wave) => bars[wave - 1];
+
+  final out = <ProjectedWave>[];
+  var ahead = 0.0;
+  for (var k = 0; k < maxWaves; k++) {
+    final wave = ends.length; // index of the wave being projected
+    if (wave >= labels.length) {
+      // A finished A-B-C: only the first step of the new trend (its wave 1) is projected.
+      if (k == 0) out.add(ProjectedWave('1', s.targetMid, math.max(1, s.legBars).toDouble()));
+      break;
+    }
+    final label = labels[wave];
+    final from = ends.last;
+    final double price, span;
+    if (k == 0) {
+      price = s.targetMid;
+      span = s.legBars.toDouble();
+    } else if (s.kind == ScenarioKind.impulse) {
+      switch (label) {
+        case '2':
+          (price, span) = (from - d * 0.55 * len(1), dur(1) * 0.6);
+        case '3':
+          (price, span) = (from + d * 1.618 * len(1), dur(1) * 1.5);
+        case '4':
+          (price, span) = (from - d * 0.382 * len(3), dur(2));
+        case '5':
+          (price, span) = (from + d * len(1), dur(1));
+        case 'A':
+          (price, span) = (from - d * 0.5 * (from - ends[0]).abs(), bars.take(5).fold(0.0, (a, b) => a + b) / 3);
+        case 'B':
+          (price, span) = (from + d * 0.5 * len(6), dur(6) * 0.6);
+        default: // 'C'
+          (price, span) = (from - d * len(6), dur(6));
+      }
+    } else {
+      switch (label) {
+        case 'B':
+          (price, span) = (from - d * 0.55 * len(1), dur(1) * 0.6);
+        default: // 'C'
+          (price, span) = (from + d * len(1), dur(1));
+      }
+    }
+    ahead += math.max(1, span);
+    out.add(ProjectedWave(label, price, ahead));
+    ends.add(price);
+    bars.add(math.max(1, span));
+  }
+  return out;
+}

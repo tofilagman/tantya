@@ -44,7 +44,7 @@ class ScanAlertSettings {
   bool get _checksHigher => htfAgreeOnly && frame.higher != null;
 
   /// 5m is left out: a 15-minute background job can't keep up with it, and it burns data.
-  static const frames = [Timeframe.m15, Timeframe.h1, Timeframe.h4, Timeframe.d1];
+  static const frames = [Timeframe.m15, Timeframe.m30, Timeframe.h1, Timeframe.h4, Timeframe.d1];
 
   bool matches(ScanResult r) {
     final s = r.setup;

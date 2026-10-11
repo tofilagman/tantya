@@ -23,7 +23,7 @@ class ScannerView extends StatefulWidget {
 }
 
 class _ScannerViewState extends State<ScannerView> {
-  static const _frames = [Timeframe.m5, Timeframe.m15, Timeframe.h1, Timeframe.h4, Timeframe.d1];
+  static const _frames = [Timeframe.m5, Timeframe.m15, Timeframe.m30, Timeframe.h1, Timeframe.h4, Timeframe.d1];
   static const _universes = [30, 50, 100];
 
   Timeframe _frame = Timeframe.h1;

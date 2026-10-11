@@ -9,15 +9,17 @@ import 'candles.dart';
 import 'elliott.dart';
 
 /// A fixed colour per timeframe, used everywhere (chart layers, chips, tables) so a
-/// colour always means the same degree. 1h is a golden yellow: distinct from 15m's orange,
-/// but dark enough to read on a white background.
+/// colour always means the same degree. Neighbouring timeframes get contrasting hues,
+/// not a gradient: a red-orange-yellow run was hard to tell apart on the chart. The
+/// 5m/15m/30m/1h colours were chosen by the users (red, yellow, blue, orange).
 const timeframeColors = <Timeframe, Color>{
   Timeframe.m1: Color(0xFF8E24AA), // purple
   Timeframe.m5: Color(0xFFE53935), // red
-  Timeframe.m15: Color(0xFFFB8C00), // orange
-  Timeframe.h1: Color(0xFFFBC02D), // yellow
-  Timeframe.h4: Color(0xFF1E88E5), // blue
-  Timeframe.d1: Color(0xFF00897B), // teal
+  Timeframe.m15: Color(0xFFFBC02D), // yellow
+  Timeframe.m30: Color(0xFF1E88E5), // blue
+  Timeframe.h1: Color(0xFFFB8C00), // orange
+  Timeframe.h4: Color(0xFF00ACC1), // cyan
+  Timeframe.d1: Color(0xFFD81B60), // magenta
 };
 
 Color colorOf(Timeframe f) => timeframeColors[f]!;

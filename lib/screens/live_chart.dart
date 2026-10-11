@@ -32,6 +32,7 @@ class LiveChart extends StatefulWidget {
     this.layers = const [],
     this.confluence = const [],
     this.macd,
+    this.bounds,
   });
 
   final List<Candle> candles;
@@ -51,6 +52,9 @@ class LiveChart extends StatefulWidget {
 
   /// MACD for [candles], shown in a pane under the volume; null hides the pane.
   final Macd? macd;
+
+  /// Price limits (Polymarket's 0–1) that projected prices are kept inside.
+  final (double, double)? bounds;
 
   /// Bumped by the parent whenever [candles] changed in place, to force a repaint.
   final int revision;
@@ -114,6 +118,7 @@ class _LiveChartState extends State<LiveChart> {
             layers: widget.layers,
             confluence: widget.confluence,
             macd: widget.macd,
+            bounds: widget.bounds,
             geo: geo,
             cross: _cross,
             revision: widget.revision,
@@ -148,7 +153,8 @@ class _LiveChartState extends State<LiveChart> {
   }
 
   /// Empty candle slots on the right: room for the projection when there is one.
-  int get _future => widget.scenario != null || widget.layers.isNotEmpty ? 16 : 3;
+  /// Empty candle slots on the right: room for the projected path when there is one.
+  int get _future => widget.scenario != null ? 24 : (widget.layers.isNotEmpty ? 16 : 3);
 }
 
 /// Maps candle indexes and prices to pixels.
@@ -194,6 +200,7 @@ class _ChartPainter extends CustomPainter {
     required this.layers,
     required this.confluence,
     required this.macd,
+    required this.bounds,
     required this.geo,
     required this.cross,
     required this.revision,
@@ -210,6 +217,7 @@ class _ChartPainter extends CustomPainter {
   final List<Layer> layers;
   final List<Confluence> confluence;
   final Macd? macd;
+  final (double, double)? bounds;
   final _Geometry geo;
   final int? cross;
   final int revision;
@@ -234,9 +242,12 @@ class _ChartPainter extends CustomPainter {
       lo = math.min(lo, candles[i].low);
       hi = math.max(hi, candles[i].high);
     }
+    final projected = scenario == null ? const <ProjectedWave>[] : projectPath(scenario!);
     final levels = <double>[
       if (setup != null) ...[setup!.stop, setup!.tp1, setup!.tp2],
       if (setup == null && scenario != null) ...[scenario!.targetLow, scenario!.targetHigh],
+      // The whole projected path stays in the price area, not over the volume/MACD panes.
+      for (final w in projected) _bounded(w.price),
     ];
     if (geo.offset < 1) {
       for (final l in levels) {
@@ -262,7 +273,7 @@ class _ChartPainter extends CustomPainter {
     for (final l in layers) {
       _layer(canvas, priceRect, l, y);
     }
-    if (scenario != null) _waves(canvas, y);
+    if (scenario != null) _waves(canvas, y, projected);
     for (final c in confluence) {
       _confluence(canvas, priceRect, c, y);
     }
@@ -343,7 +354,7 @@ class _ChartPainter extends CustomPainter {
   }
 
   /// The count's zigzag with wave labels, and the projected next wave.
-  void _waves(Canvas canvas, double Function(double) y) {
+  void _waves(Canvas canvas, double Function(double) y, List<ProjectedWave> projected) {
     final s = scenario!;
     final pc = primaryColor;
     final line = Paint()
@@ -358,15 +369,33 @@ class _ChartPainter extends CustomPainter {
     }
     canvas.drawPath(path, line);
 
-    // Projection: from the wave's start to the middle of the target zone, ~legBars ahead.
-    final last = s.points.last.pivot;
-    final aheadIdx = math.min(candles.length - 1 + s.legBars, candles.length - 1 + 14);
-    final from = Offset(geo.x(last.index), y(last.price));
-    final to = Offset(geo.x(aheadIdx), y(s.targetMid));
-    _dashed(canvas, from, to, pc, 1.8);
-    _arrowHead(canvas, from, to, pc);
-    // After a finished ABC the prior trend resumes: the next impulse's wave 1.
-    _bubble(canvas, to + Offset(0, s.direction > 0 ? -14 : 14), s.next == 'new trend' ? '1' : s.next, pc, dashed: true);
+    // Projected path: the next few waves the count implies, each with its price. Later
+    // steps are fainter and thinner: each one rests on the guesses before it.
+    if (projected.isNotEmpty) {
+      final base = candles.length - 1;
+      final room = (geo.future - 3).toDouble();
+      final squeeze = math.min(1.0, room / projected.last.barsAhead); // keep the path in the empty space
+      var from = Offset(geo.x(s.points.last.pivot.index), y(s.points.last.pivot.price));
+      final bubbles = <(Offset, String, Color)>[];
+      for (var k = 0; k < projected.length; k++) {
+        final w = projected[k];
+        final price = _bounded(w.price);
+        final to = Offset(geo.x(base + w.barsAhead * squeeze), y(price));
+        final c = pc.withValues(alpha: k == 0 ? 1.0 : (k == 1 ? 0.7 : 0.5));
+        _dashed(canvas, from, to, c, k == 0 ? 1.8 : 1.3);
+        _arrowHead(canvas, from, to, c);
+        final up = to.dy < from.dy;
+        final bubbleAt = to + Offset(0, up ? -14 : 14);
+        _bubble(canvas, bubbleAt, w.label, c, dashed: true);
+        bubbles.add((bubbleAt, format(price), c));
+        from = to;
+      }
+      // Tags after all bubbles, so each can steer clear of every bubble and earlier tag.
+      final taken = [for (final (b, _, _) in bubbles) Rect.fromCircle(center: b, radius: 11)];
+      for (final (b, label, c) in bubbles) {
+        taken.add(_priceTag(canvas, b, label, c, avoid: taken));
+      }
+    }
 
     for (final w in s.points) {
       if (w.label.isEmpty) continue;
@@ -403,8 +432,9 @@ class _ChartPainter extends CustomPainter {
     final to = Offset(math.min(x(l.projectTo), r.right - 14), y(s.targetMid));
     _dashed(canvas, from, to, c, 1.3);
     _arrowHead(canvas, from, to, c);
-    _bubble(canvas, to + Offset(0, s.direction > 0 ? -12 : 12), s.next == 'new trend' ? '1' : s.next, c,
-        dashed: true, small: true);
+    final lb = to + Offset(0, s.direction > 0 ? -12 : 12);
+    _bubble(canvas, lb, s.next == 'new trend' ? '1' : s.next, c, dashed: true, small: true);
+    _priceTag(canvas, lb, format(_bounded(s.targetMid)), c, small: true);
     // Further out than this chart's own labels (14px), so when both counts mark the same
     // swing the two bubbles stack instead of covering each other.
     for (final p in l.points) {
@@ -453,6 +483,43 @@ class _ChartPainter extends CustomPainter {
       text.copyWith(color: scheme.onSurface, fontWeight: FontWeight.w700, fontSize: 9),
     );
     tp.paint(canvas, Offset(band.left + 3, band.top + 2));
+  }
+
+  double _bounded(double p) => bounds == null ? p : p.clamp(bounds!.$1, bounds!.$2);
+
+  double _inside(double left, double width) =>
+      left.clamp(geo.plot.left, math.max(geo.plot.left, geo.plot.right - 2 - width));
+
+  /// The projected price beside a wave bubble ("where it will hit"). Tries right of the
+  /// bubble, then left, then above and below, skipping spots that overlap [avoid] or
+  /// leave the chart. Returns where it went.
+  Rect _priceTag(Canvas canvas, Offset bubble, String label, Color color,
+      {bool small = false, List<Rect> avoid = const []}) {
+    final tp = _tp(label, text.copyWith(color: color, fontWeight: FontWeight.w700, fontSize: small ? 8.5 : 9.5));
+    final w = tp.width + 6, h = tp.height + 2;
+    final gap = small ? 10.0 : 13.0;
+    final candidates = [
+      Rect.fromLTWH(bubble.dx + gap, bubble.dy - h / 2, w, h), // right
+      Rect.fromLTWH(bubble.dx - gap - w, bubble.dy - h / 2, w, h), // left
+      // Above/below are centred on the bubble, nudged back inside the chart near its edge.
+      Rect.fromLTWH(_inside(bubble.dx - w / 2, w), bubble.dy - gap - h, w, h), // above
+      Rect.fromLTWH(_inside(bubble.dx - w / 2, w), bubble.dy + gap, w, h), // below
+    ];
+    bool fits(Rect r) => r.left >= geo.plot.left && r.right <= geo.plot.right - 2 && r.top >= geo.plot.top;
+    final box = candidates.firstWhere(
+      (r) => fits(r) && !avoid.any((a) => a.overlaps(r)),
+      orElse: () => candidates.firstWhere(fits, orElse: () => candidates[1]),
+    );
+    canvas.drawRRect(RRect.fromRectAndRadius(box, const Radius.circular(3)), Paint()..color = scheme.surface.withValues(alpha: 0.9));
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(box, const Radius.circular(3)),
+      Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1,
+    );
+    tp.paint(canvas, Offset(box.left + 3, box.center.dy - tp.height / 2));
+    return box;
   }
 
   void _bubble(Canvas canvas, Offset c, String label, Color color, {bool dashed = false, bool small = false}) {
@@ -666,6 +733,7 @@ class _ChartPainter extends CustomPainter {
       old.layers != layers ||
       old.confluence != confluence ||
       old.macd != macd ||
+      old.bounds != bounds ||
       old.cross != cross ||
       old.geo.visible != geo.visible ||
       old.geo.offset != geo.offset ||

@@ -1,3 +1,4 @@
+import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tantya/candles.dart';
 import 'package:tantya/elliott.dart';
@@ -22,12 +23,25 @@ Scenario zone(int dir, double lo, double hi, {int pivotIndex = 2}) => Scenario(
     );
 
 void main() {
-  test('every timeframe has its own colour, 5m red and 1h yellow-ish', () {
+  test('every timeframe has its own colour: 5m red, 15m yellow, 30m blue, 1h orange', () {
     expect(timeframeColors.keys.toSet(), Timeframe.values.toSet());
     expect(timeframeColors.values.toSet(), hasLength(Timeframe.values.length));
-    expect(colorOf(Timeframe.m5).r, greaterThan(colorOf(Timeframe.m5).b), reason: 'red');
-    final h1 = colorOf(Timeframe.h1);
-    expect(h1.r > h1.b && h1.g > h1.b, isTrue, reason: 'yellow/amber');
+    double hue(Timeframe f) => HSVColor.fromColor(colorOf(f)).hue;
+    expect(hue(Timeframe.m5), anyOf(lessThan(15), greaterThan(345)), reason: 'red');
+    expect(hue(Timeframe.m15), inInclusiveRange(40, 65), reason: 'yellow');
+    expect(hue(Timeframe.m30), inInclusiveRange(195, 240), reason: 'blue');
+    expect(hue(Timeframe.h1), inInclusiveRange(25, 40), reason: 'orange');
+  });
+
+  test('neighbouring timeframes are far apart in hue (no gradient)', () {
+    double diff(Color a, Color b) {
+      final d = (HSVColor.fromColor(a).hue - HSVColor.fromColor(b).hue).abs();
+      return d > 180 ? 360 - d : d;
+    }
+    for (var i = 1; i < Timeframe.values.length; i++) {
+      final a = Timeframe.values[i - 1], b = Timeframe.values[i];
+      expect(diff(colorOf(a), colorOf(b)), greaterThanOrEqualTo(40), reason: '${a.label} vs ${b.label}');
+    }
   });
 
   group('indexAt', () {

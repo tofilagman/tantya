@@ -4,7 +4,7 @@ import '../elliott.dart';
 import '../layers.dart';
 import '../setup.dart';
 
-const appVersion = '0.2.0';
+const appVersion = '0.2.1';
 
 /// What the app is, how to use it while trading, and exactly how predictions are made.
 /// The swing sensitivities, Fibonacci table, stop buffer and expiry are read from the
@@ -59,7 +59,7 @@ class AboutScreen extends StatelessWidget {
               _Step(1, 'Open the same pair and timeframe you are trading on Binance (Crypto tab), '
                   'or a prediction market (Polymarket tab).'),
               _Step(2, 'Read the primary count at the top of the card ("Impulse ↑ · wave 3 in progress") '
-                  'and follow the dashed arrow on the chart: that is the projected next wave.'),
+                  'and follow the dashed path on the chart: the next few waves it expects, each with its price.'),
               _Step(3, 'Check the setup: LONG or SHORT, the stop (SL) and the targets (TP1, TP2). '
                   'Skip it when reward:risk to TP1 is under 1, or when the card says the alternate counts disagree.'),
               _Step(4, 'Check the badge under the setup. It shows whether the next timeframe up (e.g. 4h for a 1h '
@@ -80,7 +80,8 @@ class AboutScreen extends StatelessWidget {
             children: [
               _Legend(swatch: _bubble(context, '3'), text: 'A completed wave, labelled at its swing high or low.'),
               _Legend(swatch: _bubble(context, '4', outline: true), text: 'The wave in progress, at its projected target.'),
-              _Legend(swatch: _line(scheme.primary, dashed: true), text: 'Projection: where the next wave is expected to go.'),
+              _Legend(swatch: _line(scheme.primary, dashed: true), text: 'Projected path: the next few waves (e.g. 4 → 5 → A), each labelled with its price. '
+                    'Later steps are fainter: each rests on the guesses before it.'),
               _Legend(swatch: _box(Colors.green.shade600.withValues(alpha: 0.2)), text: 'Target zone (green for up, red for down).'),
               _Legend(swatch: _tag('SL', Colors.red.shade400), text: 'Stop: where the count is proven wrong.'),
               _Legend(swatch: _tag('TP1', Colors.green.shade600), text: 'First and second targets: near and far edge of the zone.'),
@@ -89,8 +90,8 @@ class AboutScreen extends StatelessWidget {
                   for (final f in timeframeColors.values)
                     Container(width: 6, height: 16, color: f, margin: const EdgeInsets.only(right: 1)),
                 ]),
-                text: 'Overlays: other timeframes\' counts in their own colour (1m purple, 5m red, 15m orange, '
-                    '1h yellow, 4h blue, 1D teal). Turn them on with the Overlay chips under the chart.',
+                text: 'Overlays: other timeframes\' counts in their own colour (1m purple, 5m red, 15m yellow, '
+                    '30m blue, 1h orange, 4h cyan, 1D magenta). Turn them on with the Overlay chips under the chart.',
               ),
               _Legend(
                 swatch: Container(

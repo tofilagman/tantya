@@ -20,7 +20,7 @@ never places orders. *It is an analysis tool, not financial advice.*
   <tr>
     <td align="center"><img src="docs/screenshots/pairs.png" width="200" alt="Binance pairs sorted by 24h volume"><br><sub><b>Pairs</b><br>Binance spot by 24h volume</sub></td>
     <td align="center"><img src="docs/screenshots/about.png" width="200" alt="About tab with an Elliott Wave diagram and the three rules"><br><sub><b>About</b><br>how to use it, and the algorithm</sub></td>
-    <td align="center"><img src="docs/screenshots/overlays.png" width="200" alt="5m count in red with the 1h count overlaid in yellow"><br><sub><b>Timeframe overlays</b><br>5m red + 1h yellow on one chart</sub></td>
+    <td align="center"><img src="docs/screenshots/overlays.png" width="200" alt="5m count with another timeframe's count overlaid in its own colour"><br><sub><b>Timeframe overlays</b><br>several timeframes on one chart</sub></td>
   </tr>
 </table>
 
@@ -36,7 +36,7 @@ never places orders. *It is an analysis tool, not financial advice.*
   two targets and reward:risk, plus the alternate counts.
 - **Higher-timeframe check**: does the 4h agree with your 1h setup?
 - **Timeframe overlays**: other timeframes' counts drawn on the same chart, one
-  colour each (5m red, 1h yellow, …), with their target overlaps (confluence)
+  colour each (5m red, 15m yellow, 30m blue, 1h orange, …), with their target overlaps (confluence)
   outlined, and an "All timeframes" table showing how many point which way.
 - **Scanner** across the top 30/50/100 pairs, and **background alerts** for fresh
   setups.
@@ -77,7 +77,13 @@ space right of the last candle:
 - live candles and volume; drag to pan, pinch to zoom, long-press for an OHLC
   crosshair, double-tap to reset
 - the wave count: a zigzag through the labelled swings (1–5, A–C)
-- the projected next wave: a dashed arrow to the middle of the target zone
+- the **projected path** (`projectPath` in `lib/elliott.dart`): the next few waves
+  the count implies (e.g. from wave 3: 4 → 5 → A), each with its price, so you can
+  see where price is expected to go. The first step is the middle of the count's
+  target zone. Later steps use textbook ratios (W4 38.2% of W3, W5 = W1, A 50% of
+  1–5, B 50% of A, C = A) and are drawn fainter, since each rests on the guesses
+  before it. The path stops at wave C; after a finished A-B-C only the new trend's
+  wave 1 is shown.
 - the target zone band, plus SL / TP1 / TP2 / last-price tags on the price axis
 
 ## How the wave count works (`lib/elliott.dart`)
@@ -129,7 +135,9 @@ and is *unknown* when there is no count.
 ## Timeframe overlays & confluence (`lib/layers.dart`)
 
 Every timeframe has a fixed colour everywhere in the app: **1m purple, 5m red,
-15m orange, 1h yellow, 4h blue, 1D teal**. The chart's own count uses its
+15m yellow, 30m blue, 1h orange, 4h cyan, 1D magenta**. Neighbouring timeframes
+get contrasting hues rather than a gradient (a red→orange→yellow run was hard to
+tell apart); a test keeps neighbours at least 40° apart in hue. The chart's own count uses its
 timeframe's colour.
 
 - **Overlay chips** under the timeframes draw other timeframes' counts on the
@@ -156,7 +164,7 @@ recount every 5 minutes). The same data feeds the higher-timeframe badge.
 Standard MACD (12, 26, 9): EMAs seeded with a simple average, signal = EMA(9) of
 MACD, histogram = MACD − signal. The pane under the chart shows histogram bars
 (paler while shrinking), the MACD line (dark) and the signal line (grey), in
-neutral colours because the timeframe overlays use red, orange, yellow and blue.
+neutral colours because the timeframe overlays use the bright hues.
 Toggle it with the line-chart icon. The crosshair shows MACD and signal values.
 
 The setup card's **MACD** section reads it three ways:

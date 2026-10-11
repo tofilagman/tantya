@@ -3,6 +3,7 @@ enum Timeframe {
   m1('1m', Duration(minutes: 1)),
   m5('5m', Duration(minutes: 5)),
   m15('15m', Duration(minutes: 15)),
+  m30('30m', Duration(minutes: 30)),
   h1('1h', Duration(hours: 1)),
   h4('4h', Duration(hours: 4)),
   d1('1D', Duration(days: 1));
@@ -17,6 +18,7 @@ enum Timeframe {
         Timeframe.m1 => Timeframe.m15,
         Timeframe.m5 => Timeframe.h1,
         Timeframe.m15 => Timeframe.h1,
+        Timeframe.m30 => Timeframe.h4,
         Timeframe.h1 => Timeframe.h4,
         Timeframe.h4 => Timeframe.d1,
         Timeframe.d1 => null,

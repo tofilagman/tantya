@@ -276,6 +276,7 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                     primaryColor: colorOf(_frame),
                     layers: _overlay ? layers : const [],
                     macd: _showMacd ? _macd : null,
+                    bounds: widget.source.bounds,
                     confluence: _overlay
                         ? findConfluence({_frame: ?selected, for (final l in layers) l.frame: l.scenario})
                         : const [],

@@ -44,6 +44,7 @@ class BinanceApi {
         Timeframe.m1 => '1m',
         Timeframe.m5 => '5m',
         Timeframe.m15 => '15m',
+        Timeframe.m30 => '30m',
         Timeframe.h1 => '1h',
         Timeframe.h4 => '4h',
         Timeframe.d1 => '1d',

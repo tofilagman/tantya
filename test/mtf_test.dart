@@ -22,6 +22,7 @@ void main() {
   test('higher timeframe ladder', () {
     expect(Timeframe.m1.higher, Timeframe.m15);
     expect(Timeframe.m5.higher, Timeframe.h1);
+    expect(Timeframe.m30.higher, Timeframe.h4);
     expect(Timeframe.h1.higher, Timeframe.h4);
     expect(Timeframe.h4.higher, Timeframe.d1);
     expect(Timeframe.d1.higher, isNull);

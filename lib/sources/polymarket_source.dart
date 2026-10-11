@@ -34,7 +34,8 @@ class PolymarketSource implements CandleSource {
   String get subtitle => 'Polymarket · $outcome';
 
   @override
-  List<Timeframe> get timeframes => const [Timeframe.m5, Timeframe.m15, Timeframe.h1, Timeframe.h4, Timeframe.d1];
+  List<Timeframe> get timeframes =>
+      const [Timeframe.m5, Timeframe.m15, Timeframe.m30, Timeframe.h1, Timeframe.h4, Timeframe.d1];
   @override
   Timeframe get defaultFrame => Timeframe.h1;
   @override
@@ -48,6 +49,7 @@ class PolymarketSource implements CandleSource {
   static (int fidelity, Duration lookback) _plan(Timeframe f) => switch (f) {
         Timeframe.m1 || Timeframe.m5 => (1, const Duration(hours: 6)),
         Timeframe.m15 => (1, const Duration(hours: 18)),
+        Timeframe.m30 => (5, const Duration(hours: 36)),
         Timeframe.h1 => (5, const Duration(days: 3)),
         Timeframe.h4 => (15, const Duration(days: 12)),
         Timeframe.d1 => (60, const Duration(days: 30)),
