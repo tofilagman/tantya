@@ -5,7 +5,7 @@ import '../layers.dart';
 import '../setup.dart';
 import '../theme_mode.dart';
 
-const appVersion = '0.2.5';
+const appVersion = '0.2.6';
 
 /// What the app is, how to use it while trading, and exactly how predictions are made.
 /// The swing sensitivities, Fibonacci table, stop buffer and expiry are read from the

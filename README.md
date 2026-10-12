@@ -319,6 +319,22 @@ That's a hint worth tracking, not proof. Reproduce with
 `BACKTEST=BTCUSDT,ETHUSDT:1h:5000 flutter test test/live_backtest_test.dart`
 (network; skipped by default).
 
+## Pair alerts (`lib/pair_watch.dart`, `lib/screens/pair_alert_sheet.dart`)
+
+Tap the bell on any Binance pair's chart to watch it on one timeframe (15m–1D). The background check
+(`checkPairs` in `lib/alerts.dart`, with the other checks: about every 15 min on Android, when iOS allows,
+every 15 min while open on desktop) notifies:
+
+- **New buy / sell setup:** the count gives a trade with R:R ≥ 1 that wasn't there at the last check.
+- **Wave count changes**, e.g. wave 3 → wave 4, or no valid count any more.
+- **Target reached / count invalidated:** price enters the count's target zone or breaks its
+  invalidation level (once per count).
+- **Price levels** (rises above / falls below) and **big moves** (±N% since the last move alert).
+
+The count and setup come from closed candles only, so a forming candle can't make them flicker; price
+rules use the latest price. A new watch records what the chart shows now, so the first alert is a real
+change. Watched pairs appear at the top of the Watchlist tab; tapping a notification opens the chart.
+
 ## Out-of-sample validation (`test/live_validate_test.dart`)
 
 Before making "strong evidence" setups the default, they were tested on 30 liquid Binance pairs × 1h and 4h

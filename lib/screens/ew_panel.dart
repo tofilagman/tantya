@@ -23,7 +23,7 @@ import 'widgets.dart';
 /// Live chart + Elliott Wave count + trade setup for one [CandleSource].
 /// Lays out as a column; put it inside a scroll view.
 class EwPanel extends StatefulWidget {
-  const EwPanel({super.key, required this.source, this.onPrice, this.initialFrame, this.wide = false});
+  const EwPanel({super.key, required this.source, this.onPrice, this.onFrame, this.initialFrame, this.wide = false});
 
   final CandleSource source;
 
@@ -36,6 +36,9 @@ class EwPanel extends StatefulWidget {
 
   /// Latest price, for a header owned by the parent.
   final ValueChanged<double>? onPrice;
+
+  /// Called when the user switches the chart's timeframe.
+  final ValueChanged<Timeframe>? onFrame;
 
   @override
   State<EwPanel> createState() => _EwPanelState();
@@ -247,6 +250,7 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
 
   /// Switches the chart's timeframe; the default overlay moves to the new next-higher one.
   void _setFrame(Timeframe f) {
+    widget.onFrame?.call(f);
     setState(() {
       _frame = f;
       if (!_layersPicked) {

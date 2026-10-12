@@ -7,6 +7,7 @@ import 'package:workmanager/workmanager.dart';
 
 import 'api.dart';
 import 'mtf.dart';
+import 'pair_watch.dart';
 import 'scan_alerts.dart';
 import 'scanner.dart';
 import 'setup.dart';
@@ -45,7 +46,7 @@ void callbackDispatcher() {
 /// (network blip) doesn't skip the others. Returns false if any failed.
 Future<bool> runChecks() async {
   var ok = true;
-  for (final check in [checkWatchlist, checkSetups, checkScan]) {
+  for (final check in [checkWatchlist, checkPairs, checkSetups, checkScan]) {
     try {
       await check();
     } catch (_) {
@@ -144,6 +145,72 @@ Future<void> scheduleBackgroundChecks() async {
     constraints: Constraints(networkType: NetworkType.connected),
     existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
   );
+}
+
+const _pairChannel = AndroidNotificationDetails(
+  'pair_alerts',
+  'Pair alerts',
+  channelDescription: 'Watched pairs: new setups, wave count changes, targets and your price levels',
+  importance: Importance.high,
+  priority: Priority.high,
+);
+
+/// Checks every watched pair: fetches candles, reads the count on closed candles, and
+/// notifies whatever changed. One notification per pair and check.
+Future<void> checkPairs({BinanceApi? api}) async {
+  api ??= BinanceApi();
+  final items = await PairWatchStore.load();
+  if (items.isEmpty) return;
+  final now = DateTime.now();
+  final fired = <String, List<PairAlert>>{};
+  for (final w in items) {
+    try {
+      final candles = await api.klines(w.symbol, w.frame, limit: 301);
+      if (candles.isEmpty) continue;
+      final closed = candles.last.start.add(w.frame.size).isAfter(now) ? candles.sublist(0, candles.length - 1) : candles;
+      final price = candles.last.close;
+      final alerts = applySnapshot(w, PairSnapshot.of(closed, price),
+          fmt: (p) => p.toStringAsFixed(decimalsFor(p)));
+      if (alerts.isNotEmpty) fired[w.key] = alerts;
+    } catch (_) {
+      // Skip this one; the rest still get checked.
+    }
+  }
+  // Re-read before saving so rules edited meanwhile aren't overwritten.
+  final latest = {for (final w in await PairWatchStore.load()) w.key: w};
+  for (final w in items) {
+    final current = latest[w.key];
+    if (current != null) latest[w.key] = w..applyRules(current);
+  }
+  await PairWatchStore.save(latest.values.toList());
+
+  for (final w in items) {
+    final alerts = fired[w.key];
+    if (alerts == null || !latest.containsKey(w.key)) continue;
+    final setup = alerts.where((a) => a.kind == PairAlertKind.setup).firstOrNull;
+    final title = setup != null
+        ? '${setup.text.split(' ').first} ${w.title} · ${w.frame.label}'
+        : '${w.title} · ${w.frame.label}';
+    final body = alerts.map((a) => a.text).join('\n');
+    await _notifications.show(
+      id: 'pair|${w.key}'.hashCode & 0x7fffffff,
+      title: title,
+      body: body,
+      notificationDetails: NotificationDetails(
+        android: AndroidNotificationDetails(
+          _pairChannel.channelId,
+          _pairChannel.channelName,
+          channelDescription: _pairChannel.channelDescription,
+          importance: Importance.high,
+          priority: Priority.high,
+          styleInformation: BigTextStyleInformation(body),
+        ),
+        iOS: _ios,
+        macOS: _ios,
+      ),
+      payload: 'pair|${w.symbol}|${w.frame.name}',
+    );
+  }
 }
 
 /// Settles open setups and notifies for each one that hit its target or stop.
