@@ -319,6 +319,38 @@ That's a hint worth tracking, not proof. Reproduce with
 `BACKTEST=BTCUSDT,ETHUSDT:1h:5000 flutter test test/live_backtest_test.dart`
 (network; skipped by default).
 
+## Out-of-sample validation (`test/live_validate_test.dart`)
+
+Before making "strong evidence" setups the default, they were tested on 30 liquid Binance pairs × 1h and 4h
+(5,000 candles each, ~14,500 trades), with the newest 30% of trades held out. Fees: 0.1% taker per side.
+
+- Before fees the setups were about breakeven; after fees every group lost (1h: −0.15 R/trade older
+  data, −0.25 R on the holdout). On 1h, fees alone are ~0.19 R per trade because the stops are tight.
+- The best filter found on the older data (strong evidence + ADX ≥ 30 + MACD agreeing, +0.16 R)
+  fell to −0.01 R on the holdout: overfitting, not an edge.
+- A trend filter (ADX ≥ 25) chosen before looking did not help; strong trends did slightly worse.
+
+So there is no "high-confidence" default. Re-run with
+`VALIDATE=BTCUSDT,ETHUSDT:1h:5000 OUT=trades.csv flutter test test/live_validate_test.dart`.
+
+## Public track record (`lib/track_record.dart`, `tool/track_record.dart`)
+
+An hourly GitHub Action (`.github/workflows/track-record.yml`) runs the engine on 20 fixed pairs
+(1h and 4h), settles open signals and logs new ones, and commits `signals.json`, `summary.json` and a
+`README.md` to the [`track-record`](https://github.com/tofilagman/tantya/tree/track-record) branch.
+Nothing is picked or deleted by hand, and the branch history shows each signal was published before
+its outcome. The app shows it under Setups → Public track record.
+
+- Entry is the live price when the job runs. A signal is only logged if the job runs within 20 minutes
+  of the candle opening; late runs skip that candle, which never depends on the outcome.
+- Same rules as tracked setups (TP1 or stop first; a candle touching both counts as the stop; 50-candle
+  expiry), one open signal per pair and timeframe. Results are shown before and after fees.
+- Each signal records the engine's commit, so changes to the method show up in the record.
+- The engine path (`candles`, `elliott`, `indicators`, `evidence`, `trade`, `backtest`) is pure Dart so
+  the job can run it with `dart run`. Keep Flutter imports out of it.
+- Dry run locally: `TRACK_MAX_DELAY_MIN=240 dart run tool/track_record.dart /tmp/track`. Point the app
+  at local data with `--dart-define=TRACK_RECORD_RAW=http://localhost:8765`.
+
 ## How this was computed (`lib/explain.dart`)
 
 A collapsible panel in the setup card that walks through the setup with real

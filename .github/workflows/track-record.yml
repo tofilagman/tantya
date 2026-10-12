@@ -1,0 +1,56 @@
+# The public track record: every hour, settle open signals and log new ones on the
+# fixed pair list, then commit the result to the `track-record` branch. Each signal is
+# committed when it is published, so the branch history proves it came before the
+# outcome. Nothing here is edited by hand.
+name: Track record
+
+on:
+  schedule:
+    - cron: '7 * * * *' # a few minutes after each candle close; off the busy :00
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: track-record
+  cancel-in-progress: false
+
+env:
+  FLUTTER_VERSION: '3.47.6'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Check out the record
+        run: |
+          if git ls-remote --exit-code --heads origin track-record; then
+            git fetch --depth=1 origin track-record
+            git worktree add record FETCH_HEAD
+          else
+            git worktree add --orphan -b track-record record
+          fi
+      - name: Update
+        run: dart run tool/track_record.dart record | tee message.txt
+      - name: Publish
+        working-directory: record
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          # Only when a signal was added or settled (not for the timestamp alone).
+          if git diff --cached --quiet -- signals.json; then
+            echo 'No change'
+            exit 0
+          fi
+          git commit -q -F ../message.txt
+          git push origin HEAD:track-record

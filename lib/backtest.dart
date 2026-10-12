@@ -16,7 +16,7 @@ import 'candles.dart';
 import 'elliott.dart';
 import 'evidence.dart';
 import 'indicators.dart';
-import 'setup.dart';
+import 'trade.dart';
 
 class BacktestConfig {
   const BacktestConfig({
@@ -154,7 +154,7 @@ BacktestResult runBacktest(List<Candle> candles, Timeframe frame, BacktestConfig
     if (onProgress != null && t % 50 == 0) onProgress((t - w + 1) / math.max(1, candles.length - w));
     final view = candles.sublist(t - w + 1, t + 1);
     steps++;
-    final trade = _setupAt(view, t, cfg);
+    final trade = setupAt(view, t, cfg);
     if (trade == null) {
       t++;
       continue;
@@ -174,11 +174,12 @@ BacktestResult runBacktest(List<Candle> candles, Timeframe frame, BacktestConfig
 }
 
 /// The setup the live app would have shown on [view], or null if none passes the filters.
-BacktestTrade? _setupAt(List<Candle> view, int index, BacktestConfig cfg) {
+/// Entered at [price] (default: the last candle's close).
+BacktestTrade? setupAt(List<Candle> view, int index, BacktestConfig cfg, {double? price}) {
   final a = analyze(view, bounds: cfg.bounds);
   final s = a.primary;
   if (s == null || s.score < cfg.minScore) return null;
-  final price = view.last.close;
+  price ??= view.last.close;
   final setup = TradeSetup.from(s, price, buffer: atr(view) * stopBufferAtr);
   if (setup == null || setup.rr1 < cfg.minRR) return null;
   final ind = Indicators.of(view);

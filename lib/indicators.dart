@@ -5,7 +5,7 @@ import 'dart:math' as math;
 
 import 'candles.dart';
 import 'elliott.dart';
-import 'setup.dart';
+import 'trade.dart';
 
 /// Exponential moving average, seeded with the simple average of the first [n] values.
 /// Entries before the first full window are null, so the result lines up with [xs].

@@ -9,6 +9,7 @@ import '../setup.dart';
 import '../sources/binance.dart';
 import 'instrument_screen.dart';
 import 'market_screen.dart';
+import 'track_record_screen.dart';
 import '../sources/polymarket_source.dart';
 
 /// Tracked setups and the method's real track record.
@@ -115,6 +116,18 @@ class SetupsScreenState extends State<SetupsScreen> {
                               ],
                             ),
                           ),
+                        Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: ListTile(
+                            leading: const Icon(Icons.public),
+                            title: const Text('Public track record'),
+                            subtitle: const Text('Every setup the app made on 20 pairs, logged automatically. '
+                                'See how the method really does.'),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () => Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (_) => const TrackRecordScreen())),
+                          ),
+                        ),
                         _ScoreCard(
                           Scorecard(items),
                           frame: frame,
@@ -183,7 +196,7 @@ class _ScoreCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(frame == null ? 'Track record' : 'Track record · ${frame!.label}', style: text.titleMedium),
+            Text(frame == null ? 'Your track record' : 'Your track record · ${frame!.label}', style: text.titleMedium),
             const SizedBox(height: 12),
             Row(
               children: [

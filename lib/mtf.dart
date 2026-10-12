@@ -3,7 +3,7 @@ library;
 
 import 'candles.dart';
 import 'elliott.dart';
-import 'setup.dart';
+import 'trade.dart';
 
 enum HtfVerdict { agree, conflict, unknown }
 
