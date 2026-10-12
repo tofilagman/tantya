@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../watchlist.dart';
@@ -82,3 +84,46 @@ class ErrorRetry extends StatelessWidget {
     );
   }
 }
+
+/// A running total (e.g. R or P&L after each trade) as a line from zero, green when it
+/// ends above zero and red below.
+class EquityLine extends StatelessWidget {
+  const EquityLine(this.values, {super.key});
+  final List<double> values;
+
+  @override
+  Widget build(BuildContext context) =>
+      CustomPaint(painter: _EquityPainter(values, Theme.of(context).colorScheme), size: Size.infinite);
+}
+
+class _EquityPainter extends CustomPainter {
+  _EquityPainter(this.equity, this.colors);
+  final List<double> equity;
+  final ColorScheme colors;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final values = [0.0, ...equity];
+    final lo = math.min(0.0, values.reduce(math.min)), hi = math.max(0.0, values.reduce(math.max));
+    final span = hi - lo == 0 ? 1.0 : hi - lo;
+    double y(double v) => size.height - (v - lo) / span * size.height;
+    double x(int i) => i / (values.length - 1) * size.width;
+    canvas.drawLine(Offset(0, y(0)), Offset(size.width, y(0)),
+        Paint()..color = colors.outlineVariant..strokeWidth = 1);
+    final path = Path()..moveTo(0, y(0));
+    for (var i = 1; i < values.length; i++) {
+      path.lineTo(x(i), y(values[i]));
+    }
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = values.last >= 0 ? Colors.green.shade600 : Colors.red.shade400
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_EquityPainter old) => old.equity != equity;
+}
+

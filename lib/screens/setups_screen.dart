@@ -9,6 +9,7 @@ import '../setup.dart';
 import '../sources/binance.dart';
 import 'instrument_screen.dart';
 import 'market_screen.dart';
+import 'journal_screen.dart';
 import 'track_record_screen.dart';
 import '../sources/polymarket_source.dart';
 
@@ -126,6 +127,17 @@ class SetupsScreenState extends State<SetupsScreen> {
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () => Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (_) => const TrackRecordScreen())),
+                          ),
+                        ),
+                        Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: ListTile(
+                            leading: const Icon(Icons.edit_note),
+                            title: const Text('Trade journal'),
+                            subtitle: const Text('Your real trades: size, exits, mistakes and P&L.'),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () => Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (_) => const JournalScreen())),
                           ),
                         ),
                         _ScoreCard(

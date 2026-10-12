@@ -335,6 +335,21 @@ The count and setup come from closed candles only, so a forming candle can't mak
 rules use the latest price. A new watch records what the chart shows now, so the first alert is a real
 change. Watched pairs appear at the top of the Watchlist tab; tapping a notification opens the chart.
 
+## Position sizing and trade journal (`lib/sizing.dart`, `lib/journal.dart`)
+
+**Size this trade** (on a setup) works out how much to buy or sell so that hitting the stop loses exactly
+your chosen risk (balance × risk %), fees on the way in and out included. It shows the result at the stop,
+TP1 and TP2, and the leverage the size needs. Leverage only changes margin and liquidation, so it suggests
+the smallest that carries the position. It also gives a safe maximum: liquidation must stay at least 1.5
+stop-distances from entry, assuming 0.5% maintenance margin. It warns about unsafe leverage, risk above 2%
+and very tight stops. Balance, risk and fee are remembered.
+
+**Trade journal** (Setups → Trade journal) holds the trades you actually took: log one from the sizing
+sheet or add it by hand, then close it with your exit. It shows win rate, P&L and R after fees, an equity
+curve, results when you followed your plan versus broke it, and what each tagged mistake cost (moved stop,
+chased entry, exited early, …). Trades can be copied as CSV for Sheets or Excel. R is measured against the
+original stop.
+
 ## Out-of-sample validation (`test/live_validate_test.dart`)
 
 Before making "strong evidence" setups the default, they were tested on 30 liquid Binance pairs × 1h and 4h

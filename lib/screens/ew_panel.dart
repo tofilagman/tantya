@@ -15,9 +15,11 @@ import '../live.dart';
 import '../mtf.dart';
 import '../setup.dart';
 import '../volume_profile.dart';
+import '../sources/binance.dart';
 import '../sources/source.dart';
 import 'backtest_screen.dart';
 import 'live_chart.dart';
+import 'position_size_sheet.dart';
 import 'widgets.dart';
 
 /// Live chart + Elliott Wave count + trade setup for one [CandleSource].
@@ -313,6 +315,37 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Tracking — see the Setups tab for the result'),
     ));
+  }
+
+  Future<void> _size(TradeSetup s) async {
+    final src = widget.source;
+    final logged = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (_) => PositionSizeSheet(
+        title: src.title,
+        sourceId: src.id,
+        frame: _frame.label,
+        count: s.scenario.title,
+        entry: s.entry,
+        stop: s.stop,
+        tp1: s.tp1,
+        tp2: s.tp2,
+        format: src.format,
+        quote: switch (src) {
+          BinanceSource(:final quote?) => quote,
+          BinanceSource() => 'USDT',
+          _ => 'USD',
+        },
+        leverageAllowed: src is BinanceSource,
+      ),
+    );
+    if (logged == true && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Logged: close it in Setups → Trade journal when you exit'),
+      ));
+    }
   }
 
   @override
@@ -624,10 +657,24 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
             if (setup != null)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: FilledButton.tonalIcon(
-                  onPressed: () => _track(setup),
-                  icon: const Icon(Icons.playlist_add),
-                  label: const Text('Track this setup'),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: () => _size(setup),
+                        icon: const Icon(Icons.calculate_outlined),
+                        label: const Text('Size this trade'),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: FilledButton.tonalIcon(
+                        onPressed: () => _track(setup),
+                        icon: const Icon(Icons.playlist_add),
+                        label: const Text('Track setup'),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             Padding(
