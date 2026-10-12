@@ -1,0 +1,113 @@
+{
+ "updated": "2026-10-12T22:07:35.919129Z",
+ "since": "2026-10-12T22:07:35.919129Z",
+ "pairs": [
+  "BTCUSDT",
+  "ETHUSDT",
+  "BNBUSDT",
+  "SOLUSDT",
+  "XRPUSDT",
+  "DOGEUSDT",
+  "ADAUSDT",
+  "TRXUSDT",
+  "LINKUSDT",
+  "AVAXUSDT",
+  "DOTUSDT",
+  "LTCUSDT",
+  "BCHUSDT",
+  "XLMUSDT",
+  "NEARUSDT",
+  "UNIUSDT",
+  "SUIUSDT",
+  "AAVEUSDT",
+  "HBARUSDT",
+  "TONUSDT"
+ ],
+ "frames": [
+  "h1",
+  "h4"
+ ],
+ "takerFee": 0.001,
+ "all": {
+  "closed": 0,
+  "open": 11,
+  "wins": 0,
+  "losses": 0,
+  "expired": 0,
+  "hitRate": null,
+  "avgR": null,
+  "avgNetR": null,
+  "totalR": 0.0,
+  "totalNetR": 0.0,
+  "maxDrawdownR": 0.0
+ },
+ "byFrame": {
+  "h1": {
+   "closed": 0,
+   "open": 11,
+   "wins": 0,
+   "losses": 0,
+   "expired": 0,
+   "hitRate": null,
+   "avgR": null,
+   "avgNetR": null,
+   "totalR": 0.0,
+   "totalNetR": 0.0,
+   "maxDrawdownR": 0.0
+  },
+  "h4": {
+   "closed": 0,
+   "open": 0,
+   "wins": 0,
+   "losses": 0,
+   "expired": 0,
+   "hitRate": null,
+   "avgR": null,
+   "avgNetR": null,
+   "totalR": 0.0,
+   "totalNetR": 0.0,
+   "maxDrawdownR": 0.0
+  }
+ },
+ "byEvidence": {
+  "strong": {
+   "closed": 0,
+   "open": 1,
+   "wins": 0,
+   "losses": 0,
+   "expired": 0,
+   "hitRate": null,
+   "avgR": null,
+   "avgNetR": null,
+   "totalR": 0.0,
+   "totalNetR": 0.0,
+   "maxDrawdownR": 0.0
+  },
+  "mixed": {
+   "closed": 0,
+   "open": 1,
+   "wins": 0,
+   "losses": 0,
+   "expired": 0,
+   "hitRate": null,
+   "avgR": null,
+   "avgNetR": null,
+   "totalR": 0.0,
+   "totalNetR": 0.0,
+   "maxDrawdownR": 0.0
+  },
+  "weak": {
+   "closed": 0,
+   "open": 9,
+   "wins": 0,
+   "losses": 0,
+   "expired": 0,
+   "hitRate": null,
+   "avgR": null,
+   "avgNetR": null,
+   "totalR": 0.0,
+   "totalNetR": 0.0,
+   "maxDrawdownR": 0.0
+  }
+ }
+}
