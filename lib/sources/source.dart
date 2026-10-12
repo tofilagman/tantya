@@ -57,6 +57,13 @@ abstract class CandleSource {
   /// How far back [backtestHistory] can go. Sources without paging just give [history].
   int get maxBacktestCandles => 300;
 
+  /// Daily candles from January 1 of the year [years] − 1 years ago, for the volume
+  /// buckets. Null where the source has no volume history.
+  Future<List<Candle>>? volumeHistory(int years) => null;
+
+  /// Whether [volumeHistory] is available (without fetching anything).
+  bool get hasVolumeHistory => false;
+
   /// Fine-grained candles from [from] until now, for checking which level was hit first.
   Future<List<Candle>> since(DateTime from);
 

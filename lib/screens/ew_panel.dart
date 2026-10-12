@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../candles.dart';
+import '../burst.dart';
 import '../elliott.dart';
 import '../evidence.dart';
 import '../explain.dart';
@@ -13,6 +14,7 @@ import '../layers.dart';
 import '../live.dart';
 import '../mtf.dart';
 import '../setup.dart';
+import '../volume_profile.dart';
 import '../sources/source.dart';
 import 'backtest_screen.dart';
 import 'live_chart.dart';
@@ -60,6 +62,28 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
   static bool _panesLoaded = false;
   Set<_Pane> get _panes => _shownPanes;
   bool _showEmas = true;
+
+  /// Momentum bursts on this chart, recomputed with the indicators.
+  List<BurstEvent> _bursts = const [];
+  static bool _showBursts = true;
+
+  /// Volume buckets (2024 / 2025 / 2026 volume by price), per pair, fetched once.
+  static final _bucketCache = <String, VolumeBuckets?>{};
+  static bool _showBuckets = false;
+  VolumeBuckets? get _buckets => _bucketCache[widget.source.id];
+
+  Future<void> _loadBuckets() async {
+    final source = widget.source;
+    if (_bucketCache.containsKey(source.id) || !source.hasVolumeHistory) return;
+    final f = source.volumeHistory(3);
+    if (f == null) return;
+    try {
+      final b = VolumeBuckets.build(await f);
+      if (mounted) setState(() => _bucketCache[source.id] = b);
+    } catch (_) {
+      // Leave uncached so a later visit retries.
+    }
+  }
 
   static const _panesKey = 'chart.panes.v1';
 
@@ -113,6 +137,7 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     _loadPanes();
     _load();
+    _loadBuckets();
   }
 
   @override
@@ -265,6 +290,7 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
     _analysis = analyze(candles, bounds: widget.source.bounds);
     _ind = Indicators.of(candles);
     _macd = _ind!.macd;
+    _bursts = detectBursts(candles, _ind!);
     widget.onPrice?.call(candles.last.close);
   }
 
@@ -322,12 +348,13 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                     ],
                     emas: _showEmas && _ind != null
                         ? [
-                            EmaLine(20, _ind!.ema20, width: 1, alpha: 0.35),
-                            EmaLine(50, _ind!.ema50, width: 1.3, alpha: 0.55),
-                            EmaLine(200, _ind!.ema200, width: 1.8, alpha: 0.8),
+                            for (final n in emaPeriods)
+                              EmaLine(n, _ind!.emas[n]!, color: emaColors[n]!, width: n >= 100 ? 1.5 : 1.2),
                           ]
                         : const [],
                     bounds: widget.source.bounds,
+                    buckets: _showBuckets ? _buckets : null,
+                    bursts: _showBursts ? _bursts : const [],
                     confluence: _overlay
                         ? findConfluence({_frame: ?selected, for (final l in layers) l.frame: l.scenario})
                         : const [],
@@ -357,12 +384,27 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
           ),
         ),
         IconButton(
-          tooltip: _showEmas ? 'Hide EMA 20/50/200' : 'Show EMA 20/50/200',
+          tooltip: _showEmas ? 'Hide EMA 3/25/50/100/200' : 'Show EMA 3/25/50/100/200',
           isSelected: _showEmas,
           icon: const Icon(Icons.timeline_outlined),
           selectedIcon: const Icon(Icons.timeline),
           onPressed: () => setState(() => _showEmas = !_showEmas),
         ),
+        IconButton(
+          tooltip: _showBursts ? 'Hide momentum bursts' : 'Show momentum bursts',
+          isSelected: _showBursts,
+          icon: const Icon(Icons.bolt_outlined),
+          selectedIcon: const Icon(Icons.bolt),
+          onPressed: () => setState(() => _showBursts = !_showBursts),
+        ),
+        if (widget.source.hasVolumeHistory)
+          IconButton(
+            tooltip: _showBuckets ? 'Hide volume buckets' : 'Show volume buckets (volume by price per year)',
+            isSelected: _showBuckets,
+            icon: const Icon(Icons.water_drop_outlined),
+            selectedIcon: const Icon(Icons.water_drop),
+            onPressed: () => setState(() => _showBuckets = !_showBuckets),
+          ),
         // Checkboxes, and the menu stays open so several can be ticked in one go.
         MenuAnchor(
           menuChildren: [
@@ -544,6 +586,14 @@ class _EwPanelState extends State<EwPanel> with WidgetsBindingObserver {
                 side: setup?.side,
                 notes: _candles == null ? const [] : macdNotes(s, _macd!, _candles!),
               ),
+            ],
+            if (_candles != null) ...[
+              const Divider(height: 24),
+              _BurstSection(candles: _candles!, bursts: _bursts, frame: _frame),
+            ],
+            if (_buckets != null && _candles != null) ...[
+              const Divider(height: 24),
+              _BucketsSection(buckets: _buckets!, price: _candles!.last.close, format: fmt),
             ],
             const Divider(height: 24),
             _TimeframesTable(
@@ -1072,6 +1122,158 @@ class _ComputationTile extends StatelessWidget {
               ),
             ),
         ],
+      ],
+    );
+  }
+}
+
+/// The volume buckets in words: per year, how much traded and how much of it sits
+/// above today's price (buyers who'd be underwater), plus the heaviest zones either side.
+class _BucketsSection extends StatelessWidget {
+  const _BucketsSection({required this.buckets, required this.price, required this.format});
+  final VolumeBuckets buckets;
+  final double price;
+  final String Function(double) format;
+
+  static String _money(double v) => v >= 1e9
+      ? '\$${(v / 1e9).toStringAsFixed(1)}B'
+      : v >= 1e6
+          ? '\$${(v / 1e6).toStringAsFixed(1)}M'
+          : '\$${(v / 1e3).toStringAsFixed(0)}K';
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final b = buckets;
+    final zones = b.nearestZones(price);
+    Widget cell(String s, {TextStyle? style, TextAlign align = TextAlign.end, int flex = 2}) =>
+        Expanded(flex: flex, child: Text(s, style: style ?? text.bodySmall, textAlign: align));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text('Volume buckets', style: text.labelLarge),
+        Text('How much traded at each price, per year. Volume above today\'s price is "trapped water": '
+            'buyers from that year who still hold are at a loss there.',
+            style: text.bodySmall?.copyWith(color: muted)),
+        const SizedBox(height: 6),
+        Row(children: [
+          cell('', flex: 2, align: TextAlign.start),
+          cell('traded', style: text.labelSmall?.copyWith(color: muted)),
+          cell('busiest price', flex: 3, style: text.labelSmall?.copyWith(color: muted)),
+          cell('above now', style: text.labelSmall?.copyWith(color: muted)),
+        ]),
+        for (var k = b.years.length - 1; k >= 0; k--)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            child: Row(children: [
+              Expanded(
+                flex: 2,
+                child: Row(children: [
+                  Container(width: 10, height: 10, color: yearColor(k, b.years.length)),
+                  const SizedBox(width: 6),
+                  Text('${b.years[k].year}', style: text.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
+                ]),
+              ),
+              cell(_money(b.years[k].total)),
+              cell(format(b.priceMid(b.years[k].pocBin)), flex: 3),
+              () {
+                final share = b.shareAbove(b.years[k], price);
+                return cell('${(share * 100).round()}%',
+                    style: text.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: share >= 0.6 ? Colors.red.shade400 : (share <= 0.3 ? Colors.green.shade600 : null)));
+              }(),
+            ]),
+          ),
+        const SizedBox(height: 6),
+        if (zones.above != null)
+          Text.rich(TextSpan(children: [
+            TextSpan(text: '▲ Heaviest above: ', style: TextStyle(color: Colors.red.shade400, fontWeight: FontWeight.w700)),
+            TextSpan(text: '${format(zones.above!.low)}–${format(zones.above!.high)}, '
+                '${_money(zones.above!.volume)} traded, mostly ${zones.above!.year}. Trapped buyers there may sell '
+                'when price comes back (resistance).'),
+          ]), style: text.bodySmall),
+        if (zones.below != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Text.rich(TextSpan(children: [
+              TextSpan(text: '▼ Heaviest below: ', style: TextStyle(color: Colors.green.shade600, fontWeight: FontWeight.w700)),
+              TextSpan(text: '${format(zones.below!.low)}–${format(zones.below!.high)}, '
+                  '${_money(zones.below!.volume)} traded, mostly ${zones.below!.year}. Where buyers stepped in '
+                  'before (support).'),
+            ]), style: text.bodySmall),
+          ),
+        const SizedBox(height: 4),
+        Text('Daily spot volume since Jan ${b.years.first.year}. Shows what traded at each price, not who still '
+            'holds. Tap the drop icon to draw the buckets on the chart.',
+            style: text.bodySmall?.copyWith(color: muted, fontStyle: FontStyle.italic)),
+      ],
+    );
+  }
+}
+
+/// Momentum bursts in words: the latest one on this chart and what bursts here led to.
+class _BurstSection extends StatelessWidget {
+  const _BurstSection({required this.candles, required this.bursts, required this.frame});
+  final List<Candle> candles;
+  final List<BurstEvent> bursts;
+  final Timeframe frame;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    String pct(double? v) => v == null ? '—' : '${(v * 100).round()}%';
+    final last = bursts.isEmpty ? null : bursts.last;
+    final ago = last == null ? null : candles.length - 1 - last.index;
+    final stats = burstStats(candles, bursts);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(children: [
+          const Icon(Icons.bolt, size: 18, color: Color(0xFFFFA000)),
+          const SizedBox(width: 4),
+          Text('Momentum bursts', style: text.labelLarge),
+        ]),
+        Text('A fast, heavy move: volume spike plus at least two of MACD jump, RSI jump and EMA 3 twisting '
+            'through EMA 25/50, within ${const BurstConfig().window} candles.',
+            style: text.bodySmall?.copyWith(color: muted)),
+        const SizedBox(height: 6),
+        if (last == null)
+          Text('No burst on this chart (${candles.length} candles).', style: text.bodySmall)
+        else ...[
+          Text.rich(
+            TextSpan(children: [
+              TextSpan(
+                text: 'Latest: ${last.dir > 0 ? 'UP ↑' : 'DOWN ↓'} ',
+                style: TextStyle(
+                    fontWeight: FontWeight.w800, color: last.dir > 0 ? Colors.green.shade600 : Colors.red.shade400),
+              ),
+              TextSpan(text: ago == 0 ? 'on the current candle' : '$ago candle${ago == 1 ? '' : 's'} ago'),
+              TextSpan(text: ' · ${last.strength} of 4 signals'),
+            ]),
+            style: text.bodyMedium,
+          ),
+          Text(
+            'volume ${last.volumeRatio.toStringAsFixed(1)}× average · MACD ${last.macdZ.toStringAsFixed(1)}σ'
+            '${last.macdFired ? ' ✓' : ''} · RSI ${last.rsiMove >= 0 ? '+' : ''}${last.rsiMove.toStringAsFixed(0)} pts'
+            '${last.rsiFired ? ' ✓' : ''} · EMA twist ${last.emaTwist ? '✓' : '✗'}',
+            style: text.bodySmall,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'On this chart: ${stats.count} burst${stats.count == 1 ? '' : 's'}; price kept going after 12 candles '
+            '${pct(stats.continuation(12))} of the time.',
+            style: text.bodySmall,
+          ),
+        ],
+        const SizedBox(height: 4),
+        Text(
+          'Tested on 722 bursts (5 majors, 5m–1h): they continued about half the time. Treat a burst as a '
+          'signal to look closer, not to chase. Run Backtest for this pair\'s full history.',
+          style: text.bodySmall?.copyWith(color: muted, fontStyle: FontStyle.italic),
+        ),
       ],
     );
   }

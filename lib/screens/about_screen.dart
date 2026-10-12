@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../elliott.dart';
 import '../layers.dart';
 import '../setup.dart';
+import '../theme_mode.dart';
 
-const appVersion = '0.2.4';
+const appVersion = '0.2.5';
 
 /// What the app is, how to use it while trading, and exactly how predictions are made.
 /// The swing sensitivities, Fibonacci table, stop buffer and expiry are read from the
@@ -42,6 +43,32 @@ class AboutScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 16),
+          Card(
+            margin: EdgeInsets.zero,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Appearance', style: text.titleSmall),
+                  const SizedBox(height: 8),
+                  ValueListenableBuilder(
+                    valueListenable: themeController,
+                    builder: (_, mode, _) => SegmentedButton<ThemeMode>(
+                      showSelectedIcon: false,
+                      segments: [
+                        for (final m in ThemeMode.values)
+                          ButtonSegment(value: m, icon: Icon(themeIcon(m), size: 18), label: Text(themeLabel(m))),
+                      ],
+                      selected: {mode},
+                      onSelectionChanged: (s) => themeController.set(s.first),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           Text(
@@ -103,8 +130,22 @@ class AboutScreen extends StatelessWidget {
               ),
               _Legend(
                 swatch: const Icon(Icons.timeline, size: 20),
-                text: 'EMA 20, 50 and 200: grey lines over the candles, darker for longer periods. '
-                    'Stacked in order (price > 20 > 50 > 200) means a clean uptrend.',
+                text: 'EMA 3, 25, 50, 100 and 200 in Binance\'s colours (yellow, pink, purple, red, green), '
+                    'with their values on top. Stacked in order (price > 25 > 50 > 200) means a clean uptrend; '
+                    'candles crossing the fast EMA 3 shows a flip.',
+              ),
+              _Legend(
+                swatch: const Icon(Icons.bolt, size: 20, color: Color(0xFFFFA000)),
+                text: 'Momentum burst (bolt icon): a fast, heavy move, with a volume spike plus at least two of a MACD '
+                    'jump, an RSI jump and EMA 3 twisting through EMA 25/50. On past data bursts continued only about '
+                    'half the time, so treat one as a reason to look closer, not to chase. The backtest shows how '
+                    'they did on each pair.',
+              ),
+              _Legend(
+                swatch: const Icon(Icons.water_drop, size: 20),
+                text: 'Volume buckets (drop icon): how much traded at each price in each of the last three years. '
+                    'Volume above today\'s price is buyers from that year who are now trapped at a loss; heavy '
+                    'zones above often act as resistance. Best on the 1D chart.',
               ),
               _Legend(
                 swatch: const Icon(Icons.stacked_line_chart, size: 20),
@@ -219,7 +260,7 @@ class AboutScreen extends StatelessWidget {
               const _Algo(
                 n: 10,
                 title: 'Weigh the evidence',
-                body: 'Each indicator answers one question. EMA 20/50/200: which direction? Volume: how many are '
+                body: 'Each indicator answers one question. EMA 3/25/50/100/200: which direction? Volume: how many are '
                     'participating? MACD: how fast? RSI: how tired? CCI: how strong? For a wave 3 the app checks '
                     'for a healthy wave 3 (stacked EMAs, rising momentum, CCI beyond 100, RSI strong but not '
                     'exhausted, volume above wave 2). For a wave 5 it checks for exhaustion (a new extreme on '

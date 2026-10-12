@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../candles.dart';
+import '../burst.dart';
 import '../elliott.dart';
 import '../indicators.dart';
 import '../layers.dart';
+import '../volume_profile.dart';
 import '../setup.dart';
 
 final _up = Colors.green.shade600;
@@ -34,6 +36,8 @@ class LiveChart extends StatefulWidget {
     this.macd,
     this.oscillators = const [],
     this.emas = const [],
+    this.buckets,
+    this.bursts = const [],
     this.bounds,
   });
 
@@ -58,8 +62,14 @@ class LiveChart extends StatefulWidget {
   /// RSI / CCI panes, stacked under the MACD pane (any combination can be shown).
   final List<Oscillator> oscillators;
 
-  /// EMA lines drawn over the candles, e.g. 20/50/200.
+  /// EMA lines drawn over the candles (3/25/50/100/200, Binance colours).
   final List<EmaLine> emas;
+
+  /// Volume by price per year, drawn as stacked horizontal bars from the left edge.
+  final VolumeBuckets? buckets;
+
+  /// Momentum bursts to mark on their candles.
+  final List<BurstEvent> bursts;
 
   /// Price limits (Polymarket's 0–1) that projected prices are kept inside.
   final (double, double)? bounds;
@@ -128,6 +138,8 @@ class _LiveChartState extends State<LiveChart> {
             macd: widget.macd,
             oscillators: widget.oscillators,
             emas: widget.emas,
+            buckets: widget.buckets,
+            bursts: widget.bursts,
             bounds: widget.bounds,
             geo: geo,
             cross: _cross,
@@ -212,6 +224,8 @@ class _ChartPainter extends CustomPainter {
     required this.macd,
     required this.oscillators,
     required this.emas,
+    required this.buckets,
+    required this.bursts,
     required this.bounds,
     required this.geo,
     required this.cross,
@@ -231,6 +245,8 @@ class _ChartPainter extends CustomPainter {
   final Macd? macd;
   final List<Oscillator> oscillators;
   final List<EmaLine> emas;
+  final VolumeBuckets? buckets;
+  final List<BurstEvent> bursts;
   final (double, double)? bounds;
   final _Geometry geo;
   final int? cross;
@@ -256,7 +272,10 @@ class _ChartPainter extends CustomPainter {
     final panesTop = hasPane ? paneRect(paneCount - 1).top : plot.bottom;
     final volBase = Rect.fromLTRB(plot.left, plot.top, plot.right, panesTop - (hasPane ? 8 : 0));
     final volH = hasVolume ? plot.height * (hasPane ? 0.12 : 0.16) : 0.0;
-    final priceRect = Rect.fromLTRB(plot.left, plot.top + 8, plot.right, volBase.bottom - volH - 6);
+    // With EMAs on, a strip at the top holds their legend (two lines on phones) so it
+    // never covers candles or wave labels.
+    final legendH = emas.isEmpty ? 0.0 : _emaLegendHeight(plot.width);
+    final priceRect = Rect.fromLTRB(plot.left, plot.top + 8 + legendH, plot.right, volBase.bottom - volH - 6);
 
     // Price range: visible candles plus the levels we draw, so targets and stops stay on screen.
     var lo = double.infinity, hi = -double.infinity;
@@ -289,6 +308,7 @@ class _ChartPainter extends CustomPainter {
     canvas.clipRect(plot);
     _grid(canvas, priceRect, lo, hi, y);
     if (hasVolume) _volume(canvas, volBase, volH, from, to);
+    if (buckets != null) _buckets(canvas, priceRect, y);
     // Bottom-up order matches the menu: MACD, RSI, CCI from top to bottom.
     var k = paneCount - 1;
     if (macd != null) _macd(canvas, paneRect(k--), from, to);
@@ -299,6 +319,10 @@ class _ChartPainter extends CustomPainter {
     _candles(canvas, from, to, y);
     for (final e in emas) {
       _ema(canvas, e, from, to, y);
+    }
+    if (emas.isNotEmpty) _emaLegend(canvas, Rect.fromLTRB(plot.left, plot.top + 2, plot.right, priceRect.top));
+    for (final b in bursts) {
+      if (b.index >= from && b.index <= to) _burstMark(canvas, b, y);
     }
     // Other timeframes' points can sit outside this chart's price range; keep their
     // lines and labels out of the volume and indicator panes.
@@ -647,6 +671,52 @@ class _ChartPainter extends CustomPainter {
     }
   }
 
+  /// A burst marker: an amber bolt tag above the candle (up burst) or below (down).
+  void _burstMark(Canvas canvas, BurstEvent b, double Function(double) y) {
+    final c = candles[b.index];
+    final x = geo.x(b.index);
+    const amber = Color(0xFFFFA000);
+    final tp = _tp('⚡${b.dir > 0 ? '↑' : '↓'}', text.copyWith(color: Colors.black, fontSize: 9, fontWeight: FontWeight.w800));
+    final w = tp.width + 6, h = tp.height + 2;
+    final top = b.dir > 0 ? y(c.high) - h - 4 : y(c.low) + 4;
+    final box = Rect.fromLTWH(x - w / 2, top, w, h);
+    canvas.drawRRect(RRect.fromRectAndRadius(box, const Radius.circular(3)), Paint()..color = amber);
+    tp.paint(canvas, Offset(box.left + 3, box.top + 1));
+  }
+
+  /// Volume buckets: per price level, one stacked bar segment per year (oldest first),
+  /// growing from the left edge over the oldest candles. Each year's POC is marked.
+  void _buckets(Canvas canvas, Rect r, double Function(double) y) {
+    final b = buckets!;
+    final all = b.combined;
+    if (all.isEmpty) return;
+    final maxV = all.reduce(math.max);
+    if (maxV <= 0) return;
+    final width = r.width * 0.28;
+    for (var i = 0; i < b.bins; i++) {
+      final top = y(b.priceHigh(i)), bottom = y(b.priceLow(i));
+      if (bottom < r.top || top > r.bottom) continue; // outside the visible price range
+      var x = r.left;
+      for (var k = 0; k < b.years.length; k++) {
+        final w = b.years[k].volume[i] / maxV * width;
+        if (w <= 0) continue;
+        canvas.drawRect(Rect.fromLTRB(x, top + 0.5, x + w, bottom - 0.5),
+            Paint()..color = yearColor(k, b.years.length).withValues(alpha: 0.33));
+        x += w;
+      }
+    }
+    for (var k = 0; k < b.years.length; k++) {
+      final py = y(b.priceMid(b.years[k].pocBin));
+      if (py < r.top || py > r.bottom) continue;
+      final c = yearColor(k, b.years.length);
+      canvas.drawLine(Offset(r.left, py), Offset(r.left + width, py), Paint()
+        ..color = c
+        ..strokeWidth = 1.5);
+      final tp = _tp('${b.years[k].year} POC', text.copyWith(color: c, fontSize: 8, fontWeight: FontWeight.w700));
+      tp.paint(canvas, Offset(r.left + width + 3, py - tp.height / 2));
+    }
+  }
+
   /// An EMA line through the candles, labelled with its period at the right end.
   void _ema(Canvas canvas, EmaLine e, int from, int to, double Function(double) y) {
     final path = Path();
@@ -661,13 +731,49 @@ class _ChartPainter extends CustomPainter {
       last = o;
     }
     if (last == null) return;
-    final color = scheme.onSurface.withValues(alpha: e.alpha);
     canvas.drawPath(path, Paint()
-      ..color = color
+      ..color = e.color
       ..strokeWidth = e.width
       ..style = PaintingStyle.stroke);
-    final tp = _tp('${e.period}', text.copyWith(color: color, fontSize: 8.5, fontWeight: FontWeight.w700));
-    tp.paint(canvas, last + Offset(3, -tp.height / 2));
+  }
+
+  /// Binance-style EMA legend across the top of the price area: "EMA(3) 70,703.40 …",
+  /// each in its line's colour. Values at the crosshair candle, else the latest.
+  /// Height the legend needs at [width]: one line per row of labels that fits.
+  double _emaLegendHeight(double width) {
+    var x = 4.0, lines = 1;
+    double h = 0;
+    for (final e in emas) {
+      final tp = _tp('EMA(${e.period}) ${format(e.values.lastWhere((v) => v != null, orElse: () => 0) ?? 0)}',
+          text.copyWith(fontSize: 9, fontWeight: FontWeight.w600));
+      h = tp.height;
+      if (x + tp.width > width - 4 && x > 4) {
+        lines++;
+        x = 4;
+      }
+      x += tp.width + 10;
+    }
+    return lines * (h + 1) + 4;
+  }
+
+  void _emaLegend(Canvas canvas, Rect r) {
+    if (emas.isEmpty) return;
+    final i = cross ?? candles.length - 1;
+    var x = r.left + 4;
+    var y = r.top;
+    for (final e in emas) {
+      final v = i < e.values.length ? e.values[i] : null;
+      final tp = _tp('EMA(${e.period}) ${v == null ? '—' : format(v)}',
+          text.copyWith(color: e.color, fontSize: 9, fontWeight: FontWeight.w600));
+      if (x + tp.width > r.right - 4 && x > r.left + 4) {
+        x = r.left + 4; // wrap onto a second line on narrow charts
+        y += tp.height + 1;
+      }
+      final bg = Rect.fromLTWH(x - 2, y, tp.width + 4, tp.height);
+      canvas.drawRect(bg, Paint()..color = scheme.surface.withValues(alpha: 0.75));
+      tp.paint(canvas, Offset(x, y));
+      x += tp.width + 10;
+    }
   }
 
   /// RSI / CCI pane: one line with guide levels (e.g. 30/70, ±100), shaded beyond them.
@@ -847,6 +953,8 @@ class _ChartPainter extends CustomPainter {
       old.macd != macd ||
       old.oscillators != oscillators ||
       old.emas != emas ||
+      old.buckets != buckets ||
+      old.bursts != bursts ||
       old.bounds != bounds ||
       old.cross != cross ||
       old.geo.visible != geo.visible ||
@@ -870,12 +978,28 @@ class Oscillator {
   final double? min, max;
 }
 
-/// An EMA over the candles; longer periods are drawn heavier and darker.
+/// An EMA over the candles, in its own colour (Binance's palette).
 class EmaLine {
-  const EmaLine(this.period, this.values, {required this.width, required this.alpha});
+  const EmaLine(this.period, this.values, {required this.color, this.width = 1.2});
   final int period;
   final List<double?> values;
+  final Color color;
   final double width;
-  final double alpha;
+}
+
+/// EMA colours as on Binance's chart, so the app reads the same as the exchange.
+const emaColors = <int, Color>{
+  3: Color(0xFFF0B90B), // yellow
+  25: Color(0xFFE84393), // pink
+  50: Color(0xFFB39DDB), // purple
+  100: Color(0xFFFF6B6B), // red
+  200: Color(0xFF4CAF50), // green
+};
+
+/// Year colours for the volume buckets, oldest → newest: earthy brown, slate, teal.
+/// Muted on purpose: the buckets sit behind the candles.
+Color yearColor(int index, int count) {
+  const palette = [Color(0xFF8D6E63), Color(0xFF78909C), Color(0xFF26A69A)];
+  return palette[(palette.length - count + index).clamp(0, palette.length - 1)];
 }
 

@@ -172,6 +172,16 @@ class BinanceSource implements CandleSource {
   int get maxBacktestCandles => 5000;
 
   @override
+  bool get hasVolumeHistory => true;
+
+  @override
+  Future<List<Candle>>? volumeHistory(int years) {
+    final now = DateTime.now();
+    final from = DateTime(now.year - years + 1);
+    return _api.longHistory(symbol, Timeframe.d1, now.difference(from).inDays + 2);
+  }
+
+  @override
   Future<List<Candle>> backtestHistory(Timeframe frame, int count) => _api.longHistory(symbol, frame, count);
 
   @override

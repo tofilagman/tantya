@@ -11,12 +11,15 @@ import 'screens/markets_screen.dart';
 import 'screens/setups_screen.dart';
 import 'screens/watchlist_screen.dart';
 import 'sources/binance.dart';
+import 'theme_mode.dart';
 
 /// Payloads of notifications tapped while the app is running.
 final _taps = StreamController<String>.broadcast();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Before runApp so the first frame already uses the saved theme (no flash).
+  themeController = await ThemeController.load();
   // Alerts are an extra; never let their setup keep the app from opening.
   try {
     await initNotifications(onTap: _taps.add);
@@ -33,12 +36,16 @@ class TantyaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const seed = Color(0xFF2D6BEA);
-    return MaterialApp(
-      title: 'Tantya',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: seed, brightness: Brightness.light),
-      darkTheme: ThemeData(colorSchemeSeed: seed, brightness: Brightness.dark),
-      home: const HomeScreen(),
+    return ValueListenableBuilder(
+      valueListenable: themeController,
+      builder: (context, mode, _) => MaterialApp(
+        title: 'Tantya',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(colorSchemeSeed: seed, brightness: Brightness.light),
+        darkTheme: ThemeData(colorSchemeSeed: seed, brightness: Brightness.dark),
+        themeMode: mode,
+        home: const HomeScreen(),
+      ),
     );
   }
 }
@@ -129,6 +136,22 @@ class _HomeScreenState extends State<HomeScreen> {
               selectedIndex: _tab,
               onDestinationSelected: _select,
               labelType: NavigationRailLabelType.all,
+              trailing: Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: ValueListenableBuilder(
+                      valueListenable: themeController,
+                      builder: (_, mode, _) => IconButton(
+                        tooltip: 'Theme: ${themeLabel(mode)} (tap to change)',
+                        icon: Icon(themeIcon(mode)),
+                        onPressed: themeController.cycle,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               destinations: [
                 for (final (icon, selected, label) in _tabs)
                   NavigationRailDestination(icon: Icon(icon), selectedIcon: Icon(selected), label: Text(label)),

@@ -43,17 +43,25 @@ never places orders. *It is an analysis tool, not financial advice.*
 - **Track record**: tracked setups are settled at their target or stop, and
   scored in R per timeframe and by higher-timeframe agreement, so you can see
   whether the method actually works.
-- **Evidence report**: EMA 20/50/200, volume per wave, MACD, RSI 14 and CCI 20
+- **Evidence report**: EMA 3/25/50/100/200, volume per wave, MACD, RSI 14 and CCI 20
   checked against the wave in progress ("Healthy wave 3?", "Wave 5 exhaustion?"),
   following the layered method: indicators are evidence, price is the result.
 - **MACD**: a momentum pane under the chart, read against the wave count (does
   wave 3 carry the most momentum? does wave 5 diverge?), and whether momentum
   backs the setup.
+- **Momentum bursts**: flags fast, heavy moves (volume spike + MACD jump, RSI
+  jump, EMA 3 twisting through 25/50) with ⚡ on the chart, and measures in the
+  backtest whether riding them paid.
+- **Volume buckets**: volume by price for each of the last three years
+  (2024 / 2025 / 2026), showing where each year's buyers are now trapped above the
+  price ("water left in the bucket") and where support was built.
 - **Backtest**: replay the app's own setups over up to 5,000 past candles, with no
   look-ahead, and see the hit rate, average R, drawdown and equity curve, broken
   down by evidence, MACD, wave and direction.
 - **How this was computed**: every setup's numbers step by step: swings, Fibonacci
   fit, score, target zone, stop (with the ATR buffer), R:R and the projected path.
+- **Light / dark theme**: System, Light or Dark in the About tab (and a one-tap
+  toggle at the bottom of the desktop side rail), remembered across restarts.
 - **Desktop**: a big chart with the setup beside it, a side navigation rail,
   mouse-wheel zoom and a crosshair that follows the pointer.
 
@@ -203,8 +211,11 @@ where each indicator answers one question (EMA: which direction? volume: how man
 are participating? MACD: how fast? RSI: how tired? CCI: how strong?) and
 "indicators = evidence, price = actual result".
 
-Indicators (all standard): EMA 20/50/200 (`K = 2/(N+1)`, drawn on the chart and
-toggled with the timeline icon), RSI 14 (Wilder smoothing), CCI 20 (typical price,
+Indicators (all standard): EMA 3/25/50/100/200 (`K = 2/(N+1)`), drawn in
+Binance's colours (3 yellow, 25 pink, 50 purple, 100 red, 200 green) with a
+Binance-style legend strip on top showing each value ("EMA(25) 83,473.09"), which
+follows the crosshair; the fast EMA 3 makes it easy to see candles flip. Toggled
+with the timeline icon. The evidence report's "EMAs stacked" check uses 25/50/200. RSI 14 (Wilder smoothing), CCI 20 (typical price,
 0.015 × mean deviation), and average volume per wave. MACD, RSI and CCI each get
 their own pane under the chart, in any combination: tick them in the pane menu
 (checkboxes; it stays open while ticking). The choice is remembered across charts
@@ -224,6 +235,62 @@ weak. It's **informational**: tracked setups record it, and the Setups tab's
 **By evidence** table compares results, so we can see whether strong evidence
 actually wins more before letting it affect scores. Open interest (mentioned in the
 write-up) needs Binance futures data and isn't included; the app uses spot.
+
+## Momentum bursts (`lib/burst.dart`)
+
+From the users: bots and whales show up as *"a sudden boost in MACD and RSI and a
+twist of the EMA combination in a short time — ride with the whale."*
+
+**Detection** (within 5 candles, all causal: no look-ahead):
+
+- **Volume spike (required)**: the window's heaviest candle is ≥ 3× the 50-candle
+  average before it.
+- **At least two of**:
+  - MACD histogram ≥ 2.5 standard deviations from its last 100 candles, in the
+    move's direction;
+  - RSI moves ≥ 15 points;
+  - the EMA twist: EMA 3 was not beyond EMA 25 and 50 at the window's start, and is
+    beyond both now.
+- A burst can't re-fire in the same direction within 5 candles.
+
+**Shown**: ⚡↑/⚡↓ on the burst candle (bolt toggle), and a card section with the
+latest burst and its signals. The backtest screen has a **"Momentum bursts: did they
+keep going?"** card: continuation after 3 / 12 / 24 candles, average move, and a
+ride-the-burst trade (entry at the burst close, stop at the burst's start, target 2R,
+24-candle expiry), split by direction and by 3 vs 4 signals.
+
+**Result (2026-10-12, 5 majors × 5m / 15m / 1h, 5,000 candles each, 722 bursts):**
+price kept going after 12 candles **44–58%** of the time, and the ride-the-burst
+trade averaged **−0.02 to +0.04 R** per timeframe, before fees: a coin flip. Bursts
+with all 4 signals were *not* better (24–47% continuation). The detector finds the
+footprint; it doesn't tell you which way it resolves. Reproduce with
+`BURSTS=BTCUSDT,ETHUSDT:5m,1h flutter test test/live_burst_test.dart`.
+
+## Volume buckets (`lib/volume_profile.dart`)
+
+From the users: *"the volume is what I'm after, to find who has a lot of trapped
+volume. Like buckets: which ones still have water left in them, being squeezed.
+Bucket 1 is 2026, bucket 2 is 2025, bucket 3 is 2024."*
+
+- **Data**: daily Binance spot candles since January 1 two years back (about 1,000
+  days, one request), fetched once per pair per session.
+- **Profile**: one volume profile per calendar year on a shared 100-level price grid.
+  Each day's quote volume (USDT) is spread evenly over its high–low range.
+- **Chart** (drop icon): stacked horizontal bars from the left edge, one muted
+  colour per year (2024 brown, 2025 slate, 2026 teal), plus each year's POC (the
+  busiest price) as a line. Best viewed on 1D, where years of price fit on screen.
+- **Card**: per year, the volume traded, its busiest price, and the share that traded
+  **above today's price**. That share is the "trapped water": buyers from that year
+  who still hold are underwater. Also listed: the heaviest volume zone above the price
+  (likely resistance) and below it (support), with the year that built each.
+- **Limits**: exchange data shows what *traded* at a price, not who still holds or
+  which corporates. This is the standard estimate. Binance spot volume only (no
+  futures or other exchanges).
+
+Example (BTC, 2026-10-12, price 82,700): 2025 traded $768B with 94% of it above
+today's price (POC 103,850), so most of 2025's buyers are underwater, and the
+heaviest overhead zone is 93,771–98,153, mostly 2025. Reproduce with
+`BUCKETS=BTCUSDT flutter test test/live_buckets_test.dart`.
 
 ## Backtest (`lib/backtest.dart`, `lib/screens/backtest_screen.dart`)
 

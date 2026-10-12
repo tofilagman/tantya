@@ -5,13 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 import '../backtest.dart';
+import '../burst.dart';
 import '../candles.dart';
 import '../evidence.dart';
 import '../indicators.dart';
 import '../setup.dart';
 import '../sources/source.dart';
 
-BacktestResult _backtestEntry((List<Candle>, Timeframe, BacktestConfig) a) => runBacktest(a.$1, a.$2, a.$3);
+(BacktestResult, BurstStats) _backtestEntry((List<Candle>, Timeframe, BacktestConfig) a) {
+  final candles = a.$1;
+  return (runBacktest(candles, a.$2, a.$3), burstStats(candles, detectBursts(candles, Indicators.of(candles))));
+}
 
 /// Replays the app's setups over past candles for one pair and timeframe.
 class BacktestScreen extends StatefulWidget {
@@ -32,6 +36,7 @@ class _BacktestScreenState extends State<BacktestScreen> {
 
   String? _stage;
   BacktestResult? _result;
+  BurstStats? _bursts;
   Object? _error;
   int _run = 0;
 
@@ -48,10 +53,11 @@ class _BacktestScreenState extends State<BacktestScreen> {
       final cfg = BacktestConfig(minRR: _minRR, minScore: _minScore, bounds: widget.source.bounds);
       // Off the UI thread. The entry point is top-level so the message carries only
       // plain data, not this screen.
-      final result = await compute(_backtestEntry, (candles, widget.frame, cfg));
+      final (result, bursts) = await compute(_backtestEntry, (candles, widget.frame, cfg));
       if (!mounted || run != _run) return;
       setState(() {
         _result = result;
+        _bursts = bursts;
         _stage = null;
       });
     } catch (e) {
@@ -101,6 +107,7 @@ class _BacktestScreenState extends State<BacktestScreen> {
                   child: Text('Backtest failed: $_error', style: TextStyle(color: Theme.of(context).colorScheme.error)),
                 ),
               if (r != null && _stage == null) ..._results(r, text),
+              if (_bursts != null && _stage == null) _BurstCard(_bursts!),
               const SizedBox(height: 12),
               Text(
                 'How it works: at every candle the engine sees only the 300 candles up to that moment, exactly as the '
@@ -381,3 +388,97 @@ class _EquityPainter extends CustomPainter {
   @override
   bool shouldRepaint(_EquityPainter old) => old.equity != equity || old.scheme != scheme;
 }
+
+/// The burst check: after each momentum burst in this history, did price keep going?
+class _BurstCard extends StatelessWidget {
+  const _BurstCard(this.stats);
+  final BurstStats stats;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final s = stats;
+    String pct(double? v) => v == null ? '—' : '${(v * 100).round()}%';
+    String ret(double? v) => v == null ? '—' : '${v >= 0 ? '+' : ''}${(v * 100).toStringAsFixed(2)}%';
+    String r(double? v) => v == null ? '—' : '${v >= 0 ? '+' : ''}${v.toStringAsFixed(2)}';
+    Color? tone(double? v) => v == null ? null : (v >= 0 ? Colors.green.shade600 : Colors.red.shade400);
+    Widget row(String label, BurstStats g) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Row(children: [
+            Expanded(flex: 3, child: Text(label, style: text.bodyMedium)),
+            Expanded(flex: 2, child: Text('${g.count}', style: text.bodyMedium, textAlign: TextAlign.end)),
+            Expanded(flex: 2, child: Text(pct(g.continuation(12)), style: text.bodyMedium, textAlign: TextAlign.end)),
+            Expanded(
+              flex: 2,
+              child: Text(r(g.tradeAvgR),
+                  style: text.bodyMedium?.copyWith(fontWeight: FontWeight.w700, color: tone(g.tradeAvgR)),
+                  textAlign: TextAlign.end),
+            ),
+          ]),
+        );
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(children: [
+              const Icon(Icons.bolt, color: Color(0xFFFFA000)),
+              const SizedBox(width: 4),
+              Text('Momentum bursts: did they keep going?', style: text.titleSmall),
+            ]),
+            const SizedBox(height: 6),
+            if (s.count == 0)
+              Text('No bursts in this history.', style: text.bodyMedium)
+            else ...[
+              Text('${s.count} bursts. Price was further in the burst\'s direction after:', style: text.bodyMedium),
+              const SizedBox(height: 4),
+              Row(children: [
+                for (final h in BurstStats.horizons)
+                  Expanded(
+                    child: Column(children: [
+                      Text(pct(s.continuation(h)), style: text.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+                      Text('$h candles · avg ${ret(s.avgForward(h))}', style: text.labelSmall, textAlign: TextAlign.center),
+                    ]),
+                  ),
+              ]),
+              const SizedBox(height: 10),
+              Text(
+                'Riding each burst (enter at its close, stop where it started, target ${BurstStats.targetR.toStringAsFixed(0)}× '
+                'the risk, out after ${BurstStats.tradeExpiry} candles): win rate ${pct(s.tradeWinRate)}, '
+                'average ${r(s.tradeAvgR)} R per trade, before fees.',
+                style: text.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 8),
+              Row(children: [
+                const Expanded(flex: 3, child: SizedBox()),
+                for (final h in ['bursts', 'kept going (12)', 'avg R'])
+                  Expanded(flex: 2, child: Text(h, style: text.labelSmall?.copyWith(color: muted), textAlign: TextAlign.end)),
+              ]),
+              row('All', s),
+              row('Up bursts', s.where((e) => e.dir > 0)),
+              row('Down bursts', s.where((e) => e.dir < 0)),
+              row('3 of 4 signals', s.where((e) => e.strength == 3)),
+              row('All 4 signals', s.where((e) => e.strength == 4)),
+              const SizedBox(height: 4),
+              Text(
+                () {
+                  final c = s.continuation(12) ?? 0.5, avg = s.tradeAvgR ?? 0;
+                  final verdict = c >= 0.6 && avg >= 0.15
+                      ? 'Bursts here leaned toward continuing, but check it holds on other periods and after fees.'
+                      : c <= 0.4 || avg <= -0.15
+                          ? 'Bursts here tended to reverse: chasing them lost money.'
+                          : 'Bursts here were close to a coin flip: as likely to reverse as to continue.';
+                  return '$verdict Small groups (under ~30) can mislead.';
+                }(),
+                style: text.bodySmall?.copyWith(color: muted),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+

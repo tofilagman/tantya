@@ -73,18 +73,25 @@ double? waveVolume(List<Candle> candles, int from, int to) {
   return n == 0 || sum == 0 ? null : sum / n;
 }
 
+/// EMA periods drawn on the chart, matching Binance's default set: a very fast 3 to
+/// see candles flip, then 25 / 50 / 100 / 200.
+const emaPeriods = [3, 25, 50, 100, 200];
+
 /// Every indicator the evidence report uses, computed once per series.
 class Indicators {
   Indicators.of(this.candles)
-      : ema20 = emaOf(candles, 20),
-        ema50 = emaOf(candles, 50),
-        ema200 = emaOf(candles, 200),
+      : emas = {for (final n in emaPeriods) n: emaOf(candles, n)},
         macd = Macd.of(candles),
         rsi14 = rsi(candles),
         cci20 = cci(candles);
 
   final List<Candle> candles;
-  final List<double?> ema20, ema50, ema200;
+  /// EMA lines by period ([emaPeriods]), as on Binance's chart.
+  final Map<int, List<double?>> emas;
+  List<double?> get ema25 => emas[25]!;
+  List<double?> get ema50 => emas[50]!;
+  List<double?> get ema100 => emas[100]!;
+  List<double?> get ema200 => emas[200]!;
   final Macd macd;
   final List<double?> rsi14;
   final List<double?> cci20;

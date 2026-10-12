@@ -182,9 +182,9 @@ EvidenceReport _context(Indicators ind, List<Pivot> p, int now, ({String label, 
 
 Evidence _emaStack(Indicators ind, int i, int d) {
   final price = ind.candles[i].close;
-  final e20 = ind.ema20[i], e50 = ind.ema50[i], e200 = ind.ema200[i];
-  if (e20 == null || e50 == null) return const Evidence('EMAs stacked with the move', null, 'not enough history');
-  final chain = [price, e20, e50, ?e200];
+  final e25 = ind.ema25[i], e50 = ind.ema50[i], e200 = ind.ema200[i];
+  if (e25 == null || e50 == null) return const Evidence('EMAs stacked with the move', null, 'not enough history');
+  final chain = [price, e25, e50, ?e200];
   bool ordered(bool up) {
     for (var k = 1; k < chain.length; k++) {
       if (up ? chain[k - 1] <= chain[k] : chain[k - 1] >= chain[k]) return false;
@@ -194,10 +194,10 @@ Evidence _emaStack(Indicators ind, int i, int d) {
   final ok = ordered(d > 0);
   final sym = d > 0 ? '>' : '<';
   final detail = ok
-      ? 'price $sym 20 $sym 50${e200 != null ? ' $sym 200' : ''}'
+      ? 'price $sym 25 $sym 50${e200 != null ? ' $sym 200' : ''}'
       : ordered(d < 0)
           ? 'stacked the other way'
-          : 'mixed (price ${price > e20 ? 'above' : 'below'} EMA 20, ${e200 == null ? 'no 200 yet' : '${price > e200 ? 'above' : 'below'} EMA 200'})';
+          : 'mixed (price ${price > e25 ? 'above' : 'below'} EMA 25, ${e200 == null ? 'no 200 yet' : '${price > e200 ? 'above' : 'below'} EMA 200'})';
   return Evidence('EMAs stacked with the move', ok, detail);
 }
 
