@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tantya/candles.dart';
 import 'package:tantya/elliott.dart';
@@ -129,4 +131,26 @@ void main() {
       expect(notes.any((n) => n.good == false && n.text.startsWith('No divergence')), isTrue);
     });
   });
+
+  group('ADX', () {
+    List<Candle> bars(double Function(int) f, int n) => [
+          for (var i = 0; i < n; i++) Candle(t0.add(Duration(hours: i)), f(i), f(i) + 0.5, f(i) - 0.5, f(i)),
+        ];
+    test('a steady trend reads high, a flat zig-zag reads low', () {
+      final trend = adx(bars((i) => 100.0 + i, 80));
+      expect(trend[26], isNull);
+      expect(trend[27], isNotNull);
+      expect(trend.last!, greaterThan(40));
+      final range = adx(bars((i) => i.isEven ? 100.0 : 101.0, 80));
+      expect(range.last!, lessThan(20));
+    });
+    test('causal: later candles never change earlier values', () {
+      final all = bars((i) => 100 + 10 * math.sin(i / 7), 120);
+      final a = adx(all.sublist(0, 80)), b = adx(all);
+      for (var i = 0; i < 80; i++) {
+        expect(b[i], a[i]);
+      }
+    });
+  });
 }
+

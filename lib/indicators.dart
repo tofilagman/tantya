@@ -48,6 +48,47 @@ List<double?> rsi(List<Candle> candles, {int n = 14}) {
   return out;
 }
 
+/// Average Directional Index (Wilder, n = 14): trend strength regardless of direction.
+/// Below ~20 is a range, above ~25 a trend. Causal: the value at i uses candles ≤ i.
+List<double?> adx(List<Candle> candles, {int n = 14}) {
+  final out = List<double?>.filled(candles.length, null);
+  if (candles.length < 2 * n + 1) return out;
+  var tr = 0.0, plus = 0.0, minus = 0.0;
+  double? adxV;
+  final dxs = <double>[];
+  for (var i = 1; i < candles.length; i++) {
+    final c = candles[i], p = candles[i - 1];
+    final t = math.max(c.high - c.low, math.max((c.high - p.close).abs(), (c.low - p.close).abs()));
+    final up = c.high - p.high, down = p.low - c.low;
+    final pdm = up > down && up > 0 ? up : 0.0;
+    final mdm = down > up && down > 0 ? down : 0.0;
+    if (i <= n) {
+      tr += t;
+      plus += pdm;
+      minus += mdm;
+      if (i < n) continue;
+    } else {
+      tr = tr - tr / n + t;
+      plus = plus - plus / n + pdm;
+      minus = minus - minus / n + mdm;
+    }
+    if (tr == 0) continue;
+    final pdi = 100 * plus / tr, mdi = 100 * minus / tr;
+    final dx = pdi + mdi == 0 ? 0.0 : 100 * (pdi - mdi).abs() / (pdi + mdi);
+    if (adxV == null) {
+      dxs.add(dx);
+      if (dxs.length == n) {
+        adxV = dxs.reduce((a, b) => a + b) / n;
+        out[i] = adxV;
+      }
+    } else {
+      adxV = (adxV * (n - 1) + dx) / n;
+      out[i] = adxV;
+    }
+  }
+  return out;
+}
+
 /// Commodity Channel Index: (typical price − its n-period average) / (0.015 × mean
 /// deviation), typical price = (high + low + close) / 3. Around ±100 is a strong move.
 List<double?> cci(List<Candle> candles, {int n = 20}) {
@@ -83,6 +124,7 @@ class Indicators {
       : emas = {for (final n in emaPeriods) n: emaOf(candles, n)},
         macd = Macd.of(candles),
         rsi14 = rsi(candles),
+        adx14 = adx(candles),
         cci20 = cci(candles);
 
   final List<Candle> candles;
@@ -94,6 +136,7 @@ class Indicators {
   List<double?> get ema200 => emas[200]!;
   final Macd macd;
   final List<double?> rsi14;
+  final List<double?> adx14;
   final List<double?> cci20;
 }
 

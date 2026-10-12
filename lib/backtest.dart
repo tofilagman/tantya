@@ -23,6 +23,8 @@ class BacktestConfig {
     this.window = 300,
     this.minRR = 1.0,
     this.minScore = 0,
+    this.minEvidence,
+    this.minAdx,
     this.bounds,
   });
 
@@ -34,6 +36,13 @@ class BacktestConfig {
 
   /// Skip counts scoring below this (0..1).
   final double minScore;
+
+  /// Skip setups whose evidence ratio (0..1) is below this; null = no filter.
+  final double? minEvidence;
+
+  /// Skip setups taken while ADX(14) is below this (a range, where waves tend to fail);
+  /// null = no filter.
+  final double? minAdx;
   final (double, double)? bounds;
 }
 
@@ -52,6 +61,7 @@ class BacktestTrade {
     required this.score,
     required this.evidence,
     required this.macd,
+    this.adx,
   });
 
   final int entryIndex;
@@ -67,6 +77,9 @@ class BacktestTrade {
   final double score;
   final double? evidence;
   final MacdVerdict? macd;
+
+  /// ADX(14) at entry: trend strength.
+  final double? adx;
 
   SetupStatus status = SetupStatus.open;
   double? exit;
@@ -169,6 +182,10 @@ BacktestTrade? _setupAt(List<Candle> view, int index, BacktestConfig cfg) {
   final setup = TradeSetup.from(s, price, buffer: atr(view) * stopBufferAtr);
   if (setup == null || setup.rr1 < cfg.minRR) return null;
   final ind = Indicators.of(view);
+  final evidence = evidenceReport(s, ind).ratio;
+  final adxNow = ind.adx14.last;
+  if (cfg.minEvidence != null && (evidence ?? 0) < cfg.minEvidence!) return null;
+  if (cfg.minAdx != null && (adxNow ?? 0) < cfg.minAdx!) return null;
   return BacktestTrade(
     entryIndex: index,
     madeAt: view.last.start,
@@ -180,8 +197,9 @@ BacktestTrade? _setupAt(List<Candle> view, int index, BacktestConfig cfg) {
     count: s.title,
     wave: s.next == 'new trend' ? '1' : s.next,
     score: s.score,
-    evidence: evidenceReport(s, ind).ratio,
+    evidence: evidence,
     macd: MacdState.of(ind.macd)?.verdictFor(setup.side),
+    adx: adxNow,
   );
 }
 
