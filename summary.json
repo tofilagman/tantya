@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-13T19:13:45.644899Z",
+ "updated": "2026-10-14T04:47:10.698576Z",
  "since": "2026-10-12T22:07:35.919129Z",
  "pairs": [
   "BTCUSDT",
@@ -29,31 +29,31 @@
  ],
  "takerFee": 0.001,
  "all": {
-  "closed": 10,
-  "open": 18,
+  "closed": 12,
+  "open": 16,
   "wins": 0,
-  "losses": 10,
+  "losses": 12,
   "expired": 0,
   "hitRate": 0.0,
   "avgR": -1.0,
-  "avgNetR": -1.089048314698403,
-  "totalR": -10.0,
-  "totalNetR": -10.89048314698403,
-  "maxDrawdownR": 10.89048314698403
+  "avgNetR": -1.121663038332984,
+  "totalR": -12.0,
+  "totalNetR": -13.459956459995807,
+  "maxDrawdownR": 13.459956459995807
  },
  "byFrame": {
   "h1": {
-   "closed": 10,
-   "open": 18,
+   "closed": 12,
+   "open": 16,
    "wins": 0,
-   "losses": 10,
+   "losses": 12,
    "expired": 0,
    "hitRate": 0.0,
    "avgR": -1.0,
-   "avgNetR": -1.089048314698403,
-   "totalR": -10.0,
-   "totalNetR": -10.89048314698403,
-   "maxDrawdownR": 10.89048314698403
+   "avgNetR": -1.121663038332984,
+   "totalR": -12.0,
+   "totalNetR": -13.459956459995807,
+   "maxDrawdownR": 13.459956459995807
   },
   "h4": {
    "closed": 0,
@@ -84,17 +84,17 @@
    "maxDrawdownR": 0.0
   },
   "mixed": {
-   "closed": 1,
-   "open": 9,
+   "closed": 3,
+   "open": 7,
    "wins": 0,
-   "losses": 1,
+   "losses": 3,
    "expired": 0,
    "hitRate": 0.0,
    "avgR": -1.0,
-   "avgNetR": -1.098596429172983,
-   "totalR": -1.0,
-   "totalNetR": -1.098596429172983,
-   "maxDrawdownR": 1.098596429172983
+   "avgNetR": -1.2226899140615863,
+   "totalR": -3.0,
+   "totalNetR": -3.668069742184759,
+   "maxDrawdownR": 3.668069742184759
   },
   "weak": {
    "closed": 9,

@@ -87,7 +87,9 @@
   "candleOpen": "2026-10-13T19:00:00.000Z",
   "madeAt": "2026-10-13T19:13:45.644899Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 5.1005,
+  "closedAt": "2026-10-14T01:00:00.000Z"
  },
  {
   "symbol": "XLMUSDT",
@@ -195,7 +197,9 @@
   "candleOpen": "2026-10-13T19:00:00.000Z",
   "madeAt": "2026-10-13T19:13:45.644899Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.3308107142857143,
+  "closedAt": "2026-10-14T03:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
