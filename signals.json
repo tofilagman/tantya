@@ -1,5 +1,41 @@
 [
  {
+  "symbol": "LINKUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 12.836,
+  "stop": 12.207071428571428,
+  "tp1": 13.658,
+  "tp2": 14.235211999999999,
+  "count": "Impulse ↑ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.6397,
+  "evidence": 0.0,
+  "adx": 12.94,
+  "candleOpen": "2026-10-14T10:00:00.000Z",
+  "madeAt": "2026-10-14T10:07:44.210825Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "TRXUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.3337,
+  "stop": 0.33438928571428567,
+  "tp1": 0.3312642,
+  "tp2": 0.3296358,
+  "count": "Impulse ↑ · wave A in progress",
+  "wave": "A",
+  "score": 0.564,
+  "evidence": 0.4,
+  "adx": 34.16,
+  "candleOpen": "2026-10-14T10:00:00.000Z",
+  "madeAt": "2026-10-14T10:07:44.210825Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "HBARUSDT",
   "frame": "h1",
   "side": "short",
@@ -15,7 +51,9 @@
   "candleOpen": "2026-10-13T19:00:00.000Z",
   "madeAt": "2026-10-13T19:13:45.644899Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.08600832,
+  "closedAt": "2026-10-14T10:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",

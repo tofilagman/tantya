@@ -4,22 +4,24 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-10-14T04:47 UTC · since 2026-10-12
+Updated 2026-10-14T10:07 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 12 | 16 | 0% | -1.00 | -1.12 | -13.5 | 13.5 |
-| 1h | 12 | 16 | 0% | -1.00 | -1.12 | -13.5 | 13.5 |
+| **All** | 13 | 17 | 8% | -0.84 | -0.96 | -12.5 | 13.5 |
+| 1h | 13 | 17 | 8% | -0.84 | -0.96 | -12.5 | 13.5 |
 | 4h | 0 | 0 | — | — | — | +0.0 | 0.0 |
 | Evidence strong | 0 | 1 | — | — | — | +0.0 | 0.0 |
-| Evidence mixed | 3 | 7 | 0% | -1.00 | -1.22 | -3.7 | 3.7 |
-| Evidence weak | 9 | 8 | 0% | -1.00 | -1.09 | -9.8 | 9.8 |
+| Evidence mixed | 4 | 7 | 25% | -0.49 | -0.68 | -2.7 | 3.7 |
+| Evidence weak | 9 | 9 | 0% | -1.00 | -1.09 | -9.8 | 9.8 |
 
 ## Latest signals
 
 | Published (UTC) | Pair | TF | Side | Entry | Stop | TP1 | Wave | Evidence | Status | Net R |
 |---|---|---|---|---:|---:|---:|---|---|---|---:|
-| 2026-10-13T19:13 | HBARUSDT | 1h | short | 0.0878 | 0.0895039 | 0.0860083 | 1 | mixed | open | — |
+| 2026-10-14T10:07 | LINKUSDT | 1h | long | 12.836 | 12.2071 | 13.6580 | 3 | weak | open | — |
+| 2026-10-14T10:07 | TRXUSDT | 1h | short | 0.3337 | 0.334389 | 0.331264 | A | mixed | open | — |
+| 2026-10-13T19:13 | HBARUSDT | 1h | short | 0.0878 | 0.0895039 | 0.0860083 | 1 | mixed | target | +0.95 |
 | 2026-10-13T19:13 | AAVEUSDT | 1h | short | 162.17 | 167.335 | 155.889 | 5 | mixed | open | — |
 | 2026-10-13T19:13 | SUIUSDT | 1h | short | 1.0574 | 1.14959 | 0.929700 | 3 | weak | open | — |
 | 2026-10-13T19:13 | UNIUSDT | 1h | short | 7.593 | 7.71886 | 7.09038 | 1 | weak | open | — |
