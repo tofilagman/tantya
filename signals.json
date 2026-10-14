@@ -71,7 +71,9 @@
   "candleOpen": "2026-10-13T19:00:00.000Z",
   "madeAt": "2026-10-13T19:13:45.644899Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 155.88866,
+  "closedAt": "2026-10-14T15:00:00.000Z"
  },
  {
   "symbol": "SUIUSDT",
@@ -291,7 +293,9 @@
   "candleOpen": "2026-10-13T19:00:00.000Z",
   "madeAt": "2026-10-13T19:13:45.644899Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 1.3468,
+  "closedAt": "2026-10-14T15:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -309,7 +313,9 @@
   "candleOpen": "2026-10-13T19:00:00.000Z",
   "madeAt": "2026-10-13T19:13:45.644899Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 105.38,
+  "closedAt": "2026-10-14T14:00:00.000Z"
  },
  {
   "symbol": "ETHUSDT",
