@@ -33,7 +33,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 153.10071428571428,
+  "closedAt": "2026-10-14T23:00:00.000Z"
  },
  {
   "symbol": "XLMUSDT",
