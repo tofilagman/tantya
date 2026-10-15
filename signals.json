@@ -15,7 +15,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.08215107142857142,
+  "closedAt": "2026-10-15T04:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -53,7 +55,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.1800142857142857,
+  "closedAt": "2026-10-15T04:00:00.000Z"
  },
  {
   "symbol": "DOTUSDT",
@@ -71,7 +75,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.0922857142857143,
+  "closedAt": "2026-10-15T04:00:00.000Z"
  },
  {
   "symbol": "AVAXUSDT",
@@ -89,7 +95,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 9.620714285714287,
+  "closedAt": "2026-10-15T04:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
@@ -125,7 +133,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.07908392857142857,
+  "closedAt": "2026-10-15T04:00:00.000Z"
  },
  {
   "symbol": "XRPUSDT",
@@ -143,7 +153,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.2970785714285713,
+  "closedAt": "2026-10-15T04:00:00.000Z"
  },
  {
   "symbol": "XRPUSDT",
@@ -161,7 +173,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.30425,
+  "closedAt": "2026-10-15T03:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -179,7 +193,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 101.09214285714286,
+  "closedAt": "2026-10-15T03:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
@@ -197,7 +213,9 @@
   "candleOpen": "2026-10-14T20:00:00.000Z",
   "madeAt": "2026-10-14T20:11:02.729012Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 80512.65821428572,
+  "closedAt": "2026-10-15T04:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
@@ -215,7 +233,9 @@
   "candleOpen": "2026-10-14T10:00:00.000Z",
   "madeAt": "2026-10-14T10:07:44.210825Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 12.207071428571428,
+  "closedAt": "2026-10-15T03:00:00.000Z"
  },
  {
   "symbol": "TRXUSDT",
@@ -537,7 +557,9 @@
   "candleOpen": "2026-10-13T19:00:00.000Z",
   "madeAt": "2026-10-13T19:13:45.644899Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 2367.73,
+  "closedAt": "2026-10-15T03:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
@@ -555,7 +577,9 @@
   "candleOpen": "2026-10-13T19:00:00.000Z",
   "madeAt": "2026-10-13T19:13:45.644899Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 80814.22571428571,
+  "closedAt": "2026-10-15T03:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -773,6 +797,8 @@
   "candleOpen": "2026-10-12T22:00:00.000Z",
   "madeAt": "2026-10-12T22:07:35.919129Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 730.56,
+  "closedAt": "2026-10-15T00:00:00.000Z"
  }
 ]
