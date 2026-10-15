@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-15T14:57:45.480343Z",
+ "updated": "2026-10-15T19:05:52.232761Z",
  "since": "2026-10-12T22:07:35.919129Z",
  "pairs": [
   "BTCUSDT",
@@ -29,22 +29,22 @@
  ],
  "takerFee": 0.001,
  "all": {
-  "closed": 33,
-  "open": 8,
+  "closed": 34,
+  "open": 15,
   "wins": 7,
-  "losses": 25,
+  "losses": 26,
   "expired": 1,
-  "hitRate": 0.21875,
-  "avgR": -0.3584101288438374,
-  "avgNetR": -0.48257160217606393,
-  "totalR": -11.827534251846634,
-  "totalNetR": -15.92486287181011,
-  "maxDrawdownR": 17.083118530082345
+  "hitRate": 0.21212121212121213,
+  "avgR": -0.3772804191719598,
+  "avgNetR": -0.49918246729983656,
+  "totalR": -12.827534251846634,
+  "totalNetR": -16.972203888194443,
+  "maxDrawdownR": 17.08311853008234
  },
  "byFrame": {
   "h1": {
    "closed": 26,
-   "open": 7,
+   "open": 15,
    "wins": 7,
    "losses": 18,
    "expired": 1,
@@ -56,17 +56,17 @@
    "maxDrawdownR": 13.459956459995807
   },
   "h4": {
-   "closed": 7,
-   "open": 1,
+   "closed": 8,
+   "open": 0,
    "wins": 0,
-   "losses": 7,
+   "losses": 8,
    "expired": 0,
    "hitRate": 0.0,
    "avgR": -1.0,
-   "avgNetR": -1.0742514556675256,
-   "totalR": -7.0,
-   "totalNetR": -7.519760189672678,
-   "maxDrawdownR": 7.519760189672678
+   "avgNetR": -1.070887650757127,
+   "totalR": -8.0,
+   "totalNetR": -8.567101206057016,
+   "maxDrawdownR": 8.567101206057016
   }
  },
  "byEvidence": {
@@ -85,7 +85,7 @@
   },
   "mixed": {
    "closed": 9,
-   "open": 3,
+   "open": 5,
    "wins": 4,
    "losses": 5,
    "expired": 0,
@@ -97,16 +97,16 @@
    "maxDrawdownR": 3.668069742184759
   },
   "weak": {
-   "closed": 21,
-   "open": 5,
+   "closed": 22,
+   "open": 10,
    "wins": 3,
-   "losses": 18,
+   "losses": 19,
    "expired": 0,
-   "hitRate": 0.14285714285714285,
-   "avgR": -0.5149388150814799,
-   "avgNetR": -0.5988342657795493,
-   "totalR": -10.813715116711077,
-   "totalNetR": -12.575519581370537,
+   "hitRate": 0.13636363636363635,
+   "avgR": -0.5369870507595944,
+   "avgNetR": -0.6192209362615853,
+   "totalR": -11.813715116711077,
+   "totalNetR": -13.622860597754876,
    "maxDrawdownR": 13.733775239642773
   }
  }
