@@ -53,7 +53,9 @@
   "candleOpen": "2026-10-16T07:00:00.000Z",
   "madeAt": "2026-10-16T07:05:45.178132Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 59.79,
+  "closedAt": "2026-10-16T16:00:00.000Z"
  },
  {
   "symbol": "NEARUSDT",
@@ -187,7 +189,9 @@
   "candleOpen": "2026-10-15T22:00:00.000Z",
   "madeAt": "2026-10-15T22:15:35.020882Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.22410000000000002,
+  "closedAt": "2026-10-16T16:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
@@ -281,7 +285,9 @@
   "candleOpen": "2026-10-15T19:00:00.000Z",
   "madeAt": "2026-10-15T19:05:52.232761Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 7.228,
+  "closedAt": "2026-10-16T16:00:00.000Z"
  },
  {
   "symbol": "DOTUSDT",
