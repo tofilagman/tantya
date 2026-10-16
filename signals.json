@@ -15,7 +15,9 @@
   "candleOpen": "2026-10-16T07:00:00.000Z",
   "madeAt": "2026-10-16T07:05:45.178132Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.0582571428571428,
+  "closedAt": "2026-10-16T12:00:00.000Z"
  },
  {
   "symbol": "NEARUSDT",
@@ -127,7 +129,9 @@
   "candleOpen": "2026-10-15T22:00:00.000Z",
   "madeAt": "2026-10-15T22:15:35.020882Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 281.93571428571425,
+  "closedAt": "2026-10-16T09:00:00.000Z"
  },
  {
   "symbol": "AVAXUSDT",
@@ -257,7 +261,9 @@
   "candleOpen": "2026-10-15T19:00:00.000Z",
   "madeAt": "2026-10-15T19:05:52.232761Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 164.34964285714284,
+  "closedAt": "2026-10-16T12:00:00.000Z"
  },
  {
   "symbol": "UNIUSDT",
@@ -311,7 +317,9 @@
   "candleOpen": "2026-10-15T19:00:00.000Z",
   "madeAt": "2026-10-15T19:05:52.232761Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 12.679642857142857,
+  "closedAt": "2026-10-16T11:00:00.000Z"
  },
  {
   "symbol": "XRPUSDT",
