@@ -1,5 +1,23 @@
 [
  {
+  "symbol": "NEARUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 5.388,
+  "stop": 5.5091785714285715,
+  "tp1": 5.162,
+  "tp2": 5.032838,
+  "count": "Correction ↓ · wave C in progress",
+  "wave": "C",
+  "score": 0.2613,
+  "evidence": 0.25,
+  "adx": 36.18,
+  "candleOpen": "2026-10-16T01:00:00.000Z",
+  "madeAt": "2026-10-16T01:16:29.660071Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "SUIUSDT",
   "frame": "h1",
   "side": "short",
@@ -87,7 +105,9 @@
   "candleOpen": "2026-10-15T22:00:00.000Z",
   "madeAt": "2026-10-15T22:15:35.020882Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.3332178571428571,
+  "closedAt": "2026-10-16T01:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
