@@ -1,5 +1,23 @@
 [
  {
+  "symbol": "TRXUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.3359,
+  "stop": 0.3366785714285714,
+  "tp1": 0.33390000000000003,
+  "tp2": 0.33254040000000007,
+  "count": "Correction ↓ · wave C in progress",
+  "wave": "C",
+  "score": 0.4444,
+  "evidence": 0.2,
+  "adx": 27.59,
+  "candleOpen": "2026-10-17T09:00:00.000Z",
+  "madeAt": "2026-10-17T09:17:24.809589Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "AAVEUSDT",
   "frame": "h4",
   "side": "long",
