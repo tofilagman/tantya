@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-17T22:14:59.428785Z",
+ "updated": "2026-10-18T00:58:25.460676Z",
  "since": "2026-10-12T22:07:35.919129Z",
  "pairs": [
   "BTCUSDT",
@@ -29,59 +29,59 @@
  ],
  "takerFee": 0.001,
  "all": {
-  "closed": 65,
-  "open": 18,
+  "closed": 68,
+  "open": 15,
   "wins": 13,
-  "losses": 39,
-  "expired": 13,
-  "hitRate": 0.25,
-  "avgR": -0.16610478797990538,
-  "avgNetR": -0.32082205878301523,
-  "totalR": -10.79681121869385,
-  "totalNetR": -20.85343382089599,
-  "maxDrawdownR": 20.85343382089599
+  "losses": 40,
+  "expired": 15,
+  "hitRate": 0.24528301886792453,
+  "avgR": -0.15897126138447717,
+  "avgNetR": -0.3088488708006699,
+  "totalR": -10.810045774144449,
+  "totalNetR": -21.001723214445555,
+  "maxDrawdownR": 21.001723214445555
  },
  "byFrame": {
   "h1": {
-   "closed": 57,
-   "open": 11,
+   "closed": 59,
+   "open": 9,
    "wins": 13,
    "losses": 31,
-   "expired": 13,
+   "expired": 15,
    "hitRate": 0.29545454545454547,
-   "avgR": -0.04906686348585699,
-   "avgNetR": -0.21554969499717505,
-   "totalR": -2.7968112186938483,
-   "totalNetR": -12.286332614838978,
+   "avgR": -0.030678741934651622,
+   "avgNetR": -0.19266995290946914,
+   "totalR": -1.8100457741444458,
+   "totalNetR": -11.36752722165868,
    "maxDrawdownR": 13.459956459995805
   },
   "h4": {
-   "closed": 8,
-   "open": 7,
+   "closed": 9,
+   "open": 6,
    "wins": 0,
-   "losses": 8,
+   "losses": 9,
    "expired": 0,
    "hitRate": 0.0,
    "avgR": -1.0,
-   "avgNetR": -1.070887650757127,
-   "totalR": -8.0,
-   "totalNetR": -8.567101206057016,
-   "maxDrawdownR": 8.567101206057016
+   "avgNetR": -1.0704662214207636,
+   "totalR": -9.0,
+   "totalNetR": -9.634195992786873,
+   "maxDrawdownR": 9.634195992786873
   }
  },
  "byEvidence": {
   "strong": {
-   "closed": 3,
-   "open": 2,
+   "closed": 4,
+   "open": 1,
    "wins": 0,
-   "losses": 2,
+   "losses": 3,
    "expired": 1,
    "hitRate": 0.0,
-   "avgR": -0.5452953030007556,
-   "avgNetR": -0.634768672794463,
-   "totalR": -1.6358859090022666,
-   "totalNetR": -1.904306018383389,
-   "maxDrawdownR": 1.904306018383389
+   "avgR": -0.6589714772505666,
+   "avgNetR": -0.7428502012783117,
+   "totalR": -2.6358859090022664,
+   "totalNetR": -2.971400805113247,
+   "maxDrawdownR": 2.971400805113247
   },
   "mixed": {
    "closed": 22,
@@ -97,17 +97,17 @@
    "maxDrawdownR": 7.065304996335243
   },
   "weak": {
-   "closed": 40,
-   "open": 14,
+   "closed": 42,
+   "open": 12,
    "wins": 6,
    "losses": 25,
-   "expired": 9,
+   "expired": 11,
    "hitRate": 0.1935483870967742,
-   "avgR": -0.2306423775073787,
-   "avgNetR": -0.36174794898271284,
-   "totalR": -9.225695100295148,
-   "totalNetR": -14.469917959308514,
-   "maxDrawdownR": 14.469917959308514
+   "avgR": -0.1961649918034701,
+   "avgNetR": -0.322645537288767,
+   "totalR": -8.238929655745745,
+   "totalNetR": -13.551112566128213,
+   "maxDrawdownR": 14.46991795930851
   }
  }
 }

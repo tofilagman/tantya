@@ -185,7 +185,9 @@
   "candleOpen": "2026-10-17T04:00:00.000Z",
   "madeAt": "2026-10-17T04:18:13.006315Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.174325,
+  "closedAt": "2026-10-18T00:00:00.000Z"
  },
  {
   "symbol": "LTCUSDT",
@@ -563,7 +565,9 @@
   "candleOpen": "2026-10-15T22:00:00.000Z",
   "madeAt": "2026-10-15T22:15:35.020882Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 9.767,
+  "closedAt": "2026-10-18T00:00:00.000Z"
  },
  {
   "symbol": "TRXUSDT",
@@ -621,7 +625,9 @@
   "candleOpen": "2026-10-15T22:00:00.000Z",
   "madeAt": "2026-10-15T22:15:35.020882Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.07937,
+  "closedAt": "2026-10-18T00:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
