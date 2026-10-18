@@ -15,7 +15,9 @@
   "candleOpen": "2026-10-18T18:00:00.000Z",
   "madeAt": "2026-10-18T18:03:49.509684Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.17315714285714287,
+  "closedAt": "2026-10-18T20:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
@@ -33,7 +35,9 @@
   "candleOpen": "2026-10-18T18:00:00.000Z",
   "madeAt": "2026-10-18T18:03:49.509684Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 11.665035714285715,
+  "closedAt": "2026-10-18T20:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
@@ -51,7 +55,9 @@
   "candleOpen": "2026-10-18T18:00:00.000Z",
   "madeAt": "2026-10-18T18:03:49.509684Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.21323214285714287,
+  "closedAt": "2026-10-18T20:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -69,7 +75,9 @@
   "candleOpen": "2026-10-17T22:00:00.000Z",
   "madeAt": "2026-10-17T22:14:59.428785Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 148.3842857142857,
+  "closedAt": "2026-10-18T20:00:00.000Z"
  },
  {
   "symbol": "DOTUSDT",
@@ -281,7 +289,9 @@
   "candleOpen": "2026-10-17T04:00:00.000Z",
   "madeAt": "2026-10-17T04:18:13.006315Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 57.1425,
+  "closedAt": "2026-10-18T20:00:00.000Z"
  },
  {
   "symbol": "AVAXUSDT",
@@ -317,7 +327,9 @@
   "candleOpen": "2026-10-17T04:00:00.000Z",
   "madeAt": "2026-10-17T04:18:13.006315Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.21304285714285714,
+  "closedAt": "2026-10-18T20:00:00.000Z"
  },
  {
   "symbol": "ETHUSDT",
@@ -335,7 +347,9 @@
   "candleOpen": "2026-10-17T04:00:00.000Z",
   "madeAt": "2026-10-17T04:18:13.006315Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 2332.37,
+  "closedAt": "2026-10-18T20:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -373,7 +387,9 @@
   "candleOpen": "2026-10-16T21:00:00.000Z",
   "madeAt": "2026-10-16T21:01:53.084217Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.9520571428571428,
+  "closedAt": "2026-10-18T20:00:00.000Z"
  },
  {
   "symbol": "UNIUSDT",
@@ -449,7 +465,9 @@
   "candleOpen": "2026-10-16T21:00:00.000Z",
   "madeAt": "2026-10-16T21:01:53.084217Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 706.8717857142857,
+  "closedAt": "2026-10-18T20:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
