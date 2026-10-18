@@ -4,15 +4,15 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-10-18T05:50 UTC · since 2026-10-12
+Updated 2026-10-18T10:57 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 69 | 14 | 24% | -0.17 | -0.36 | -25.1 | 25.1 |
-| 1h | 60 | 8 | 29% | -0.05 | -0.26 | -15.4 | 15.4 |
+| **All** | 70 | 13 | 24% | -0.17 | -0.36 | -25.4 | 25.4 |
+| 1h | 61 | 7 | 29% | -0.05 | -0.26 | -15.8 | 15.8 |
 | 4h | 9 | 6 | 0% | -1.00 | -1.07 | -9.6 | 9.6 |
 | Evidence strong | 4 | 1 | 0% | -0.66 | -0.74 | -3.0 | 3.0 |
-| Evidence mixed | 22 | 2 | 37% | +0.00 | -0.20 | -4.5 | 7.1 |
+| Evidence mixed | 23 | 1 | 37% | -0.01 | -0.21 | -4.8 | 7.1 |
 | Evidence weak | 43 | 11 | 19% | -0.21 | -0.41 | -17.6 | 17.6 |
 
 ## Latest signals
@@ -42,7 +42,7 @@ Updated 2026-10-18T05:50 UTC · since 2026-10-12
 | 2026-10-16T21:01 | BNBUSDT | 1h | long | 721.0 | 706.872 | 746.030 | 3 | weak | open | — |
 | 2026-10-16T21:01 | BTCUSDT | 1h | long | 81693.61 | 79539.9 | 83950.1 | 3 | weak | open | — |
 | 2026-10-16T07:05 | SUIUSDT | 1h | short | 1.0466 | 1.05826 | 1.00585 | B | mixed | stopped | -1.18 |
-| 2026-10-16T07:05 | NEARUSDT | 1h | long | 5.211 | 4.47200 | 6.03300 | C | mixed | open | — |
+| 2026-10-16T07:05 | NEARUSDT | 1h | long | 5.211 | 4.47200 | 6.03300 | C | mixed | expired | -0.35 |
 | 2026-10-16T07:05 | LTCUSDT | 1h | short | 61.17 | 62.2479 | 59.7900 | C | mixed | target | +1.17 |
 | 2026-10-16T01:16 | NEARUSDT | 1h | short | 5.388 | 5.50918 | 5.16200 | C | weak | target | +1.78 |
 | 2026-10-15T22:15 | SUIUSDT | 1h | short | 1.0383 | 1.05169 | 1.00130 | B | mixed | stopped | -1.16 |
