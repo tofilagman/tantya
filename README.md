@@ -4,15 +4,15 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-10-19T01:14 UTC · since 2026-10-12
+Updated 2026-10-19T07:42 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 83 | 20 | 22% | -0.26 | -0.43 | -35.8 | 35.8 |
-| 1h | 72 | 16 | 24% | -0.17 | -0.36 | -26.1 | 26.1 |
+| **All** | 84 | 19 | 21% | -0.26 | -0.44 | -37.3 | 37.3 |
+| 1h | 73 | 15 | 24% | -0.18 | -0.38 | -27.6 | 27.6 |
 | 4h | 11 | 4 | 9% | -0.81 | -0.88 | -9.7 | 10.7 |
 | Evidence strong | 6 | 0 | 20% | -0.43 | -0.54 | -3.2 | 4.2 |
-| Evidence mixed | 23 | 2 | 37% | -0.01 | -0.21 | -4.8 | 7.1 |
+| Evidence mixed | 24 | 1 | 35% | -0.05 | -0.26 | -6.4 | 7.1 |
 | Evidence weak | 54 | 18 | 15% | -0.34 | -0.51 | -27.7 | 27.7 |
 
 ## Latest signals
@@ -25,7 +25,7 @@ Updated 2026-10-19T01:14 UTC · since 2026-10-12
 | 2026-10-19T01:14 | XLMUSDT | 1h | short | 0.1787 | 0.187046 | 0.164400 | 3 | weak | open | — |
 | 2026-10-19T01:14 | BCHUSDT | 1h | short | 276.9 | 285.871 | 256.000 | 3 | weak | open | — |
 | 2026-10-19T01:14 | LINKUSDT | 1h | short | 12.134 | 12.8393 | 10.8970 | 3 | weak | open | — |
-| 2026-10-19T01:14 | TRXUSDT | 1h | long | 0.3326 | 0.331325 | 0.333900 | C | mixed | open | — |
+| 2026-10-19T01:14 | TRXUSDT | 1h | long | 0.3326 | 0.331325 | 0.333900 | C | mixed | stopped | -1.52 |
 | 2026-10-19T01:14 | ADAUSDT | 1h | short | 0.2216 | 0.234854 | 0.200100 | 3 | weak | open | — |
 | 2026-10-19T01:14 | XRPUSDT | 1h | short | 1.3103 | 1.35923 | 1.21310 | 3 | weak | open | — |
 | 2026-10-19T01:14 | SOLUSDT | 1h | short | 104.72 | 107.922 | 97.6000 | 3 | weak | open | — |
