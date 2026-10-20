@@ -4,16 +4,16 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-10-20T00:17 UTC · since 2026-10-12
+Updated 2026-10-20T16:56 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 87 | 28 | 20% | -0.29 | -0.47 | -40.7 | 40.7 |
-| 1h | 76 | 17 | 22% | -0.21 | -0.41 | -31.0 | 31.0 |
-| 4h | 11 | 11 | 9% | -0.81 | -0.88 | -9.7 | 10.7 |
+| **All** | 92 | 23 | 20% | -0.31 | -0.48 | -44.0 | 44.0 |
+| 1h | 80 | 13 | 23% | -0.23 | -0.42 | -33.2 | 33.2 |
+| 4h | 12 | 10 | 8% | -0.83 | -0.90 | -10.8 | 10.8 |
 | Evidence strong | 6 | 1 | 20% | -0.43 | -0.54 | -3.2 | 4.2 |
-| Evidence mixed | 24 | 5 | 35% | -0.05 | -0.26 | -6.4 | 7.1 |
-| Evidence weak | 57 | 22 | 14% | -0.37 | -0.55 | -31.1 | 31.1 |
+| Evidence mixed | 25 | 4 | 38% | -0.01 | -0.22 | -5.4 | 7.1 |
+| Evidence weak | 61 | 18 | 13% | -0.42 | -0.58 | -35.4 | 35.4 |
 
 ## Latest signals
 
@@ -25,9 +25,9 @@ Updated 2026-10-20T00:17 UTC · since 2026-10-12
 | 2026-10-20T00:17 | TRXUSDT | 4h | long | 0.3318 | 0.328936 | 0.338300 | C | weak | open | — |
 | 2026-10-20T00:17 | DOGEUSDT | 4h | short | 0.07931 | 0.0836811 | 0.0734600 | 3 | weak | open | — |
 | 2026-10-20T00:17 | SOLUSDT | 4h | short | 104.47 | 108.403 | 99.2100 | C | mixed | open | — |
-| 2026-10-20T00:17 | BNBUSDT | 4h | short | 728.52 | 739.888 | 703.370 | C | weak | open | — |
+| 2026-10-20T00:17 | BNBUSDT | 4h | short | 728.52 | 739.888 | 703.370 | C | weak | stopped | -1.13 |
 | 2026-10-19T21:01 | NEARUSDT | 1h | short | 4.921 | 5.48486 | 4.32200 | 3 | mixed | open | — |
-| 2026-10-19T21:01 | LTCUSDT | 1h | short | 59.7 | 60.7214 | 58.5850 | 2 | mixed | open | — |
+| 2026-10-19T21:01 | LTCUSDT | 1h | short | 59.7 | 60.7214 | 58.5850 | 2 | mixed | target | +0.98 |
 | 2026-10-19T21:01 | AVAXUSDT | 1h | long | 9.545 | 9.21186 | 10.0660 | 3 | weak | open | — |
 | 2026-10-19T21:01 | TRXUSDT | 1h | long | 0.3312 | 0.330307 | 0.332900 | C | mixed | open | — |
 | 2026-10-19T21:01 | BTCUSDT | 1h | long | 82043.05 | 80462.8 | 84222.5 | 3 | weak | open | — |
@@ -40,13 +40,13 @@ Updated 2026-10-20T00:17 UTC · since 2026-10-12
 | 2026-10-19T01:14 | TRXUSDT | 1h | long | 0.3326 | 0.331325 | 0.333900 | C | mixed | stopped | -1.52 |
 | 2026-10-19T01:14 | ADAUSDT | 1h | short | 0.2216 | 0.234854 | 0.200100 | 3 | weak | open | — |
 | 2026-10-19T01:14 | XRPUSDT | 1h | short | 1.3103 | 1.35923 | 1.21310 | 3 | weak | open | — |
-| 2026-10-19T01:14 | SOLUSDT | 1h | short | 104.72 | 107.922 | 97.6000 | 3 | weak | open | — |
+| 2026-10-19T01:14 | SOLUSDT | 1h | short | 104.72 | 107.922 | 97.6000 | 3 | weak | stopped | -1.07 |
 | 2026-10-19T01:14 | ETHUSDT | 1h | short | 2421.4 | 2504.31 | 2254.52 | 3 | weak | open | — |
 | 2026-10-18T23:05 | HBARUSDT | 1h | short | 0.08558 | 0.0906471 | 0.0774600 | 3 | weak | open | — |
-| 2026-10-18T23:05 | AAVEUSDT | 1h | short | 151.17 | 155.901 | 142.740 | 3 | weak | open | — |
+| 2026-10-18T23:05 | AAVEUSDT | 1h | short | 151.17 | 155.901 | 142.740 | 3 | weak | stopped | -1.06 |
 | 2026-10-18T23:05 | NEARUSDT | 1h | short | 4.947 | 5.01961 | 4.79700 | B | weak | stopped | -1.14 |
 | 2026-10-18T23:05 | DOTUSDT | 1h | short | 1.106 | 1.15171 | 1.00800 | 3 | weak | stopped | -1.05 |
-| 2026-10-18T23:05 | BNBUSDT | 1h | short | 719.66 | 738.050 | 690.310 | 3 | weak | open | — |
+| 2026-10-18T23:05 | BNBUSDT | 1h | short | 719.66 | 738.050 | 690.310 | 3 | weak | stopped | -1.08 |
 | 2026-10-18T23:05 | BTCUSDT | 1h | short | 81761.24 | 83111.2 | 80163.9 | 3 | weak | stopped | -1.12 |
 | 2026-10-18T18:03 | XLMUSDT | 1h | long | 0.1745 | 0.173157 | 0.178537 | A | strong | stopped | -1.26 |
 | 2026-10-18T18:03 | LINKUSDT | 1h | long | 11.786 | 11.6650 | 11.9675 | 1 | weak | stopped | -1.19 |
