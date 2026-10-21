@@ -235,7 +235,9 @@
   "candleOpen": "2026-10-19T01:00:00.000Z",
   "madeAt": "2026-10-19T01:14:56.427088Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 1.0294,
+  "closedAt": "2026-10-21T03:00:00.000Z"
  },
  {
   "symbol": "UNIUSDT",
@@ -253,7 +255,9 @@
   "candleOpen": "2026-10-19T01:00:00.000Z",
   "madeAt": "2026-10-19T01:14:56.427088Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 7.686857142857143,
+  "closedAt": "2026-10-21T01:00:00.000Z"
  },
  {
   "symbol": "NEARUSDT",
@@ -291,7 +295,9 @@
   "candleOpen": "2026-10-19T01:00:00.000Z",
   "madeAt": "2026-10-19T01:14:56.427088Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.1823,
+  "closedAt": "2026-10-21T03:00:00.000Z"
  },
  {
   "symbol": "BCHUSDT",
@@ -309,7 +315,9 @@
   "candleOpen": "2026-10-19T01:00:00.000Z",
   "madeAt": "2026-10-19T01:14:56.427088Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 285.87142857142857,
+  "closedAt": "2026-10-21T01:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
@@ -327,7 +335,9 @@
   "candleOpen": "2026-10-19T01:00:00.000Z",
   "madeAt": "2026-10-19T01:14:56.427088Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 12.356,
+  "closedAt": "2026-10-21T03:00:00.000Z"
  },
  {
   "symbol": "TRXUSDT",
@@ -365,7 +375,9 @@
   "candleOpen": "2026-10-19T01:00:00.000Z",
   "madeAt": "2026-10-19T01:14:56.427088Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.2241,
+  "closedAt": "2026-10-21T03:00:00.000Z"
  },
  {
   "symbol": "XRPUSDT",
@@ -383,7 +395,9 @@
   "candleOpen": "2026-10-19T01:00:00.000Z",
   "madeAt": "2026-10-19T01:14:56.427088Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 1.335,
+  "closedAt": "2026-10-21T03:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -421,7 +435,9 @@
   "candleOpen": "2026-10-19T01:00:00.000Z",
   "madeAt": "2026-10-19T01:14:56.427088Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 2448.73,
+  "closedAt": "2026-10-21T03:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
@@ -439,7 +455,9 @@
   "candleOpen": "2026-10-18T23:00:00.000Z",
   "madeAt": "2026-10-18T23:05:36.557334Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.08419,
+  "closedAt": "2026-10-21T01:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
