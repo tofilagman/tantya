@@ -1,5 +1,23 @@
 [
  {
+  "symbol": "BNBUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 730.8,
+  "stop": 737.2128571428572,
+  "tp1": 723.53,
+  "tp2": 717.3747199999999,
+  "count": "Correction ↓ · wave C in progress",
+  "wave": "C",
+  "score": 0.3366,
+  "evidence": 0.4,
+  "adx": 41.32,
+  "candleOpen": "2026-10-22T23:00:00.000Z",
+  "madeAt": "2026-10-22T23:18:52.692834Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "AAVEUSDT",
   "frame": "h1",
   "side": "long",
@@ -141,7 +159,9 @@
   "candleOpen": "2026-10-22T20:00:00.000Z",
   "madeAt": "2026-10-22T20:02:44.314825Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.2978178571428571,
+  "closedAt": "2026-10-22T21:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
