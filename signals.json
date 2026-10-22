@@ -51,7 +51,9 @@
   "candleOpen": "2026-10-21T23:00:00.000Z",
   "madeAt": "2026-10-21T23:18:54.286981Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 9.475214285714285,
+  "closedAt": "2026-10-22T03:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
@@ -69,7 +71,9 @@
   "candleOpen": "2026-10-21T23:00:00.000Z",
   "madeAt": "2026-10-21T23:18:54.286981Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 12.414107142857143,
+  "closedAt": "2026-10-22T02:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
@@ -87,7 +91,9 @@
   "candleOpen": "2026-10-21T23:00:00.000Z",
   "madeAt": "2026-10-21T23:18:54.286981Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.08173035714285715,
+  "closedAt": "2026-10-22T02:00:00.000Z"
  },
  {
   "symbol": "XRPUSDT",
@@ -105,7 +111,9 @@
   "candleOpen": "2026-10-21T23:00:00.000Z",
   "madeAt": "2026-10-21T23:18:54.286981Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.3399035714285714,
+  "closedAt": "2026-10-22T04:00:00.000Z"
  },
  {
   "symbol": "ETHUSDT",
@@ -123,7 +131,9 @@
   "candleOpen": "2026-10-21T23:00:00.000Z",
   "madeAt": "2026-10-21T23:18:54.286981Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 2468.5510714285715,
+  "closedAt": "2026-10-22T02:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
@@ -141,7 +151,9 @@
   "candleOpen": "2026-10-21T20:00:00.000Z",
   "madeAt": "2026-10-21T20:06:38.073030Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.08359102,
+  "closedAt": "2026-10-22T02:00:00.000Z"
  },
  {
   "symbol": "SUIUSDT",
@@ -177,7 +189,9 @@
   "candleOpen": "2026-10-21T20:00:00.000Z",
   "madeAt": "2026-10-21T20:06:38.073030Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 1.0203852,
+  "closedAt": "2026-10-22T02:00:00.000Z"
  },
  {
   "symbol": "XLMUSDT",
@@ -195,7 +209,9 @@
   "candleOpen": "2026-10-21T20:00:00.000Z",
   "madeAt": "2026-10-21T20:06:38.073030Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.18298571428571428,
+  "closedAt": "2026-10-22T02:00:00.000Z"
  },
  {
   "symbol": "DOTUSDT",
@@ -289,7 +305,9 @@
   "candleOpen": "2026-10-21T15:00:00.000Z",
   "madeAt": "2026-10-21T15:13:02.296204Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 279.2052,
+  "closedAt": "2026-10-22T03:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
@@ -387,7 +405,9 @@
   "candleOpen": "2026-10-21T15:00:00.000Z",
   "madeAt": "2026-10-21T15:13:02.296204Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 83836.3365,
+  "closedAt": "2026-10-22T02:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -461,7 +481,9 @@
   "candleOpen": "2026-10-21T10:00:00.000Z",
   "madeAt": "2026-10-21T10:04:53.977820Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 60.74321428571429,
+  "closedAt": "2026-10-22T03:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
