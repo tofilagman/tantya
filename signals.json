@@ -15,7 +15,9 @@
   "candleOpen": "2026-10-22T23:00:00.000Z",
   "madeAt": "2026-10-22T23:18:52.692834Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 737.2128571428572,
+  "closedAt": "2026-10-23T03:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
