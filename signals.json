@@ -1,5 +1,41 @@
 [
  {
+  "symbol": "SUIUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 0.9896,
+  "stop": 0.9606714285714285,
+  "tp1": 1.0217,
+  "tp2": 1.0448132,
+  "count": "Correction ↑ · wave C in progress",
+  "wave": "C",
+  "score": 0.4916,
+  "evidence": 0.6,
+  "adx": 22.0,
+  "candleOpen": "2026-10-23T15:00:00.000Z",
+  "madeAt": "2026-10-23T15:00:55.382718Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "AVAXUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 9.119,
+  "stop": 8.937785714285715,
+  "tp1": 9.5185,
+  "tp2": 9.644878,
+  "count": "Impulse ↓ · wave 2 in progress",
+  "wave": "2",
+  "score": 0.26,
+  "evidence": 0.25,
+  "adx": 26.6,
+  "candleOpen": "2026-10-23T15:00:00.000Z",
+  "madeAt": "2026-10-23T15:00:55.382718Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "HBARUSDT",
   "frame": "h1",
   "side": "long",
@@ -69,7 +105,9 @@
   "candleOpen": "2026-10-23T10:00:00.000Z",
   "madeAt": "2026-10-23T10:01:02.105538Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 9.017892857142858,
+  "closedAt": "2026-10-23T15:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
