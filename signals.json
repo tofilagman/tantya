@@ -1,5 +1,41 @@
 [
  {
+  "symbol": "DOTUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 1.076,
+  "stop": 1.0599285714285713,
+  "tp1": 1.1010000000000002,
+  "tp2": 1.1176860000000004,
+  "count": "Impulse ↓ · wave C in progress",
+  "wave": "C",
+  "score": 0.5863,
+  "evidence": 0.25,
+  "adx": 33.7,
+  "candleOpen": "2026-10-24T07:00:00.000Z",
+  "madeAt": "2026-10-24T07:15:40.860966Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "ETHUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 2379.8,
+  "stop": 2424.7482142857143,
+  "tp1": 2324.02,
+  "tp2": 2283.09604,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.5201,
+  "evidence": 0.4,
+  "adx": 31.11,
+  "candleOpen": "2026-10-24T07:00:00.000Z",
+  "madeAt": "2026-10-24T07:15:40.860966Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "SUIUSDT",
   "frame": "h1",
   "side": "long",
@@ -33,7 +69,9 @@
   "candleOpen": "2026-10-23T23:00:00.000Z",
   "madeAt": "2026-10-23T23:06:44.425828Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 103.07082,
+  "closedAt": "2026-10-24T04:00:00.000Z"
  },
  {
   "symbol": "SUIUSDT",
