@@ -1143,7 +1143,9 @@
   "candleOpen": "2026-10-21T20:00:00.000Z",
   "madeAt": "2026-10-21T20:06:38.073030Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 1.025,
+  "closedAt": "2026-10-24T20:00:00.000Z"
  },
  {
   "symbol": "TRXUSDT",

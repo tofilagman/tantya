@@ -4,16 +4,16 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-10-24T16:34 UTC · since 2026-10-12
+Updated 2026-10-24T22:27 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 178 | 9 | 18% | -0.39 | -0.57 | -102.0 | 106.2 |
+| **All** | 179 | 8 | 19% | -0.38 | -0.56 | -99.8 | 107.2 |
 | 1h | 153 | 2 | 21% | -0.31 | -0.51 | -77.3 | 86.9 |
-| 4h | 25 | 7 | 4% | -0.92 | -0.99 | -24.7 | 24.7 |
+| 4h | 26 | 6 | 8% | -0.80 | -0.87 | -22.5 | 24.7 |
 | Evidence strong | 16 | 0 | 7% | -0.79 | -1.04 | -16.7 | 16.7 |
 | Evidence mixed | 51 | 0 | 28% | -0.19 | -0.40 | -20.5 | 24.6 |
-| Evidence weak | 111 | 9 | 15% | -0.43 | -0.58 | -64.8 | 68.1 |
+| Evidence weak | 112 | 8 | 16% | -0.41 | -0.56 | -62.5 | 68.1 |
 
 ## Latest signals
 
