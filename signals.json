@@ -15,7 +15,9 @@
   "candleOpen": "2026-10-24T07:00:00.000Z",
   "madeAt": "2026-10-24T07:15:40.860966Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.0599285714285713,
+  "closedAt": "2026-10-24T09:00:00.000Z"
  },
  {
   "symbol": "ETHUSDT",
@@ -823,7 +825,9 @@
   "candleOpen": "2026-10-22T10:00:00.000Z",
   "madeAt": "2026-10-22T10:06:03.029488Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.0776,
+  "closedAt": "2026-10-24T12:00:00.000Z"
  },
  {
   "symbol": "XRPUSDT",
@@ -1437,7 +1441,9 @@
   "candleOpen": "2026-10-20T00:00:00.000Z",
   "madeAt": "2026-10-20T00:17:50.297521Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.17015357142857143,
+  "closedAt": "2026-10-24T12:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
