@@ -33,7 +33,9 @@
   "candleOpen": "2026-10-25T16:00:00.000Z",
   "madeAt": "2026-10-25T16:07:51.251138Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 6.9315,
+  "closedAt": "2026-10-25T17:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
