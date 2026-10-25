@@ -4,16 +4,16 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-10-25T06:05 UTC · since 2026-10-12
+Updated 2026-10-25T11:21 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 181 | 23 | 18% | -0.39 | -0.57 | -102.5 | 109.4 |
-| 1h | 155 | 17 | 21% | -0.32 | -0.52 | -80.0 | 85.8 |
+| **All** | 182 | 22 | 19% | -0.37 | -0.55 | -100.3 | 108.3 |
+| 1h | 156 | 16 | 21% | -0.30 | -0.50 | -77.8 | 86.9 |
 | 4h | 26 | 6 | 8% | -0.80 | -0.87 | -22.5 | 24.7 |
 | Evidence strong | 16 | 1 | 7% | -0.79 | -1.04 | -16.7 | 16.7 |
 | Evidence mixed | 51 | 5 | 28% | -0.19 | -0.40 | -20.5 | 24.6 |
-| Evidence weak | 114 | 17 | 15% | -0.42 | -0.57 | -65.3 | 69.2 |
+| Evidence weak | 115 | 16 | 16% | -0.39 | -0.55 | -63.0 | 69.2 |
 
 ## Latest signals
 
@@ -27,7 +27,7 @@ Updated 2026-10-25T06:05 UTC · since 2026-10-12
 | 2026-10-25T01:05 | NEARUSDT | 1h | short | 4.506 | 5.04864 | 3.77100 | C | mixed | open | — |
 | 2026-10-25T01:05 | XLMUSDT | 1h | short | 0.172 | 0.179643 | 0.159600 | 3 | weak | open | — |
 | 2026-10-25T01:05 | BCHUSDT | 1h | short | 277.3 | 284.089 | 263.700 | 3 | weak | open | — |
-| 2026-10-25T01:05 | LTCUSDT | 1h | short | 57.04 | 57.3929 | 56.1300 | B | weak | open | — |
+| 2026-10-25T01:05 | LTCUSDT | 1h | short | 57.04 | 57.3929 | 56.1300 | B | weak | target | +2.26 |
 | 2026-10-25T01:05 | DOTUSDT | 1h | short | 1.053 | 1.10025 | 0.983000 | 3 | mixed | open | — |
 | 2026-10-25T01:05 | AVAXUSDT | 1h | short | 9.011 | 9.39054 | 8.35300 | 3 | weak | open | — |
 | 2026-10-25T01:05 | LINKUSDT | 1h | short | 11.621 | 11.8309 | 11.0128 | 5 | strong | open | — |

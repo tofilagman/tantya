@@ -161,7 +161,9 @@
   "candleOpen": "2026-10-25T01:00:00.000Z",
   "madeAt": "2026-10-25T01:05:43.123282Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 56.13,
+  "closedAt": "2026-10-25T09:00:00.000Z"
  },
  {
   "symbol": "DOTUSDT",
