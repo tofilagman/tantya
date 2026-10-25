@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24T22:27:10.810432Z",
+ "updated": "2026-10-25T01:05:43.123282Z",
  "since": "2026-10-12T22:07:35.919129Z",
  "pairs": [
   "BTCUSDT",
@@ -30,7 +30,7 @@
  "takerFee": 0.001,
  "all": {
   "closed": 179,
-  "open": 8,
+  "open": 21,
   "wins": 28,
   "losses": 122,
   "expired": 29,
@@ -44,7 +44,7 @@
  "byFrame": {
   "h1": {
    "closed": 153,
-   "open": 2,
+   "open": 15,
    "wins": 26,
    "losses": 98,
    "expired": 29,
@@ -72,7 +72,7 @@
  "byEvidence": {
   "strong": {
    "closed": 16,
-   "open": 0,
+   "open": 1,
    "wins": 1,
    "losses": 14,
    "expired": 1,
@@ -85,7 +85,7 @@
   },
   "mixed": {
    "closed": 51,
-   "open": 0,
+   "open": 2,
    "wins": 13,
    "losses": 33,
    "expired": 5,
@@ -98,7 +98,7 @@
   },
   "weak": {
    "closed": 112,
-   "open": 8,
+   "open": 18,
    "wins": 14,
    "losses": 75,
    "expired": 23,
