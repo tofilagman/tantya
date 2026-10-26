@@ -1,5 +1,23 @@
 [
  {
+  "symbol": "UNIUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 6.941,
+  "stop": 7.088571428571429,
+  "tp1": 6.716168,
+  "tp2": 6.516,
+  "count": "Correction ↑ · ABC complete",
+  "wave": "1",
+  "score": 0.641,
+  "evidence": 0.4,
+  "adx": 21.37,
+  "candleOpen": "2026-10-26T06:00:00.000Z",
+  "madeAt": "2026-10-26T06:13:31.659054Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "AAVEUSDT",
   "frame": "h1",
   "side": "long",
@@ -307,7 +325,9 @@
   "candleOpen": "2026-10-25T01:00:00.000Z",
   "madeAt": "2026-10-25T01:05:43.123282Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 284.0892857142857,
+  "closedAt": "2026-10-26T06:00:00.000Z"
  },
  {
   "symbol": "LTCUSDT",
