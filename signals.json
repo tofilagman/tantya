@@ -15,7 +15,9 @@
   "candleOpen": "2026-10-26T06:00:00.000Z",
   "madeAt": "2026-10-26T06:13:31.659054Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 7.088571428571429,
+  "closedAt": "2026-10-26T09:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -251,7 +253,9 @@
   "candleOpen": "2026-10-25T06:00:00.000Z",
   "madeAt": "2026-10-25T06:05:41.405221Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 733.325,
+  "closedAt": "2026-10-26T09:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
