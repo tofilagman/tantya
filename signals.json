@@ -1,5 +1,95 @@
 [
  {
+  "symbol": "HBARUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 0.07614,
+  "stop": 0.07519142857142856,
+  "tp1": 0.07745052,
+  "tp2": 0.07865,
+  "count": "Correction ↓ · ABC complete",
+  "wave": "1",
+  "score": 0.5814,
+  "evidence": 0.4,
+  "adx": 18.45,
+  "candleOpen": "2026-10-27T13:00:00.000Z",
+  "madeAt": "2026-10-27T13:09:45.637357Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "LTCUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 56.42,
+  "stop": 57.49392857142857,
+  "tp1": 55.21,
+  "tp2": 54.24592,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.4928,
+  "evidence": 0.0,
+  "adx": 38.78,
+  "candleOpen": "2026-10-27T13:00:00.000Z",
+  "madeAt": "2026-10-27T13:09:45.637357Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "TRXUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.3286,
+  "stop": 0.33025714285714286,
+  "tp1": 0.326,
+  "tp2": 0.3243932,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.4296,
+  "evidence": 0.5,
+  "adx": 30.1,
+  "candleOpen": "2026-10-27T13:00:00.000Z",
+  "madeAt": "2026-10-27T13:09:45.637357Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "ADAUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.2043,
+  "stop": 0.20912142857142857,
+  "tp1": 0.19890000000000002,
+  "tp2": 0.19463580000000003,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.5388,
+  "evidence": 0.0,
+  "adx": 23.03,
+  "candleOpen": "2026-10-27T13:00:00.000Z",
+  "madeAt": "2026-10-27T13:09:45.637357Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "SOLUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 100.68,
+  "stop": 103.07000000000001,
+  "tp1": 97.66,
+  "tp2": 95.45374,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.5583,
+  "evidence": 0.0,
+  "adx": 28.01,
+  "candleOpen": "2026-10-27T13:00:00.000Z",
+  "madeAt": "2026-10-27T13:09:45.637357Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "AAVEUSDT",
   "frame": "h1",
   "side": "long",
@@ -15,7 +105,9 @@
   "candleOpen": "2026-10-27T06:00:00.000Z",
   "madeAt": "2026-10-27T06:14:22.171027Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 131.17428571428573,
+  "closedAt": "2026-10-27T08:00:00.000Z"
  },
  {
   "symbol": "SUIUSDT",
@@ -51,7 +143,9 @@
   "candleOpen": "2026-10-27T06:00:00.000Z",
   "madeAt": "2026-10-27T06:14:22.171027Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 4.58058,
+  "closedAt": "2026-10-27T13:00:00.000Z"
  },
  {
   "symbol": "DOTUSDT",
@@ -87,7 +181,9 @@
   "candleOpen": "2026-10-27T06:00:00.000Z",
   "madeAt": "2026-10-27T06:14:22.171027Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.3182285714285713,
+  "closedAt": "2026-10-27T13:00:00.000Z"
  },
  {
   "symbol": "BNBUSDT",
@@ -163,7 +259,9 @@
   "candleOpen": "2026-10-26T01:00:00.000Z",
   "madeAt": "2026-10-26T01:07:25.007216Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.3284214285714286,
+  "closedAt": "2026-10-27T07:00:00.000Z"
  },
  {
   "symbol": "UNIUSDT",
@@ -309,7 +407,9 @@
   "candleOpen": "2026-10-25T06:00:00.000Z",
   "madeAt": "2026-10-25T06:05:41.405221Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.07662,
+  "closedAt": "2026-10-27T08:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
@@ -327,7 +427,9 @@
   "candleOpen": "2026-10-25T06:00:00.000Z",
   "madeAt": "2026-10-25T06:05:41.405221Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.204,
+  "closedAt": "2026-10-27T08:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
@@ -345,7 +447,9 @@
   "candleOpen": "2026-10-25T06:00:00.000Z",
   "madeAt": "2026-10-25T06:05:41.405221Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.07743,
+  "closedAt": "2026-10-27T08:00:00.000Z"
  },
  {
   "symbol": "BNBUSDT",
