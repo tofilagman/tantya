@@ -91,7 +91,9 @@
   "candleOpen": "2026-10-27T13:00:00.000Z",
   "madeAt": "2026-10-27T13:09:45.637357Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 103.07000000000001,
+  "closedAt": "2026-10-28T09:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -345,7 +347,9 @@
   "candleOpen": "2026-10-25T16:00:00.000Z",
   "madeAt": "2026-10-25T16:07:51.251138Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.08035436,
+  "closedAt": "2026-10-28T12:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -1097,7 +1101,9 @@
   "candleOpen": "2026-10-22T20:00:00.000Z",
   "madeAt": "2026-10-22T20:02:44.314825Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.33245,
+  "closedAt": "2026-10-28T12:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
@@ -2229,7 +2235,9 @@
   "candleOpen": "2026-10-20T00:00:00.000Z",
   "madeAt": "2026-10-20T00:17:50.297521Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 11.781,
+  "closedAt": "2026-10-28T08:00:00.000Z"
  },
  {
   "symbol": "TRXUSDT",
