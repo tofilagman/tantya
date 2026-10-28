@@ -15,7 +15,9 @@
   "candleOpen": "2026-10-27T13:00:00.000Z",
   "madeAt": "2026-10-27T13:09:45.637357Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.07519142857142856,
+  "closedAt": "2026-10-28T13:00:00.000Z"
  },
  {
   "symbol": "LTCUSDT",
