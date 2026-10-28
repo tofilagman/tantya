@@ -4,25 +4,32 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-10-28T18:49 UTC · since 2026-10-12
+Updated 2026-10-28T23:09 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 216 | 9 | 20% | -0.28 | -0.45 | -98.0 | 107.2 |
-| 1h | 186 | 1 | 22% | -0.24 | -0.43 | -80.1 | 86.9 |
+| **All** | 217 | 15 | 20% | -0.28 | -0.46 | -99.1 | 108.3 |
+| 1h | 187 | 7 | 22% | -0.25 | -0.43 | -81.2 | 86.9 |
 | 4h | 30 | 8 | 14% | -0.51 | -0.60 | -17.9 | 24.7 |
-| Evidence strong | 17 | 2 | 7% | -0.66 | -0.91 | -15.4 | 16.7 |
-| Evidence mixed | 63 | 3 | 28% | -0.16 | -0.35 | -22.3 | 24.6 |
-| Evidence weak | 136 | 4 | 18% | -0.29 | -0.44 | -60.3 | 66.0 |
+| Evidence strong | 17 | 3 | 7% | -0.66 | -0.91 | -15.4 | 16.7 |
+| Evidence mixed | 63 | 5 | 28% | -0.16 | -0.35 | -22.3 | 24.6 |
+| Evidence weak | 137 | 7 | 18% | -0.29 | -0.45 | -61.4 | 65.9 |
 
 ## Latest signals
 
 | Published (UTC) | Pair | TF | Side | Entry | Stop | TP1 | Wave | Evidence | Status | Net R |
 |---|---|---|---|---:|---:|---:|---|---|---|---:|
+| 2026-10-28T23:09 | BCHUSDT | 1h | short | 290.3 | 306.796 | 270.100 | C | mixed | open | — |
+| 2026-10-28T23:09 | TRXUSDT | 1h | short | 0.33 | 0.330321 | 0.329650 | B | mixed | open | — |
+| 2026-10-28T23:09 | ADAUSDT | 1h | long | 0.206 | 0.199489 | 0.214800 | 3 | weak | open | — |
+| 2026-10-28T23:09 | XRPUSDT | 1h | long | 1.327 | 1.30288 | 1.36160 | C | strong | open | — |
+| 2026-10-28T23:09 | SOLUSDT | 1h | long | 102.51 | 100.020 | 105.560 | 3 | weak | open | — |
+| 2026-10-28T23:09 | BNBUSDT | 1h | short | 757.35 | 761.744 | 748.582 | 1 | weak | open | — |
+| 2026-10-28T23:09 | ETHUSDT | 1h | long | 2361.56 | 2314.25 | 2423.56 | 3 | weak | open | — |
 | 2026-10-27T13:09 | HBARUSDT | 1h | long | 0.07614 | 0.0751914 | 0.0774505 | 1 | mixed | stopped | -1.16 |
 | 2026-10-27T13:09 | LTCUSDT | 1h | short | 56.42 | 57.4939 | 55.2100 | 3 | weak | stopped | -1.11 |
 | 2026-10-27T13:09 | TRXUSDT | 1h | short | 0.3286 | 0.330257 | 0.326000 | 3 | mixed | stopped | -1.40 |
-| 2026-10-27T13:09 | ADAUSDT | 1h | short | 0.2043 | 0.209121 | 0.198900 | 3 | weak | open | — |
+| 2026-10-27T13:09 | ADAUSDT | 1h | short | 0.2043 | 0.209121 | 0.198900 | 3 | weak | stopped | -1.09 |
 | 2026-10-27T13:09 | SOLUSDT | 1h | short | 100.68 | 103.070 | 97.6600 | 3 | weak | stopped | -1.09 |
 | 2026-10-27T06:14 | AAVEUSDT | 1h | long | 131.93 | 131.174 | 135.022 | 1 | weak | stopped | -1.35 |
 | 2026-10-27T06:14 | SUIUSDT | 1h | long | 0.91 | 0.895796 | 0.935700 | C | mixed | target | +1.68 |
@@ -62,12 +69,5 @@ Updated 2026-10-28T18:49 UTC · since 2026-10-12
 | 2026-10-23T23:06 | SUIUSDT | 1h | long | 0.9457 | 0.933786 | 1.01206 | 1 | weak | stopped | -1.16 |
 | 2026-10-23T23:06 | SOLUSDT | 1h | long | 102.07 | 101.313 | 103.071 | A | weak | target | +1.05 |
 | 2026-10-23T15:00 | SUIUSDT | 1h | long | 0.9896 | 0.960671 | 1.02170 | C | mixed | stopped | -1.07 |
-| 2026-10-23T15:00 | AVAXUSDT | 1h | long | 9.119 | 8.93779 | 9.51850 | 2 | weak | stopped | -1.10 |
-| 2026-10-23T10:01 | HBARUSDT | 1h | long | 0.07903 | 0.0782607 | 0.0822000 | C | weak | stopped | -1.20 |
-| 2026-10-23T10:01 | UNIUSDT | 1h | short | 7.17 | 7.77525 | 6.45700 | 3 | weak | expired | +0.65 |
-| 2026-10-23T10:01 | BCHUSDT | 1h | short | 286.6 | 292.282 | 269.700 | C | mixed | target | +2.88 |
-| 2026-10-23T10:01 | AVAXUSDT | 1h | long | 9.221 | 9.01789 | 9.47200 | C | mixed | stopped | -1.09 |
-| 2026-10-23T10:01 | LINKUSDT | 1h | short | 12.091 | 12.8620 | 11.2500 | 3 | weak | target | +1.06 |
-| 2026-10-23T10:01 | TRXUSDT | 1h | short | 0.3297 | 0.331636 | 0.326500 | 3 | weak | expired | -0.13 |
 
 All signals: [signals.json](signals.json) · totals: [summary.json](summary.json)
