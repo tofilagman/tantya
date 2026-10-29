@@ -33,7 +33,9 @@
   "candleOpen": "2026-10-28T23:00:00.000Z",
   "madeAt": "2026-10-28T23:09:18.173759Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.32965,
+  "closedAt": "2026-10-29T00:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
@@ -51,7 +53,9 @@
   "candleOpen": "2026-10-28T23:00:00.000Z",
   "madeAt": "2026-10-28T23:09:18.173759Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.1994892857142857,
+  "closedAt": "2026-10-29T02:00:00.000Z"
  },
  {
   "symbol": "XRPUSDT",
@@ -69,7 +73,9 @@
   "candleOpen": "2026-10-28T23:00:00.000Z",
   "madeAt": "2026-10-28T23:09:18.173759Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.3028785714285716,
+  "closedAt": "2026-10-29T02:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -87,7 +93,9 @@
   "candleOpen": "2026-10-28T23:00:00.000Z",
   "madeAt": "2026-10-28T23:09:18.173759Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 100.01964285714286,
+  "closedAt": "2026-10-29T02:00:00.000Z"
  },
  {
   "symbol": "BNBUSDT",
@@ -105,7 +113,9 @@
   "candleOpen": "2026-10-28T23:00:00.000Z",
   "madeAt": "2026-10-28T23:09:18.173759Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 748.58186,
+  "closedAt": "2026-10-29T02:00:00.000Z"
  },
  {
   "symbol": "ETHUSDT",
@@ -123,7 +133,9 @@
   "candleOpen": "2026-10-28T23:00:00.000Z",
   "madeAt": "2026-10-28T23:09:18.173759Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 2314.252857142857,
+  "closedAt": "2026-10-29T02:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
@@ -459,7 +471,9 @@
   "candleOpen": "2026-10-25T16:00:00.000Z",
   "madeAt": "2026-10-25T16:07:51.251138Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.1965838,
+  "closedAt": "2026-10-29T04:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
