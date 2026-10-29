@@ -4,21 +4,28 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-10-29T05:39 UTC · since 2026-10-12
+Updated 2026-10-29T23:15 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 224 | 8 | 21% | -0.27 | -0.45 | -101.4 | 110.5 |
-| 1h | 193 | 1 | 22% | -0.24 | -0.44 | -84.8 | 85.8 |
+| **All** | 224 | 15 | 21% | -0.27 | -0.45 | -101.4 | 110.5 |
+| 1h | 193 | 8 | 22% | -0.24 | -0.44 | -84.8 | 85.8 |
 | 4h | 31 | 7 | 17% | -0.45 | -0.53 | -16.5 | 24.7 |
-| Evidence strong | 18 | 2 | 6% | -0.68 | -0.92 | -16.5 | 16.7 |
-| Evidence mixed | 65 | 3 | 31% | -0.11 | -0.34 | -21.9 | 24.6 |
-| Evidence weak | 141 | 3 | 19% | -0.29 | -0.45 | -63.0 | 69.2 |
+| Evidence strong | 18 | 3 | 6% | -0.68 | -0.92 | -16.5 | 16.7 |
+| Evidence mixed | 65 | 7 | 31% | -0.11 | -0.34 | -21.9 | 24.6 |
+| Evidence weak | 141 | 5 | 19% | -0.29 | -0.45 | -63.0 | 69.2 |
 
 ## Latest signals
 
 | Published (UTC) | Pair | TF | Side | Entry | Stop | TP1 | Wave | Evidence | Status | Net R |
 |---|---|---|---|---:|---:|---:|---|---|---|---:|
+| 2026-10-29T23:15 | AAVEUSDT | 1h | long | 119.78 | 117.825 | 131.357 | 1 | weak | open | — |
+| 2026-10-29T23:15 | SUIUSDT | 1h | long | 0.8817 | 0.849571 | 0.924508 | 1 | mixed | open | — |
+| 2026-10-29T23:15 | UNIUSDT | 1h | long | 6.388 | 6.14900 | 6.80300 | C | weak | open | — |
+| 2026-10-29T23:15 | AVAXUSDT | 1h | long | 8.34 | 8.17936 | 8.81705 | 1 | mixed | open | — |
+| 2026-10-29T23:15 | LINKUSDT | 1h | long | 10.702 | 10.6044 | 11.2107 | A | mixed | open | — |
+| 2026-10-29T23:15 | DOGEUSDT | 1h | short | 0.07607 | 0.0801189 | 0.0718200 | 3 | strong | open | — |
+| 2026-10-29T23:15 | ETHUSDT | 1h | long | 2267.97 | 2219.13 | 2330.98 | 1 | mixed | open | — |
 | 2026-10-28T23:09 | BCHUSDT | 1h | short | 290.3 | 306.796 | 270.100 | C | mixed | open | — |
 | 2026-10-28T23:09 | TRXUSDT | 1h | short | 0.33 | 0.330321 | 0.329650 | B | mixed | target | -0.96 |
 | 2026-10-28T23:09 | ADAUSDT | 1h | long | 0.206 | 0.199489 | 0.214800 | 3 | weak | stopped | -1.06 |
@@ -62,12 +69,5 @@ Updated 2026-10-29T05:39 UTC · since 2026-10-12
 | 2026-10-25T01:05 | XRPUSDT | 1h | short | 1.3041 | 1.33565 | 1.23070 | 3 | weak | expired | +0.06 |
 | 2026-10-25T01:05 | SOLUSDT | 1h | short | 102.38 | 105.630 | 95.9900 | 3 | weak | expired | +0.58 |
 | 2026-10-25T01:05 | BNBUSDT | 1h | short | 741.3 | 744.714 | 730.405 | 2 | weak | stopped | -1.44 |
-| 2026-10-25T01:05 | ETHUSDT | 1h | short | 2358.6 | 2426.66 | 2228.17 | 3 | weak | expired | +0.59 |
-| 2026-10-25T01:05 | BTCUSDT | 1h | short | 80820.0 | 82241.9 | 78093.4 | 3 | weak | expired | +0.59 |
-| 2026-10-24T07:15 | DOTUSDT | 1h | long | 1.076 | 1.05993 | 1.10100 | C | weak | stopped | -1.13 |
-| 2026-10-24T07:15 | ETHUSDT | 1h | short | 2379.8 | 2424.75 | 2324.02 | 3 | mixed | target | +1.14 |
-| 2026-10-23T23:06 | SUIUSDT | 1h | long | 0.9457 | 0.933786 | 1.01206 | 1 | weak | stopped | -1.16 |
-| 2026-10-23T23:06 | SOLUSDT | 1h | long | 102.07 | 101.313 | 103.071 | A | weak | target | +1.05 |
-| 2026-10-23T15:00 | SUIUSDT | 1h | long | 0.9896 | 0.960671 | 1.02170 | C | mixed | stopped | -1.07 |
 
 All signals: [signals.json](signals.json) · totals: [summary.json](summary.json)
