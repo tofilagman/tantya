@@ -87,7 +87,9 @@
   "candleOpen": "2026-10-31T02:00:00.000Z",
   "madeAt": "2026-10-31T02:18:06.356191Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 95.355,
+  "closedAt": "2026-10-31T09:00:00.000Z"
  },
  {
   "symbol": "BNBUSDT",
