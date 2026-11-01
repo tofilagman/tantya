@@ -15,7 +15,9 @@
   "candleOpen": "2026-11-01T13:00:00.000Z",
   "madeAt": "2026-11-01T13:13:44.863867Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 7.368107142857143,
+  "closedAt": "2026-11-01T15:00:00.000Z"
  },
  {
   "symbol": "BCHUSDT",
