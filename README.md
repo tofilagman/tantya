@@ -4,15 +4,15 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-11-01T18:53 UTC · since 2026-10-12
+Updated 2026-11-01T22:45 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 241 | 11 | 23% | -0.26 | -0.43 | -103.8 | 107.2 |
-| 1h | 204 | 10 | 23% | -0.24 | -0.43 | -88.3 | 89.2 |
+| **All** | 242 | 10 | 22% | -0.26 | -0.43 | -105.0 | 108.4 |
+| 1h | 205 | 9 | 22% | -0.24 | -0.44 | -89.5 | 89.5 |
 | 4h | 37 | 1 | 23% | -0.34 | -0.42 | -15.5 | 24.7 |
 | Evidence strong | 20 | 1 | 6% | -0.66 | -0.88 | -17.5 | 17.5 |
-| Evidence mixed | 73 | 3 | 32% | -0.12 | -0.33 | -23.9 | 24.6 |
+| Evidence mixed | 74 | 2 | 31% | -0.13 | -0.34 | -25.1 | 25.1 |
 | Evidence weak | 148 | 7 | 20% | -0.27 | -0.42 | -62.4 | 67.1 |
 
 ## Latest signals
@@ -20,7 +20,7 @@ Updated 2026-11-01T18:53 UTC · since 2026-10-12
 | Published (UTC) | Pair | TF | Side | Entry | Stop | TP1 | Wave | Evidence | Status | Net R |
 |---|---|---|---|---:|---:|---:|---|---|---|---:|
 | 2026-11-01T13:13 | UNIUSDT | 1h | short | 7.287 | 7.36811 | 7.07909 | 1 | weak | stopped | -1.18 |
-| 2026-11-01T13:13 | BCHUSDT | 1h | long | 283.4 | 280.186 | 287.579 | A | mixed | open | — |
+| 2026-11-01T13:13 | BCHUSDT | 1h | long | 283.4 | 280.186 | 287.579 | A | mixed | stopped | -1.18 |
 | 2026-11-01T13:13 | DOTUSDT | 1h | long | 0.949 | 0.866036 | 1.05300 | C | weak | open | — |
 | 2026-11-01T13:13 | AVAXUSDT | 1h | long | 8.789 | 8.35746 | 9.33100 | 3 | weak | open | — |
 | 2026-11-01T13:13 | SOLUSDT | 1h | long | 94.92 | 92.1036 | 99.8700 | C | weak | open | — |
