@@ -4,16 +4,16 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-11-02T20:44 UTC · since 2026-10-12
+Updated 2026-11-03T18:25 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 250 | 2 | 23% | -0.25 | -0.42 | -105.6 | 106.7 |
-| 1h | 212 | 2 | 22% | -0.24 | -0.43 | -91.2 | 91.2 |
+| **All** | 252 | 0 | 23% | -0.25 | -0.42 | -105.9 | 110.5 |
+| 1h | 214 | 0 | 22% | -0.24 | -0.43 | -91.5 | 91.5 |
 | 4h | 38 | 0 | 25% | -0.31 | -0.38 | -14.4 | 24.7 |
 | Evidence strong | 21 | 0 | 11% | -0.57 | -0.78 | -16.4 | 17.5 |
 | Evidence mixed | 76 | 0 | 31% | -0.12 | -0.33 | -25.1 | 25.1 |
-| Evidence weak | 153 | 2 | 20% | -0.27 | -0.42 | -64.1 | 67.0 |
+| Evidence weak | 155 | 0 | 20% | -0.27 | -0.42 | -64.5 | 66.2 |
 
 ## Latest signals
 
@@ -21,10 +21,10 @@ Updated 2026-11-02T20:44 UTC · since 2026-10-12
 |---|---|---|---|---:|---:|---:|---|---|---|---:|
 | 2026-11-01T13:13 | UNIUSDT | 1h | short | 7.287 | 7.36811 | 7.07909 | 1 | weak | stopped | -1.18 |
 | 2026-11-01T13:13 | BCHUSDT | 1h | long | 283.4 | 280.186 | 287.579 | A | mixed | stopped | -1.18 |
-| 2026-11-01T13:13 | DOTUSDT | 1h | long | 0.949 | 0.866036 | 1.05300 | C | weak | open | — |
+| 2026-11-01T13:13 | DOTUSDT | 1h | long | 0.949 | 0.866036 | 1.05300 | C | weak | expired | -0.13 |
 | 2026-11-01T13:13 | AVAXUSDT | 1h | long | 8.789 | 8.35746 | 9.33100 | 3 | weak | stopped | -1.04 |
 | 2026-11-01T13:13 | SOLUSDT | 1h | long | 94.92 | 92.1036 | 99.8700 | C | weak | stopped | -1.07 |
-| 2026-11-01T13:13 | ETHUSDT | 1h | short | 2264.93 | 2383.50 | 2072.53 | 3 | weak | open | — |
+| 2026-11-01T13:13 | ETHUSDT | 1h | short | 2264.93 | 2383.50 | 2072.53 | 3 | weak | expired | -0.23 |
 | 2026-10-31T02:18 | HBARUSDT | 1h | short | 0.0726 | 0.0735421 | 0.0698100 | B | weak | expired | +0.76 |
 | 2026-10-31T02:18 | SUIUSDT | 1h | short | 0.9053 | 0.920907 | 0.871050 | 2 | mixed | expired | -0.06 |
 | 2026-10-31T02:18 | NEARUSDT | 1h | short | 4.367 | 4.72825 | 3.65300 | 3 | weak | expired | +0.16 |

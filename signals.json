@@ -55,7 +55,9 @@
   "candleOpen": "2026-11-01T13:00:00.000Z",
   "madeAt": "2026-11-01T13:13:44.863867Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.94,
+  "closedAt": "2026-11-03T15:00:00.000Z"
  },
  {
   "symbol": "AVAXUSDT",
@@ -113,7 +115,9 @@
   "candleOpen": "2026-11-01T13:00:00.000Z",
   "madeAt": "2026-11-01T13:13:44.863867Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 2287.46,
+  "closedAt": "2026-11-03T15:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
