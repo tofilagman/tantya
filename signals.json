@@ -15,7 +15,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.06936466,
+  "closedAt": "2026-11-05T15:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -51,7 +53,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 7.181832,
+  "closedAt": "2026-11-05T15:00:00.000Z"
  },
  {
   "symbol": "NEARUSDT",
@@ -105,7 +109,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 54.15357142857143,
+  "closedAt": "2026-11-05T15:00:00.000Z"
  },
  {
   "symbol": "AVAXUSDT",
@@ -123,7 +129,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 8.220178571428573,
+  "closedAt": "2026-11-05T16:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
@@ -159,7 +167,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.2844928571428573,
+  "closedAt": "2026-11-05T15:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -177,7 +187,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 89.29071428571429,
+  "closedAt": "2026-11-05T16:00:00.000Z"
  },
  {
   "symbol": "BNBUSDT",
@@ -195,7 +207,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 701.165,
+  "closedAt": "2026-11-05T15:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
