@@ -4,16 +4,16 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-11-06T00:10 UTC · since 2026-10-12
+Updated 2026-11-07T01:52 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 271 | 19 | 22% | -0.27 | -0.44 | -118.4 | 118.7 |
-| 1h | 233 | 8 | 21% | -0.26 | -0.45 | -104.0 | 104.3 |
+| **All** | 274 | 16 | 22% | -0.26 | -0.43 | -117.0 | 118.7 |
+| 1h | 236 | 5 | 21% | -0.25 | -0.43 | -102.6 | 104.3 |
 | 4h | 38 | 11 | 25% | -0.31 | -0.38 | -14.4 | 24.7 |
 | Evidence strong | 22 | 3 | 11% | -0.59 | -0.80 | -17.5 | 17.5 |
 | Evidence mixed | 82 | 4 | 31% | -0.11 | -0.31 | -25.6 | 27.4 |
-| Evidence weak | 167 | 12 | 19% | -0.30 | -0.45 | -75.3 | 75.3 |
+| Evidence weak | 170 | 9 | 19% | -0.29 | -0.43 | -73.9 | 75.4 |
 
 ## Latest signals
 
@@ -36,10 +36,10 @@ Updated 2026-11-06T00:10 UTC · since 2026-10-12
 | 2026-11-06T00:10 | ETHUSDT | 4h | long | 2240.96 | 2178.53 | 2404.25 | 1 | weak | open | — |
 | 2026-11-06T00:10 | ETHUSDT | 1h | long | 2240.96 | 2190.13 | 2299.38 | A | mixed | open | — |
 | 2026-11-04T21:16 | HBARUSDT | 1h | short | 0.07212 | 0.0745557 | 0.0693647 | 1 | mixed | target | +1.07 |
-| 2026-11-04T21:16 | AAVEUSDT | 1h | long | 130.52 | 122.234 | 143.360 | 3 | weak | open | — |
+| 2026-11-04T21:16 | AAVEUSDT | 1h | long | 130.52 | 122.234 | 143.360 | 3 | weak | expired | -0.04 |
 | 2026-11-04T21:16 | UNIUSDT | 1h | short | 7.603 | 7.85171 | 7.18183 | 1 | weak | target | +1.63 |
-| 2026-11-04T21:16 | NEARUSDT | 1h | short | 4.036 | 4.61536 | 3.39100 | 3 | weak | open | — |
-| 2026-11-04T21:16 | BCHUSDT | 1h | short | 281.1 | 299.661 | 253.300 | 3 | weak | open | — |
+| 2026-11-04T21:16 | NEARUSDT | 1h | short | 4.036 | 4.61536 | 3.39100 | 3 | weak | expired | +0.56 |
+| 2026-11-04T21:16 | BCHUSDT | 1h | short | 281.1 | 299.661 | 253.300 | 3 | weak | expired | +0.89 |
 | 2026-11-04T21:16 | LTCUSDT | 1h | long | 56.08 | 54.1536 | 58.0900 | 3 | weak | stopped | -1.06 |
 | 2026-11-04T21:16 | AVAXUSDT | 1h | long | 8.758 | 8.22018 | 9.57700 | 3 | weak | stopped | -1.03 |
 | 2026-11-04T21:16 | LINKUSDT | 1h | long | 11.457 | 10.5499 | 12.4940 | C | mixed | stopped | -1.02 |

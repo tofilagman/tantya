@@ -323,7 +323,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 130.45,
+  "closedAt": "2026-11-06T23:00:00.000Z"
  },
  {
   "symbol": "UNIUSDT",
@@ -361,7 +363,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 3.702,
+  "closedAt": "2026-11-06T23:00:00.000Z"
  },
  {
   "symbol": "BCHUSDT",
@@ -379,7 +383,9 @@
   "candleOpen": "2026-11-04T21:00:00.000Z",
   "madeAt": "2026-11-04T21:16:18.496499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 264.1,
+  "closedAt": "2026-11-06T23:00:00.000Z"
  },
  {
   "symbol": "LTCUSDT",
