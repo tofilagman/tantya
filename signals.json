@@ -69,7 +69,9 @@
   "candleOpen": "2026-11-07T20:00:00.000Z",
   "madeAt": "2026-11-07T20:12:09.196516Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 252.175,
+  "closedAt": "2026-11-08T00:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
@@ -213,7 +215,9 @@
   "candleOpen": "2026-11-06T00:00:00.000Z",
   "madeAt": "2026-11-06T00:10:22.309892Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.15022142857142856,
+  "closedAt": "2026-11-07T21:00:00.000Z"
  },
  {
   "symbol": "LTCUSDT",
