@@ -33,7 +33,9 @@
   "candleOpen": "2026-11-09T06:00:00.000Z",
   "madeAt": "2026-11-09T06:13:13.241437Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 134.62071428571429,
+  "closedAt": "2026-11-09T13:00:00.000Z"
  },
  {
   "symbol": "LTCUSDT",
@@ -105,7 +107,9 @@
   "candleOpen": "2026-11-09T06:00:00.000Z",
   "madeAt": "2026-11-09T06:13:13.241437Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 74007.8925,
+  "closedAt": "2026-11-09T07:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
@@ -715,7 +719,9 @@
   "candleOpen": "2026-11-06T00:00:00.000Z",
   "madeAt": "2026-11-06T00:10:22.309892Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 674.8596428571428,
+  "closedAt": "2026-11-09T08:00:00.000Z"
  },
  {
   "symbol": "ETHUSDT",
