@@ -147,7 +147,9 @@
   "candleOpen": "2026-11-08T15:00:00.000Z",
   "madeAt": "2026-11-08T15:06:41.961409Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 671.16,
+  "closedAt": "2026-11-10T17:00:00.000Z"
  },
  {
   "symbol": "ETHUSDT",

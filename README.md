@@ -4,16 +4,16 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-11-09T17:26 UTC · since 2026-10-12
+Updated 2026-11-10T17:44 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 305 | 8 | 21% | -0.30 | -0.46 | -140.1 | 140.1 |
-| 1h | 256 | 5 | 21% | -0.27 | -0.45 | -113.9 | 113.9 |
+| **All** | 306 | 7 | 21% | -0.29 | -0.45 | -139.1 | 140.1 |
+| 1h | 257 | 4 | 21% | -0.26 | -0.44 | -113.0 | 113.9 |
 | 4h | 49 | 3 | 19% | -0.46 | -0.53 | -26.1 | 26.1 |
 | Evidence strong | 24 | 1 | 10% | -0.62 | -0.82 | -19.6 | 19.6 |
 | Evidence mixed | 91 | 2 | 31% | -0.13 | -0.32 | -29.2 | 29.2 |
-| Evidence weak | 190 | 5 | 17% | -0.34 | -0.48 | -91.3 | 91.3 |
+| Evidence weak | 191 | 4 | 17% | -0.33 | -0.47 | -90.3 | 91.3 |
 
 ## Latest signals
 
@@ -26,7 +26,7 @@ Updated 2026-11-09T17:26 UTC · since 2026-10-12
 | 2026-11-09T06:13 | ETHUSDT | 1h | short | 2131.58 | 2269.01 | 1974.09 | 3 | weak | open | — |
 | 2026-11-09T06:13 | BTCUSDT | 1h | long | 74560.01 | 74007.9 | 75194.2 | 1 | weak | stopped | -1.27 |
 | 2026-11-08T15:06 | HBARUSDT | 1h | long | 0.06658 | 0.0661129 | 0.0673300 | C | weak | stopped | -1.28 |
-| 2026-11-08T15:06 | BNBUSDT | 1h | short | 697.97 | 724.342 | 662.520 | 3 | weak | open | — |
+| 2026-11-08T15:06 | BNBUSDT | 1h | short | 697.97 | 724.342 | 662.520 | 3 | weak | expired | +0.96 |
 | 2026-11-08T15:06 | ETHUSDT | 1h | short | 2240.42 | 2257.03 | 2214.89 | C | mixed | target | +1.27 |
 | 2026-11-08T07:16 | UNIUSDT | 1h | long | 7.102 | 6.82100 | 7.43200 | 3 | weak | stopped | -1.05 |
 | 2026-11-08T07:16 | LTCUSDT | 1h | long | 52.15 | 50.9489 | 54.0300 | C | mixed | stopped | -1.09 |
