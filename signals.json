@@ -1,5 +1,167 @@
 [
  {
+  "symbol": "HBARUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.06614,
+  "stop": 0.0692067857142857,
+  "tp1": 0.0626,
+  "tp2": 0.06004148000000001,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.599,
+  "evidence": 0.0,
+  "adx": 15.13,
+  "candleOpen": "2026-11-11T14:00:00.000Z",
+  "madeAt": "2026-11-11T14:10:49.238752Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "UNIUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 6.467,
+  "stop": 6.664142857142857,
+  "tp1": 6.181718,
+  "tp2": 6.03986,
+  "count": "Impulse ↓ · wave 5 in progress",
+  "wave": "5",
+  "score": 0.5272,
+  "evidence": 0.6,
+  "adx": 27.0,
+  "candleOpen": "2026-11-11T14:00:00.000Z",
+  "madeAt": "2026-11-11T14:10:49.238752Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "XLMUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.1496,
+  "stop": 0.15102142857142858,
+  "tp1": 0.14764059999999998,
+  "tp2": 0.1460594,
+  "count": "Impulse ↑ · wave A in progress",
+  "wave": "A",
+  "score": 0.5962,
+  "evidence": 0.4,
+  "adx": 20.68,
+  "candleOpen": "2026-11-11T14:00:00.000Z",
+  "madeAt": "2026-11-11T14:10:49.238752Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "LTCUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 51.26,
+  "stop": 52.47392857142857,
+  "tp1": 48.59,
+  "tp2": 46.8905,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.5766,
+  "evidence": 0.0,
+  "adx": 16.39,
+  "candleOpen": "2026-11-11T14:00:00.000Z",
+  "madeAt": "2026-11-11T14:10:49.238752Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "DOTUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.866,
+  "stop": 0.8989285714285714,
+  "tp1": 0.7999999999999999,
+  "tp2": 0.7573579999999999,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.6262,
+  "evidence": 0.0,
+  "adx": 26.73,
+  "candleOpen": "2026-11-11T14:00:00.000Z",
+  "madeAt": "2026-11-11T14:10:49.238752Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "TRXUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 0.3172,
+  "stop": 0.3017642857142857,
+  "tp1": 0.338,
+  "tp2": 0.3517196,
+  "count": "Correction ↑ · wave C in progress",
+  "wave": "C",
+  "score": 0.5748,
+  "evidence": 0.2,
+  "adx": 14.23,
+  "candleOpen": "2026-11-11T14:00:00.000Z",
+  "madeAt": "2026-11-11T14:10:49.238752Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "DOGEUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.06819,
+  "stop": 0.07118000000000001,
+  "tp1": 0.06455999999999999,
+  "tp2": 0.06189641999999999,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.5963,
+  "evidence": 0.2,
+  "adx": 27.5,
+  "candleOpen": "2026-11-11T14:00:00.000Z",
+  "madeAt": "2026-11-11T14:10:49.238752Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "SOLUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 84.16,
+  "stop": 85.14785714285715,
+  "tp1": 83.14,
+  "tp2": 82.75768,
+  "count": "Impulse ↓ · wave B in progress",
+  "wave": "B",
+  "score": 0.7527,
+  "evidence": 0.25,
+  "adx": 28.88,
+  "candleOpen": "2026-11-11T14:00:00.000Z",
+  "madeAt": "2026-11-11T14:10:49.238752Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "ETHUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 2049.41,
+  "stop": 2002.597857142857,
+  "tp1": 2097.5337600000003,
+  "tp2": 2151.9,
+  "count": "Correction ↓ · ABC complete",
+  "wave": "1",
+  "score": 0.4068,
+  "evidence": 0.2,
+  "adx": 33.87,
+  "candleOpen": "2026-11-11T14:00:00.000Z",
+  "madeAt": "2026-11-11T14:10:49.238752Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "NEARUSDT",
   "frame": "h1",
   "side": "short",
@@ -15,7 +177,9 @@
   "candleOpen": "2026-11-11T06:00:00.000Z",
   "madeAt": "2026-11-11T06:03:32.236551Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 3.7997857142857145,
+  "closedAt": "2026-11-11T13:00:00.000Z"
  },
  {
   "symbol": "DOTUSDT",
@@ -33,7 +197,9 @@
   "candleOpen": "2026-11-11T06:00:00.000Z",
   "madeAt": "2026-11-11T06:03:32.236551Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.8266428571428571,
+  "closedAt": "2026-11-11T08:00:00.000Z"
  },
  {
   "symbol": "AVAXUSDT",
@@ -51,7 +217,9 @@
   "candleOpen": "2026-11-11T06:00:00.000Z",
   "madeAt": "2026-11-11T06:03:32.236551Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 8.595357142857143,
+  "closedAt": "2026-11-11T09:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
@@ -215,7 +383,9 @@
   "candleOpen": "2026-11-09T06:00:00.000Z",
   "madeAt": "2026-11-09T06:13:13.241437Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.06554,
+  "closedAt": "2026-11-11T08:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -253,7 +423,9 @@
   "candleOpen": "2026-11-09T06:00:00.000Z",
   "madeAt": "2026-11-09T06:13:13.241437Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 50.8,
+  "closedAt": "2026-11-11T08:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
@@ -271,7 +443,9 @@
   "candleOpen": "2026-11-09T06:00:00.000Z",
   "madeAt": "2026-11-09T06:13:13.241437Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.06815,
+  "closedAt": "2026-11-11T08:00:00.000Z"
  },
  {
   "symbol": "ETHUSDT",
@@ -289,7 +463,9 @@
   "candleOpen": "2026-11-09T06:00:00.000Z",
   "madeAt": "2026-11-09T06:13:13.241437Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 2069.67,
+  "closedAt": "2026-11-11T08:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",

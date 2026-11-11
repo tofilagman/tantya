@@ -4,24 +4,33 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-11-11T06:03 UTC · since 2026-10-12
+Updated 2026-11-11T14:10 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 307 | 17 | 21% | -0.29 | -0.45 | -137.2 | 140.1 |
-| 1h | 258 | 14 | 22% | -0.25 | -0.43 | -111.1 | 113.9 |
+| **All** | 314 | 19 | 21% | -0.29 | -0.45 | -139.9 | 140.1 |
+| 1h | 265 | 16 | 21% | -0.26 | -0.43 | -113.8 | 113.9 |
 | 4h | 49 | 3 | 19% | -0.46 | -0.53 | -26.1 | 26.1 |
 | Evidence strong | 24 | 3 | 10% | -0.62 | -0.82 | -19.6 | 19.6 |
-| Evidence mixed | 91 | 6 | 31% | -0.13 | -0.32 | -29.2 | 29.2 |
-| Evidence weak | 192 | 8 | 18% | -0.32 | -0.46 | -88.5 | 91.3 |
+| Evidence mixed | 94 | 5 | 31% | -0.13 | -0.32 | -30.2 | 30.3 |
+| Evidence weak | 196 | 11 | 17% | -0.32 | -0.46 | -90.1 | 91.3 |
 
 ## Latest signals
 
 | Published (UTC) | Pair | TF | Side | Entry | Stop | TP1 | Wave | Evidence | Status | Net R |
 |---|---|---|---|---:|---:|---:|---|---|---|---:|
-| 2026-11-11T06:03 | NEARUSDT | 1h | short | 3.651 | 3.79979 | 3.43000 | C | weak | open | — |
-| 2026-11-11T06:03 | DOTUSDT | 1h | long | 0.843 | 0.826643 | 0.869934 | 1 | mixed | open | — |
-| 2026-11-11T06:03 | AVAXUSDT | 1h | short | 8.506 | 8.59536 | 8.34700 | B | weak | open | — |
+| 2026-11-11T14:10 | HBARUSDT | 1h | short | 0.06614 | 0.0692068 | 0.0626000 | 3 | weak | open | — |
+| 2026-11-11T14:10 | UNIUSDT | 1h | short | 6.467 | 6.66414 | 6.18172 | 5 | mixed | open | — |
+| 2026-11-11T14:10 | XLMUSDT | 1h | short | 0.1496 | 0.151021 | 0.147641 | A | mixed | open | — |
+| 2026-11-11T14:10 | LTCUSDT | 1h | short | 51.26 | 52.4739 | 48.5900 | 3 | weak | open | — |
+| 2026-11-11T14:10 | DOTUSDT | 1h | short | 0.866 | 0.898929 | 0.800000 | 3 | weak | open | — |
+| 2026-11-11T14:10 | TRXUSDT | 1h | long | 0.3172 | 0.301764 | 0.338000 | C | weak | open | — |
+| 2026-11-11T14:10 | DOGEUSDT | 1h | short | 0.06819 | 0.0711800 | 0.0645600 | 3 | weak | open | — |
+| 2026-11-11T14:10 | SOLUSDT | 1h | short | 84.16 | 85.1479 | 83.1400 | B | weak | open | — |
+| 2026-11-11T14:10 | ETHUSDT | 1h | long | 2049.41 | 2002.60 | 2097.53 | 1 | weak | open | — |
+| 2026-11-11T06:03 | NEARUSDT | 1h | short | 3.651 | 3.79979 | 3.43000 | C | weak | stopped | -1.05 |
+| 2026-11-11T06:03 | DOTUSDT | 1h | long | 0.843 | 0.826643 | 0.869934 | 1 | mixed | stopped | -1.10 |
+| 2026-11-11T06:03 | AVAXUSDT | 1h | short | 8.506 | 8.59536 | 8.34700 | B | weak | stopped | -1.19 |
 | 2026-11-11T06:03 | LINKUSDT | 1h | short | 10.407 | 10.8815 | 9.72200 | 3 | weak | open | — |
 | 2026-11-11T06:03 | ADAUSDT | 1h | short | 0.1755 | 0.184179 | 0.163700 | 3 | weak | open | — |
 | 2026-11-11T06:03 | XRPUSDT | 1h | short | 1.0625 | 1.08196 | 1.03548 | 5 | strong | open | — |
@@ -30,11 +39,11 @@ Updated 2026-11-11T06:03 UTC · since 2026-10-12
 | 2026-11-10T23:14 | UNIUSDT | 1h | long | 6.629 | 6.54221 | 6.80500 | C | weak | target | +1.87 |
 | 2026-11-10T23:14 | BCHUSDT | 1h | long | 230.5 | 224.943 | 246.593 | A | strong | open | — |
 | 2026-11-10T23:14 | BTCUSDT | 1h | short | 73668.01 | 75888.8 | 71214.8 | 3 | mixed | open | — |
-| 2026-11-09T06:13 | HBARUSDT | 1h | short | 0.06627 | 0.0696364 | 0.0621900 | 3 | weak | open | — |
+| 2026-11-09T06:13 | HBARUSDT | 1h | short | 0.06627 | 0.0696364 | 0.0621900 | 3 | weak | expired | +0.18 |
 | 2026-11-09T06:13 | AAVEUSDT | 1h | short | 129.3 | 134.621 | 121.690 | C | weak | stopped | -1.05 |
-| 2026-11-09T06:13 | LTCUSDT | 1h | short | 50.61 | 53.8132 | 46.9400 | 3 | mixed | open | — |
-| 2026-11-09T06:13 | DOGEUSDT | 1h | short | 0.06914 | 0.0738379 | 0.0643600 | 3 | mixed | open | — |
-| 2026-11-09T06:13 | ETHUSDT | 1h | short | 2131.58 | 2269.01 | 1974.09 | 3 | weak | open | — |
+| 2026-11-09T06:13 | LTCUSDT | 1h | short | 50.61 | 53.8132 | 46.9400 | 3 | mixed | expired | -0.09 |
+| 2026-11-09T06:13 | DOGEUSDT | 1h | short | 0.06914 | 0.0738379 | 0.0643600 | 3 | mixed | expired | +0.18 |
+| 2026-11-09T06:13 | ETHUSDT | 1h | short | 2131.58 | 2269.01 | 1974.09 | 3 | weak | expired | +0.42 |
 | 2026-11-09T06:13 | BTCUSDT | 1h | long | 74560.01 | 74007.9 | 75194.2 | 1 | weak | stopped | -1.27 |
 | 2026-11-08T15:06 | HBARUSDT | 1h | long | 0.06658 | 0.0661129 | 0.0673300 | C | weak | stopped | -1.28 |
 | 2026-11-08T15:06 | BNBUSDT | 1h | short | 697.97 | 724.342 | 662.520 | 3 | weak | expired | +0.96 |
@@ -60,14 +69,5 @@ Updated 2026-11-11T06:03 UTC · since 2026-10-12
 | 2026-11-06T00:10 | LTCUSDT | 1h | long | 51.75 | 50.6718 | 54.0550 | 2 | weak | expired | +0.21 |
 | 2026-11-06T00:10 | DOTUSDT | 4h | long | 0.91 | 0.853821 | 1.01300 | C | weak | stopped | -1.03 |
 | 2026-11-06T00:10 | LINKUSDT | 4h | long | 10.729 | 10.3333 | 11.4076 | 1 | weak | stopped | -1.05 |
-| 2026-11-06T00:10 | TRXUSDT | 4h | long | 0.319 | 0.314639 | 0.324143 | 5 | strong | open | — |
-| 2026-11-06T00:10 | ADAUSDT | 4h | long | 0.1815 | 0.174664 | 0.208948 | A | strong | stopped | -1.05 |
-| 2026-11-06T00:10 | DOGEUSDT | 4h | long | 0.07154 | 0.0692468 | 0.0786048 | 1 | weak | stopped | -1.06 |
-| 2026-11-06T00:10 | DOGEUSDT | 1h | long | 0.07154 | 0.0696718 | 0.0742700 | 2 | weak | expired | -0.20 |
-| 2026-11-06T00:10 | SOLUSDT | 4h | long | 89.68 | 87.0196 | 96.5800 | C | weak | stopped | -1.07 |
-| 2026-11-06T00:10 | SOLUSDT | 1h | long | 89.68 | 87.6104 | 92.0589 | A | mixed | expired | -0.37 |
-| 2026-11-06T00:10 | BNBUSDT | 4h | long | 691.53 | 674.860 | 726.620 | C | weak | stopped | -1.08 |
-| 2026-11-06T00:10 | ETHUSDT | 4h | long | 2240.96 | 2178.53 | 2404.25 | 1 | weak | stopped | -1.07 |
-| 2026-11-06T00:10 | ETHUSDT | 1h | long | 2240.96 | 2190.13 | 2299.38 | A | mixed | expired | -0.22 |
 
 All signals: [signals.json](signals.json) · totals: [summary.json](summary.json)
