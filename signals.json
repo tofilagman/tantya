@@ -357,7 +357,9 @@
   "candleOpen": "2026-11-10T23:00:00.000Z",
   "madeAt": "2026-11-10T23:14:10.733339Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 224.94285714285715,
+  "closedAt": "2026-11-12T00:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
@@ -693,7 +695,9 @@
   "candleOpen": "2026-11-07T20:00:00.000Z",
   "madeAt": "2026-11-07T20:12:09.196516Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 119.14000000000001,
+  "closedAt": "2026-11-12T00:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
