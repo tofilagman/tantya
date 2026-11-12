@@ -4,16 +4,16 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-11-12T02:55 UTC · since 2026-10-12
+Updated 2026-11-12T10:57 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 321 | 12 | 21% | -0.29 | -0.45 | -143.6 | 144.4 |
+| **All** | 322 | 11 | 21% | -0.29 | -0.45 | -144.6 | 144.6 |
 | 1h | 271 | 10 | 21% | -0.26 | -0.44 | -118.4 | 118.4 |
-| 4h | 50 | 2 | 21% | -0.43 | -0.50 | -25.2 | 26.1 |
+| 4h | 51 | 1 | 20% | -0.44 | -0.51 | -26.2 | 26.2 |
 | Evidence strong | 25 | 2 | 9% | -0.64 | -0.83 | -20.7 | 20.7 |
 | Evidence mixed | 97 | 2 | 30% | -0.16 | -0.35 | -33.5 | 33.5 |
-| Evidence weak | 199 | 8 | 18% | -0.31 | -0.45 | -89.4 | 91.3 |
+| Evidence weak | 200 | 7 | 18% | -0.31 | -0.45 | -90.4 | 91.3 |
 
 ## Latest signals
 
@@ -63,7 +63,7 @@ Updated 2026-11-12T02:55 UTC · since 2026-10-12
 | 2026-11-07T20:12 | BNBUSDT | 1h | short | 697.28 | 700.148 | 689.888 | 1 | weak | stopped | -1.49 |
 | 2026-11-07T20:12 | BTCUSDT | 1h | short | 75801.92 | 77073.1 | 74132.0 | 3 | mixed | target | +1.20 |
 | 2026-11-06T00:10 | HBARUSDT | 4h | long | 0.06776 | 0.0649754 | 0.0828371 | A | strong | stopped | -1.05 |
-| 2026-11-06T00:10 | UNIUSDT | 4h | long | 6.842 | 6.10293 | 8.15300 | C | weak | open | — |
+| 2026-11-06T00:10 | UNIUSDT | 4h | long | 6.842 | 6.10293 | 8.15300 | C | weak | stopped | -1.02 |
 | 2026-11-06T00:10 | XLMUSDT | 4h | long | 0.1535 | 0.149104 | 0.159925 | 4 | mixed | stopped | -1.07 |
 | 2026-11-06T00:10 | XLMUSDT | 1h | long | 0.1535 | 0.150221 | 0.158987 | A | mixed | stopped | -1.09 |
 | 2026-11-06T00:10 | LTCUSDT | 1h | long | 51.75 | 50.6718 | 54.0550 | 2 | weak | expired | +0.21 |

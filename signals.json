@@ -875,7 +875,9 @@
   "candleOpen": "2026-11-06T00:00:00.000Z",
   "madeAt": "2026-11-06T00:10:22.309892Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 6.102928571428571,
+  "closedAt": "2026-11-12T04:00:00.000Z"
  },
  {
   "symbol": "XLMUSDT",
