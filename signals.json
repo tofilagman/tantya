@@ -73,7 +73,9 @@
   "candleOpen": "2026-11-11T14:00:00.000Z",
   "madeAt": "2026-11-11T14:10:49.238752Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 48.59,
+  "closedAt": "2026-11-12T14:00:00.000Z"
  },
  {
   "symbol": "DOTUSDT",
@@ -127,7 +129,9 @@
   "candleOpen": "2026-11-11T14:00:00.000Z",
   "madeAt": "2026-11-11T14:10:49.238752Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.06455999999999999,
+  "closedAt": "2026-11-12T16:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -281,7 +285,9 @@
   "candleOpen": "2026-11-11T06:00:00.000Z",
   "madeAt": "2026-11-11T06:03:32.236551Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 1.035484,
+  "closedAt": "2026-11-12T12:00:00.000Z"
  },
  {
   "symbol": "BNBUSDT",
@@ -299,7 +305,9 @@
   "candleOpen": "2026-11-11T06:00:00.000Z",
   "madeAt": "2026-11-11T06:03:32.236551Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 662.06,
+  "closedAt": "2026-11-12T13:00:00.000Z"
  },
  {
   "symbol": "SUIUSDT",
