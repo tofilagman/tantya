@@ -15,7 +15,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.06225214285714285,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -51,7 +53,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.780599,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "NEARUSDT",
@@ -105,7 +109,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 221.20357142857142,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "BCHUSDT",
@@ -123,7 +129,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 222.02142857142857,
+  "closedAt": "2026-11-13T03:00:00.000Z"
  },
  {
   "symbol": "LTCUSDT",
@@ -177,7 +185,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 9.670428571428571,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
@@ -213,7 +223,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.06389642,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
@@ -231,7 +243,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.06553999999999999,
+  "closedAt": "2026-11-13T03:00:00.000Z"
  },
  {
   "symbol": "XRPUSDT",
@@ -249,7 +263,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1.0062464285714285,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -267,7 +283,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 79.73964285714285,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
@@ -285,7 +303,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 70673.83678571429,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
@@ -303,7 +323,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 70860.59857142856,
+  "closedAt": "2026-11-13T01:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
@@ -321,7 +343,9 @@
   "candleOpen": "2026-11-11T14:00:00.000Z",
   "madeAt": "2026-11-11T14:10:49.238752Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.0626,
+  "closedAt": "2026-11-13T03:00:00.000Z"
  },
  {
   "symbol": "UNIUSDT",
@@ -399,7 +423,9 @@
   "candleOpen": "2026-11-11T14:00:00.000Z",
   "madeAt": "2026-11-11T14:10:49.238752Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.7999999999999999,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "TRXUSDT",
@@ -555,7 +581,9 @@
   "candleOpen": "2026-11-11T06:00:00.000Z",
   "madeAt": "2026-11-11T06:03:32.236551Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 9.722,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
@@ -1311,7 +1339,9 @@
   "candleOpen": "2026-11-06T00:00:00.000Z",
   "madeAt": "2026-11-06T00:10:22.309892Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.31463928571428573,
+  "closedAt": "2026-11-13T04:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
