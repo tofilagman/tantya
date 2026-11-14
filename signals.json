@@ -1,5 +1,113 @@
 [
  {
+  "symbol": "UNIUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 5.621,
+  "stop": 5.460285714285715,
+  "tp1": 6.142772,
+  "tp2": 6.5312280000000005,
+  "count": "Impulse ↓ · wave A in progress",
+  "wave": "A",
+  "score": 0.6519,
+  "evidence": 1.0,
+  "adx": 25.9,
+  "candleOpen": "2026-11-14T03:00:00.000Z",
+  "madeAt": "2026-11-14T03:08:32.096530Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "BCHUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 218.8,
+  "stop": 212.43928571428572,
+  "tp1": 229.7,
+  "tp2": 239.03179999999998,
+  "count": "Impulse ↓ · wave C in progress",
+  "wave": "C",
+  "score": 0.7067,
+  "evidence": 0.25,
+  "adx": 24.49,
+  "candleOpen": "2026-11-14T03:00:00.000Z",
+  "madeAt": "2026-11-14T03:08:32.096530Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "DOTUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 0.797,
+  "stop": 0.775,
+  "tp1": 0.837238,
+  "tp2": 0.872,
+  "count": "Correction ↓ · ABC complete",
+  "wave": "1",
+  "score": 0.4767,
+  "evidence": 0.25,
+  "adx": 24.82,
+  "candleOpen": "2026-11-14T03:00:00.000Z",
+  "madeAt": "2026-11-14T03:08:32.096530Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "BNBUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 624.84,
+  "stop": 615.0235714285714,
+  "tp1": 646.52484,
+  "tp2": 664.13516,
+  "count": "Impulse ↓ · wave A in progress",
+  "wave": "A",
+  "score": 0.6722,
+  "evidence": 1.0,
+  "adx": 32.91,
+  "candleOpen": "2026-11-14T03:00:00.000Z",
+  "madeAt": "2026-11-14T03:08:32.096530Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "ETHUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 1910.49,
+  "stop": 1866.7542857142857,
+  "tp1": 1982.6298,
+  "tp2": 2047.2702,
+  "count": "Impulse ↓ · wave A in progress",
+  "wave": "A",
+  "score": 0.7415,
+  "evidence": 1.0,
+  "adx": 32.79,
+  "candleOpen": "2026-11-14T03:00:00.000Z",
+  "madeAt": "2026-11-14T03:08:32.096530Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "BTCUSDT",
+  "frame": "h1",
+  "side": "long",
+  "entry": 67650.01,
+  "stop": 66611.53142857143,
+  "tp1": 70220.51475999999,
+  "tp2": 72262.66524,
+  "count": "Impulse ↓ · wave A in progress",
+  "wave": "A",
+  "score": 0.8139,
+  "evidence": 1.0,
+  "adx": 42.35,
+  "candleOpen": "2026-11-14T03:00:00.000Z",
+  "madeAt": "2026-11-14T03:08:32.096530Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "HBARUSDT",
   "frame": "h4",
   "side": "long",
@@ -33,7 +141,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.06014071428571428,
+  "closedAt": "2026-11-14T03:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -51,7 +161,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 108.395,
+  "closedAt": "2026-11-14T03:00:00.000Z"
  },
  {
   "symbol": "SUIUSDT",
@@ -87,7 +199,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 5.574642857142857,
+  "closedAt": "2026-11-14T03:00:00.000Z"
  },
  {
   "symbol": "NEARUSDT",
@@ -141,7 +255,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.7906428571428572,
+  "closedAt": "2026-11-14T03:00:00.000Z"
  },
  {
   "symbol": "AVAXUSDT",
@@ -213,7 +329,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.1647,
+  "closedAt": "2026-11-14T03:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
@@ -267,7 +385,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 624.6789285714286,
+  "closedAt": "2026-11-14T03:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
@@ -285,7 +405,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 67688.70357142857,
+  "closedAt": "2026-11-14T03:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
@@ -457,7 +579,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 7.942,
+  "closedAt": "2026-11-14T03:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
