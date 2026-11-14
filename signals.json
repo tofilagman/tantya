@@ -69,7 +69,9 @@
   "candleOpen": "2026-11-14T03:00:00.000Z",
   "madeAt": "2026-11-14T03:08:32.096530Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 615.0235714285714,
+  "closedAt": "2026-11-14T04:00:00.000Z"
  },
  {
   "symbol": "ETHUSDT",
@@ -105,7 +107,9 @@
   "candleOpen": "2026-11-14T03:00:00.000Z",
   "madeAt": "2026-11-14T03:08:32.096530Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 66611.53142857143,
+  "closedAt": "2026-11-14T05:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
@@ -123,7 +127,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.05985928571428571,
+  "closedAt": "2026-11-14T04:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
@@ -237,7 +243,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.7861428571428571,
+  "closedAt": "2026-11-14T04:00:00.000Z"
  },
  {
   "symbol": "DOTUSDT",
@@ -349,7 +357,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.06220571428571428,
+  "closedAt": "2026-11-14T04:00:00.000Z"
  },
  {
   "symbol": "XRPUSDT",
@@ -367,7 +377,9 @@
   "candleOpen": "2026-11-13T16:00:00.000Z",
   "madeAt": "2026-11-13T16:15:03.249499Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.9857035714285715,
+  "closedAt": "2026-11-14T04:00:00.000Z"
  },
  {
   "symbol": "BNBUSDT",
@@ -445,7 +457,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 109.30535714285715,
+  "closedAt": "2026-11-14T04:00:00.000Z"
  },
  {
   "symbol": "SUIUSDT",
@@ -619,7 +633,9 @@
   "candleOpen": "2026-11-13T00:00:00.000Z",
   "madeAt": "2026-11-13T00:15:45.674146Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.16549642857142857,
+  "closedAt": "2026-11-14T04:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
