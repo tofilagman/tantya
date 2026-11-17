@@ -1,5 +1,23 @@
 [
  {
+  "symbol": "XRPUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.9708,
+  "stop": 0.985,
+  "tp1": 0.9564958,
+  "tp2": 0.9424,
+  "count": "Correction ↑ · ABC complete",
+  "wave": "1",
+  "score": 0.2906,
+  "evidence": 0.4,
+  "adx": 12.67,
+  "candleOpen": "2026-11-17T22:00:00.000Z",
+  "madeAt": "2026-11-17T22:15:42.832554Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "AAVEUSDT",
   "frame": "h1",
   "side": "short",
@@ -51,7 +69,9 @@
   "candleOpen": "2026-11-17T13:00:00.000Z",
   "madeAt": "2026-11-17T13:14:45.337209Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 5.447035714285715,
+  "closedAt": "2026-11-17T14:00:00.000Z"
  },
  {
   "symbol": "NEARUSDT",
@@ -69,7 +89,9 @@
   "candleOpen": "2026-11-17T13:00:00.000Z",
   "madeAt": "2026-11-17T13:14:45.337209Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 3.143774,
+  "closedAt": "2026-11-17T16:00:00.000Z"
  },
  {
   "symbol": "XLMUSDT",
@@ -105,7 +127,9 @@
   "candleOpen": "2026-11-17T13:00:00.000Z",
   "madeAt": "2026-11-17T13:14:45.337209Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 213.3607142857143,
+  "closedAt": "2026-11-17T14:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -141,7 +165,9 @@
   "candleOpen": "2026-11-17T13:00:00.000Z",
   "madeAt": "2026-11-17T13:14:45.337209Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 582.86,
+  "closedAt": "2026-11-17T16:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
