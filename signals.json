@@ -331,7 +331,9 @@
   "candleOpen": "2026-11-16T11:00:00.000Z",
   "madeAt": "2026-11-16T11:03:22.677081Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 0.05717,
+  "closedAt": "2026-11-18T13:00:00.000Z"
  },
  {
   "symbol": "AAVEUSDT",
@@ -369,7 +371,9 @@
   "candleOpen": "2026-11-16T11:00:00.000Z",
   "madeAt": "2026-11-16T11:03:22.677081Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 9.141,
+  "closedAt": "2026-11-18T13:00:00.000Z"
  },
  {
   "symbol": "TRXUSDT",
@@ -387,7 +391,9 @@
   "candleOpen": "2026-11-16T11:00:00.000Z",
   "madeAt": "2026-11-16T11:03:22.677081Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.3092524,
+  "closedAt": "2026-11-18T07:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
@@ -405,7 +411,9 @@
   "candleOpen": "2026-11-16T11:00:00.000Z",
   "madeAt": "2026-11-16T11:03:22.677081Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "expired",
+  "exit": 64088.45,
+  "closedAt": "2026-11-18T13:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
