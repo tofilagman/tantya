@@ -4,22 +4,30 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-11-17T22:15 UTC · since 2026-10-12
+Updated 2026-11-18T04:14 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 393 | 10 | 23% | -0.25 | -0.41 | -160.6 | 173.2 |
-| 1h | 325 | 9 | 25% | -0.19 | -0.37 | -120.7 | 133.3 |
-| 4h | 68 | 1 | 17% | -0.51 | -0.59 | -39.9 | 39.9 |
-| Evidence strong | 41 | 5 | 11% | -0.63 | -0.90 | -37.0 | 37.0 |
-| Evidence mixed | 126 | 2 | 31% | -0.09 | -0.26 | -33.0 | 41.3 |
-| Evidence weak | 226 | 3 | 21% | -0.27 | -0.40 | -90.7 | 94.8 |
+| **All** | 394 | 17 | 23% | -0.25 | -0.41 | -161.8 | 173.2 |
+| 1h | 326 | 10 | 25% | -0.19 | -0.37 | -121.9 | 133.3 |
+| 4h | 68 | 7 | 17% | -0.51 | -0.59 | -39.9 | 39.9 |
+| Evidence strong | 41 | 7 | 11% | -0.63 | -0.90 | -37.0 | 37.0 |
+| Evidence mixed | 127 | 3 | 31% | -0.09 | -0.27 | -34.1 | 41.3 |
+| Evidence weak | 226 | 7 | 21% | -0.27 | -0.40 | -90.7 | 94.8 |
 
 ## Latest signals
 
 | Published (UTC) | Pair | TF | Side | Entry | Stop | TP1 | Wave | Evidence | Status | Net R |
 |---|---|---|---|---:|---:|---:|---|---|---|---:|
-| 2026-11-17T22:15 | XRPUSDT | 1h | short | 0.9708 | 0.985000 | 0.956496 | 1 | mixed | open | — |
+| 2026-11-18T04:14 | AAVEUSDT | 4h | short | 111.04 | 115.972 | 105.555 | B | mixed | open | — |
+| 2026-11-18T04:14 | UNIUSDT | 4h | long | 5.203 | 4.54589 | 6.00000 | C | mixed | open | — |
+| 2026-11-18T04:14 | NEARUSDT | 4h | short | 3.384 | 3.74768 | 2.86978 | 5 | strong | open | — |
+| 2026-11-18T04:14 | XLMUSDT | 4h | short | 0.1401 | 0.152200 | 0.121600 | 3 | weak | open | — |
+| 2026-11-18T04:14 | LTCUSDT | 1h | long | 44.58 | 42.4218 | 46.8400 | C | weak | open | — |
+| 2026-11-18T04:14 | LINKUSDT | 4h | short | 9.198 | 9.72782 | 8.66407 | 5 | strong | open | — |
+| 2026-11-18T04:14 | XRPUSDT | 1h | short | 0.9783 | 1.04942 | 0.841100 | 3 | weak | open | — |
+| 2026-11-18T04:14 | BTCUSDT | 4h | long | 64397.56 | 61468.5 | 67462.0 | C | weak | open | — |
+| 2026-11-17T22:15 | XRPUSDT | 1h | short | 0.9708 | 0.985000 | 0.956496 | 1 | mixed | stopped | -1.14 |
 | 2026-11-17T13:14 | AAVEUSDT | 1h | short | 113.83 | 135.460 | 76.2100 | 3 | weak | open | — |
 | 2026-11-17T13:14 | SUIUSDT | 1h | short | 0.7397 | 0.769307 | 0.685345 | 5 | strong | open | — |
 | 2026-11-17T13:14 | UNIUSDT | 1h | short | 5.406 | 5.44704 | 5.01450 | B | weak | stopped | -1.26 |
@@ -61,13 +69,5 @@ Updated 2026-11-17T22:15 UTC · since 2026-10-12
 | 2026-11-13T16:15 | AAVEUSDT | 1h | long | 111.5 | 108.395 | 117.040 | C | weak | stopped | -1.07 |
 | 2026-11-13T16:15 | SUIUSDT | 1h | long | 0.8078 | 0.758611 | 0.861900 | C | mixed | stopped | -1.03 |
 | 2026-11-13T16:15 | UNIUSDT | 1h | long | 5.804 | 5.57464 | 6.11800 | C | weak | stopped | -1.05 |
-| 2026-11-13T16:15 | NEARUSDT | 1h | long | 3.502 | 3.22132 | 3.82000 | C | mixed | stopped | -1.02 |
-| 2026-11-13T16:15 | DOTUSDT | 4h | long | 0.827 | 0.786143 | 0.955912 | A | strong | stopped | -1.04 |
-| 2026-11-13T16:15 | DOTUSDT | 1h | long | 0.827 | 0.790643 | 0.873000 | 3 | weak | stopped | -1.04 |
-| 2026-11-13T16:15 | AVAXUSDT | 4h | long | 8.333 | 7.65850 | 9.24100 | C | mixed | stopped | -1.02 |
-| 2026-11-13T16:15 | LINKUSDT | 4h | long | 9.883 | 9.49464 | 11.0691 | 1 | mixed | stopped | -1.05 |
-| 2026-11-13T16:15 | TRXUSDT | 4h | long | 0.3133 | 0.301375 | 0.332900 | C | mixed | open | — |
-| 2026-11-13T16:15 | ADAUSDT | 1h | long | 0.1714 | 0.164700 | 0.178100 | 3 | weak | stopped | -1.05 |
-| 2026-11-13T16:15 | DOGEUSDT | 4h | long | 0.06495 | 0.0622057 | 0.0678860 | 1 | weak | stopped | -1.05 |
 
 All signals: [signals.json](signals.json) · totals: [summary.json](summary.json)
