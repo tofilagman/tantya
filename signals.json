@@ -231,7 +231,9 @@
   "candleOpen": "2026-11-20T20:00:00.000Z",
   "madeAt": "2026-11-20T20:04:36.244333Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.676594,
+  "closedAt": "2026-11-20T23:00:00.000Z"
  },
  {
   "symbol": "AVAXUSDT",
@@ -375,7 +377,9 @@
   "candleOpen": "2026-11-20T20:00:00.000Z",
   "madeAt": "2026-11-20T20:04:36.244333Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.1427514,
+  "closedAt": "2026-11-20T22:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
@@ -447,7 +451,9 @@
   "candleOpen": "2026-11-20T20:00:00.000Z",
   "madeAt": "2026-11-20T20:04:36.244333Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "target",
+  "exit": 0.9108575999999999,
+  "closedAt": "2026-11-20T22:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
