@@ -1,5 +1,95 @@
 [
  {
+  "symbol": "SUIUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.6579,
+  "stop": 0.6725,
+  "tp1": 0.62845,
+  "tp2": 0.6189509999999999,
+  "count": "Impulse ↓ · wave B in progress",
+  "wave": "B",
+  "score": 0.8286,
+  "evidence": 0.4,
+  "adx": 21.49,
+  "candleOpen": "2026-11-22T15:00:00.000Z",
+  "madeAt": "2026-11-22T15:14:53.968819Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "NEARUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 3.016,
+  "stop": 3.501535714285714,
+  "tp1": 2.133,
+  "tp2": 1.5601139999999998,
+  "count": "Impulse ↓ · wave 3 in progress",
+  "wave": "3",
+  "score": 0.5224,
+  "evidence": 0.0,
+  "adx": 26.06,
+  "candleOpen": "2026-11-22T15:00:00.000Z",
+  "madeAt": "2026-11-22T15:14:53.968819Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "LINKUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 8.799,
+  "stop": 8.954571428571429,
+  "tp1": 8.441,
+  "tp2": 8.330316,
+  "count": "Impulse ↓ · wave B in progress",
+  "wave": "B",
+  "score": 0.8414,
+  "evidence": 0.4,
+  "adx": 20.73,
+  "candleOpen": "2026-11-22T15:00:00.000Z",
+  "madeAt": "2026-11-22T15:14:53.968819Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "ADAUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.1446,
+  "stop": 0.14828214285714286,
+  "tp1": 0.1404,
+  "tp2": 0.1387244,
+  "count": "Impulse ↓ · wave B in progress",
+  "wave": "B",
+  "score": 0.706,
+  "evidence": 0.4,
+  "adx": 20.05,
+  "candleOpen": "2026-11-22T15:00:00.000Z",
+  "madeAt": "2026-11-22T15:14:53.968819Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
+  "symbol": "DOGEUSDT",
+  "frame": "h1",
+  "side": "short",
+  "entry": 0.05523,
+  "stop": 0.05628357142857143,
+  "tp1": 0.053385,
+  "tp2": 0.05276786,
+  "count": "Impulse ↓ · wave B in progress",
+  "wave": "B",
+  "score": 0.7148,
+  "evidence": 0.4,
+  "adx": 15.89,
+  "candleOpen": "2026-11-22T15:00:00.000Z",
+  "madeAt": "2026-11-22T15:14:53.968819Z",
+  "engine": "5288a7a",
+  "status": "open"
+ },
+ {
   "symbol": "HBARUSDT",
   "frame": "h1",
   "side": "short",
@@ -51,7 +141,9 @@
   "candleOpen": "2026-11-21T23:00:00.000Z",
   "madeAt": "2026-11-21T23:08:39.956772Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.6591642857142858,
+  "closedAt": "2026-11-22T10:00:00.000Z"
  },
  {
   "symbol": "UNIUSDT",
@@ -141,7 +233,9 @@
   "candleOpen": "2026-11-21T23:00:00.000Z",
   "madeAt": "2026-11-21T23:08:39.956772Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 6.756607142857143,
+  "closedAt": "2026-11-22T13:00:00.000Z"
  },
  {
   "symbol": "LINKUSDT",
@@ -159,7 +253,9 @@
   "candleOpen": "2026-11-21T23:00:00.000Z",
   "madeAt": "2026-11-21T23:08:39.956772Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 8.760285714285715,
+  "closedAt": "2026-11-22T10:00:00.000Z"
  },
  {
   "symbol": "TRXUSDT",
@@ -195,7 +291,9 @@
   "candleOpen": "2026-11-21T23:00:00.000Z",
   "madeAt": "2026-11-21T23:08:39.956772Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.14706785714285714,
+  "closedAt": "2026-11-22T13:00:00.000Z"
  },
  {
   "symbol": "DOGEUSDT",
@@ -213,7 +311,9 @@
   "candleOpen": "2026-11-21T23:00:00.000Z",
   "madeAt": "2026-11-21T23:08:39.956772Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.05597642857142857,
+  "closedAt": "2026-11-22T13:00:00.000Z"
  },
  {
   "symbol": "SOLUSDT",
@@ -267,7 +367,9 @@
   "candleOpen": "2026-11-21T23:00:00.000Z",
   "madeAt": "2026-11-21T23:08:39.956772Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 1725.6892857142857,
+  "closedAt": "2026-11-22T13:00:00.000Z"
  },
  {
   "symbol": "BTCUSDT",
@@ -285,7 +387,9 @@
   "candleOpen": "2026-11-21T23:00:00.000Z",
   "madeAt": "2026-11-21T23:08:39.956772Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 61299.24285714286,
+  "closedAt": "2026-11-22T10:00:00.000Z"
  },
  {
   "symbol": "HBARUSDT",
