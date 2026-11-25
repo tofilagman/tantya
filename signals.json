@@ -33,7 +33,9 @@
   "candleOpen": "2026-11-24T21:00:00.000Z",
   "madeAt": "2026-11-24T21:07:57.231248Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 91.94857142857143,
+  "closedAt": "2026-11-25T08:00:00.000Z"
  },
  {
   "symbol": "SUIUSDT",
@@ -105,7 +107,9 @@
   "candleOpen": "2026-11-24T21:00:00.000Z",
   "madeAt": "2026-11-24T21:07:57.231248Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 193.0392857142857,
+  "closedAt": "2026-11-25T14:00:00.000Z"
  },
  {
   "symbol": "AVAXUSDT",
@@ -159,7 +163,9 @@
   "candleOpen": "2026-11-24T21:00:00.000Z",
   "madeAt": "2026-11-24T21:07:57.231248Z",
   "engine": "5288a7a",
-  "status": "open"
+  "status": "stopped",
+  "exit": 0.30320714285714284,
+  "closedAt": "2026-11-25T15:00:00.000Z"
  },
  {
   "symbol": "ADAUSDT",
