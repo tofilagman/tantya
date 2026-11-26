@@ -4,16 +4,16 @@ Every setup the Tantya Elliott Wave engine produces on 20 Binance pairs (1h, 4h)
 
 Rules: enter at the price when the signal is published; stop beyond the invalidation level (+½ ATR); take profit at TP1; a candle touching both counts as the stop; closed at market after 50 candles. Net R deducts 0.1% taker fees on entry and exit. Not financial advice — an out-of-sample test before launch found **no edge** after fees.
 
-Updated 2026-11-26T00:16 UTC · since 2026-10-12
+Updated 2026-11-26T09:27 UTC · since 2026-10-12
 
 | | Closed | Open | Hit rate | Avg R | Avg net R | Total net R | Max DD (R) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **All** | 483 | 19 | 22% | -0.29 | -0.44 | -214.7 | 214.7 |
-| 1h | 392 | 16 | 23% | -0.24 | -0.41 | -159.0 | 159.0 |
+| **All** | 484 | 18 | 22% | -0.29 | -0.45 | -215.8 | 215.8 |
+| 1h | 393 | 15 | 23% | -0.24 | -0.41 | -160.1 | 160.1 |
 | 4h | 91 | 3 | 17% | -0.54 | -0.61 | -55.7 | 55.7 |
 | Evidence strong | 65 | 2 | 14% | -0.53 | -0.75 | -48.6 | 48.6 |
 | Evidence mixed | 161 | 2 | 26% | -0.23 | -0.39 | -63.6 | 63.6 |
-| Evidence weak | 257 | 15 | 21% | -0.27 | -0.40 | -102.5 | 102.5 |
+| Evidence weak | 258 | 14 | 21% | -0.27 | -0.40 | -103.6 | 103.6 |
 
 ## Latest signals
 
@@ -22,7 +22,7 @@ Updated 2026-11-26T00:16 UTC · since 2026-10-12
 | 2026-11-26T00:16 | AAVEUSDT | 1h | short | 97.12 | 107.157 | 79.5400 | C | weak | open | — |
 | 2026-11-26T00:16 | XLMUSDT | 4h | long | 0.1303 | 0.118079 | 0.155188 | A | strong | open | — |
 | 2026-11-26T00:16 | XLMUSDT | 1h | short | 0.1303 | 0.139311 | 0.110200 | 3 | weak | open | — |
-| 2026-11-26T00:16 | LTCUSDT | 1h | short | 43.34 | 43.9750 | 38.6400 | C | weak | open | — |
+| 2026-11-26T00:16 | LTCUSDT | 1h | short | 43.34 | 43.9750 | 38.6400 | C | weak | stopped | -1.14 |
 | 2026-11-26T00:16 | DOTUSDT | 1h | short | 0.669 | 0.727821 | 0.565000 | 3 | weak | open | — |
 | 2026-11-26T00:16 | XRPUSDT | 4h | long | 0.9484 | 0.848182 | 1.05490 | C | strong | open | — |
 | 2026-11-26T00:16 | SOLUSDT | 4h | long | 71.46 | 63.9189 | 79.4500 | C | mixed | open | — |
